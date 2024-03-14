@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "systemd_status_flutter",
+      "cwd": "systemd_status_flutter",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "web-server"
+    },
+    {
+      "name": "systemd_status_flutter (profile mode)",
+      "cwd": "systemd_status_flutter",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "deviceId": "web-server"
+    },
+    {
+      "name": "systemd_status_flutter (release mode)",
+      "cwd": "systemd_status_flutter",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "deviceId": "web-server"
+    },
+    {
+      "name": "systemd_status_server",
+      "cwd": "systemd_status_server",
+      "request": "launch",
+      "type": "dart",
+      "program": "bin/main.dart",
+      "args": [
+        "--apply-migrations"
+      ]
+    }
+  ]
+}

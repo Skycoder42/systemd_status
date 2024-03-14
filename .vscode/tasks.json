@@ -1,0 +1,22 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"command": "serverpod",
+			"args": [
+				"generate",
+				"-w"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/systemd_status_server",
+			},
+			"problemMatcher": [],
+			"label": "serverpod: generate -w",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
