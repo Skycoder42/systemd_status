@@ -1,13 +1,14 @@
-import 'package:systemd_status_client/systemd_status_client.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
+import 'package:systemd_status_client/systemd_status_client.dart';
 
 // Sets up a singleton client object that can be used to talk to the server from
 // anywhere in our app. The client is generated from your server code.
 // The client is set up to connect to a Serverpod running on a local server on
 // the default port. You will need to modify this to connect to staging or
 // production servers.
-var client = Client('http://$localhost:8080/')
+Client client = Client('http://$localhost:8080/')
   ..connectivityMonitor = FlutterConnectivityMonitor();
 
 void main() {
@@ -18,15 +19,13 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Serverpod Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Serverpod Example'),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+        title: 'Serverpod Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const MyHomePage(title: 'Serverpod Example'),
+      );
 }
 
 class MyHomePage extends StatefulWidget {
@@ -36,6 +35,11 @@ class MyHomePage extends StatefulWidget {
 
   @override
   MyHomePageState createState() => MyHomePageState();
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('title', title));
+  }
 }
 
 class MyHomePageState extends State<MyHomePage> {
@@ -49,13 +53,14 @@ class MyHomePageState extends State<MyHomePage> {
   // Calls the `hello` method of the `example` endpoint. Will set either the
   // `_resultMessage` or `_errorMessage` field, depending on if the call
   // is successful.
-  void _callHello() async {
+  Future<void> _callHello() async {
     try {
       final result = await client.example.hello(_textEditingController.text);
       setState(() {
         _errorMessage = null;
         _resultMessage = result;
       });
+      // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       setState(() {
         _errorMessage = '$e';
@@ -64,40 +69,38 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: TextField(
-                controller: _textEditingController,
-                decoration: const InputDecoration(
-                  hintText: 'Enter your name',
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: TextField(
+                  controller: _textEditingController,
+                  decoration: const InputDecoration(
+                    hintText: 'Enter your name',
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: ElevatedButton(
-                onPressed: _callHello,
-                child: const Text('Send to Server'),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: ElevatedButton(
+                  onPressed: _callHello,
+                  child: const Text('Send to Server'),
+                ),
               ),
-            ),
-            _ResultDisplay(
-              resultMessage: _resultMessage,
-              errorMessage: _errorMessage,
-            ),
-          ],
+              _ResultDisplay(
+                resultMessage: _resultMessage,
+                errorMessage: _errorMessage,
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 // _ResultDisplays shows the result of the call. Either the returned result from
@@ -133,5 +136,13 @@ class _ResultDisplay extends StatelessWidget {
         child: Text(text),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(StringProperty('resultMessage', resultMessage))
+      ..add(StringProperty('errorMessage', errorMessage));
   }
 }
