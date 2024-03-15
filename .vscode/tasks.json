@@ -9,10 +9,19 @@
 				"-w"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}/systemd_status_server",
+				"cwd": "${workspaceFolder}/systemd_status_server"
 			},
 			"problemMatcher": [],
 			"label": "serverpod: generate -w",
+			"group": {
+				"kind": "build",
+			}
+		},
+		{
+			"label": "Build",
+			"dependsOn": [
+				"serverpod: generate -w"
+			],
 			"group": {
 				"kind": "build",
 				"isDefault": true

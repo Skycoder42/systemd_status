@@ -18,5 +18,17 @@ services:
     command: redis-server --requirepass "rz9IPkqfBiUQU9RGWl3vYRLAuObnne73"
     environment:
       - REDIS_REPLICATION_MODE=master
+  bridge:
+    build:
+      context: ../systemd_status_bridge
+      dockerfile: Dockerfile
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    tty: true
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    cgroup: private
 volumes:
   systemd_status_data:

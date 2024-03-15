@@ -1,0 +1,11 @@
+[Unit]
+Description=systemd status bridge
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/app/bin/bridge
+
+[Install]
+WantedBy=multi-user.target
