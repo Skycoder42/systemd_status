@@ -1,15 +1,17 @@
 name: systemd_status_bridge
 description: A sample command-line application.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+publish_to: none
 
 environment:
-  sdk: ^3.3.1
+  sdk: ^3.3.0
 
-# Add regular dependencies here.
 dependencies:
-  # path: ^1.8.0
+  logging: ^1.2.0
+  systemd_status_client:
+    path: ../systemd_status_client
 
 dev_dependencies:
-  lints: ^3.0.0
-  test: ^1.24.0
+  custom_lint: ^0.6.2
+  dart_pre_commit: ^5.3.0
+  dart_test_tools: ^5.6.2

@@ -1,0 +1,3 @@
+class: ListUnitsResponse
+fields:
+  units: List<UnitState>

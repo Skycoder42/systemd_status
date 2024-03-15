@@ -26,6 +26,14 @@ class EndpointExample extends _i1.EndpointRef {
       );
 }
 
+/// {@category Endpoint}
+class EndpointSystemctlBridge extends _i1.EndpointRef {
+  EndpointSystemctlBridge(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'systemctlBridge';
+}
+
 class Client extends _i1.ServerpodClient {
   Client(
     String host, {
@@ -42,12 +50,18 @@ class Client extends _i1.ServerpodClient {
           connectionTimeout: connectionTimeout,
         ) {
     example = EndpointExample(this);
+    systemctlBridge = EndpointSystemctlBridge(this);
   }
 
   late final EndpointExample example;
 
+  late final EndpointSystemctlBridge systemctlBridge;
+
   @override
-  Map<String, _i1.EndpointRef> get endpointRefLookup => {'example': example};
+  Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'example': example,
+        'systemctlBridge': systemctlBridge,
+      };
 
   @override
   Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {};

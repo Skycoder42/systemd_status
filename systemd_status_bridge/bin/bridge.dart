@@ -1,7 +1,12 @@
-import 'package:systemd_status_bridge/systemd_status_bridge.dart'
-    as systemd_status_bridge;
+import 'package:logging/logging.dart';
+import 'package:systemd_status_bridge/src/bridge_client.dart';
+import 'package:systemd_status_bridge/src/systemctl_bridge_handler.dart';
 
 Future<void> main(List<String> arguments) async {
-  print('Hello world: ${systemd_status_bridge.calculate()}!');
-  await Future.delayed(Duration(days: 1));
+  Logger.root
+    ..level = Level.ALL
+    ..onRecord.listen(print);
+
+  final client = BridgeClient(SystemctlBridgeHandler());
+  await client.run();
 }

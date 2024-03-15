@@ -1,0 +1,7 @@
+class: UnitState
+fields:
+  unit: String
+  load: String
+  active: String
+  sub: String
+  description: String?
