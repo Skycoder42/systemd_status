@@ -1,35 +1,23 @@
 import 'package:logging/logging.dart';
 import 'package:systemd_status_client/systemd_status_client.dart';
 
+import 'key_manager.dart';
 import 'systemctl_bridge_handler.dart';
-
-class _FakeAuthKeyManager implements AuthenticationKeyManager {
-  String? _key = 'test-key';
-
-  @override
-  Future<String?> get() async => _key;
-
-  @override
-  Future<void> put(String key) async {
-    _key = key;
-  }
-
-  @override
-  Future<void> remove() async {
-    _key = null;
-  }
-}
 
 class BridgeClient {
   final SystemctlBridgeHandler _bridgeHandler;
+  final KeyManager _keyManager;
   final _logger = Logger('BridgeClient');
 
-  BridgeClient(this._bridgeHandler);
+  BridgeClient(
+    this._bridgeHandler,
+    this._keyManager,
+  );
 
   Future<void> run() async {
     final client = Client(
       'http://localhost:8080/',
-      authenticationKeyManager: _FakeAuthKeyManager(),
+      authenticationKeyManager: _keyManager,
     );
 
     try {
