@@ -3,6 +3,23 @@ import 'package:systemd_status_client/systemd_status_client.dart';
 
 import 'systemctl_bridge_handler.dart';
 
+class _FakeAuthKeyManager implements AuthenticationKeyManager {
+  String? _key = 'test-key';
+
+  @override
+  Future<String?> get() async => _key;
+
+  @override
+  Future<void> put(String key) async {
+    _key = key;
+  }
+
+  @override
+  Future<void> remove() async {
+    _key = null;
+  }
+}
+
 class BridgeClient {
   final SystemctlBridgeHandler _bridgeHandler;
   final _logger = Logger('BridgeClient');
@@ -10,7 +27,11 @@ class BridgeClient {
   BridgeClient(this._bridgeHandler);
 
   Future<void> run() async {
-    final client = Client('http://localhost:8080');
+    final client = Client(
+      'http://localhost:8080/',
+      authenticationKeyManager: _FakeAuthKeyManager(),
+    );
+
     try {
       await client.openStreamingConnection();
       _logger.info('Successfully connected to ${client.host}');

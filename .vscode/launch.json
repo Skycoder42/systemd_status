@@ -33,6 +33,13 @@
       "args": [
         "--apply-migrations"
       ]
+    },
+    {
+      "name": "systemd_status_bridge",
+      "cwd": "systemd_status_bridge",
+      "request": "launch",
+      "type": "dart",
+      "program": "bin/bridge.dart",
     }
   ]
 }
