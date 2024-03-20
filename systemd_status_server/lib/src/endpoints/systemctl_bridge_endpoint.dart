@@ -4,7 +4,12 @@ import '../generated/protocol.dart';
 
 class SystemctlBridgeEndpoint extends Endpoint {
   @override
-  Future<void> streamOpened(StreamingSession session) async {}
+  Future<void> streamOpened(StreamingSession session) async {
+    session.log(
+      'AUTH-KEY: ${session.authenticationKey}',
+      level: LogLevel.warning,
+    );
+  }
 
   @override
   Future<void> streamClosed(StreamingSession session) async {}

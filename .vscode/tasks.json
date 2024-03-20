@@ -19,23 +19,9 @@
 			}
 		},
 		{
-			"type": "dart",
-			"command": "dart",
-			"cwd": "systemd_status_bridge",
-			"args": [
-				"run",
-				"build_runner",
-				"watch"
-			],
-			"problemMatcher": [],
-			"label": "dart: dart run build_runner watch",
-			"detail": "systemd_status_bridge"
-		},
-		{
 			"label": "Build",
 			"dependsOn": [
 				"serverpod: generate -w",
-				"dart: dart run build_runner watch",
 			],
 			"group": {
 				"kind": "build",
