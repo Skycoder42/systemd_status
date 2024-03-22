@@ -12,6 +12,8 @@ class SystemctlBridgeEndpoint extends Endpoint {
     if (!await _ensureAuthenticated(session)) {
       return;
     }
+
+    await sendStreamMessage(session, SystemctlCommand.listUnits);
   }
 
   @override
@@ -48,9 +50,10 @@ class SystemctlBridgeEndpoint extends Endpoint {
     StreamingSession session,
     ListUnitsResponse response,
   ) async {
-    session.log('onListUnitsResponse', level: LogLevel.debug);
+    session.log('onListUnitsResponse: $response', level: LogLevel.debug);
   }
 
+  // TODO use authentication handler
   Future<bool> _ensureAuthenticated(StreamingSession session) async {
     final actualAuthKey = session.authenticationKey;
     if (actualAuthKey == null) {

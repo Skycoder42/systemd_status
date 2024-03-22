@@ -1,43 +1,38 @@
 import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_client/systemd_status_client.dart';
 
-import 'key_manager.dart';
+import 'client_provider.dart';
 import 'systemctl_bridge_handler.dart';
 
+part 'bridge_client.g.dart';
+
+@riverpod
+BridgeClient bridgeClient(BridgeClientRef ref) => BridgeClient(
+      ref.watch(systemdStatusClientProvider),
+      ref.watch(systemctlBridgeHandlerProvider),
+    );
+
 class BridgeClient {
+  final Client _client;
   final SystemctlBridgeHandler _bridgeHandler;
-  final KeyManager _keyManager;
   final _logger = Logger('BridgeClient');
 
   BridgeClient(
+    this._client,
     this._bridgeHandler,
-    this._keyManager,
   );
 
   Future<void> run() async {
-    final client = Client(
-      'http://localhost:8080/',
-      authenticationKeyManager: _keyManager,
-    );
-
     try {
-      await client.openStreamingConnection();
-      _logger.info('Successfully connected to ${client.host}');
+      await _client.openStreamingConnection();
+      _logger.info('Successfully connected to ${_client.host}');
 
-      await for (final message in client.systemctlBridge.stream) {
+      await for (final message in _client.systemctlBridge.stream) {
         _logger.finer('Received message of type: ${message.runtimeType}');
         switch (message) {
           case SystemctlCommand():
-            _logger.fine('>> Received command: $message');
-            final response = await _bridgeHandler(message);
-            if (response != null) {
-              _logger.finer(
-                '<< Sending response of type ${response.runtimeType}',
-              );
-              await client.systemctlBridge.sendStreamMessage(response);
-            } else {
-              _logger.finer('<< Finished without response');
-            }
+            await _processCommand(message);
           default:
             _logger.warning(
               'Received invalid message of type ${message.runtimeType}',
@@ -45,8 +40,24 @@ class BridgeClient {
         }
       }
     } finally {
-      await client.closeStreamingConnection();
-      client.close();
+      await _client.closeStreamingConnection();
+    }
+  }
+
+  Future<void> _processCommand(SystemctlCommand message) async {
+    try {
+      _logger.fine('>>> Processing command: $message');
+      final response = await _bridgeHandler(message);
+      if (response != null) {
+        _logger.finer(
+          '<<< Sending command reply of type ${response.runtimeType}',
+        );
+        await _client.systemctlBridge.sendStreamMessage(response);
+      } else {
+        _logger.finer('<<< Finished without response');
+      }
+    } on Exception catch (e, s) {
+      _logger.severe('<<< Finished with exception', e, s);
     }
   }
 }

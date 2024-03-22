@@ -13,6 +13,12 @@ scripts:
       dart pub global run melos exec --flutter -- flutter pub get
     description: Run 'pub get' in all projects
 
+  upgrade:
+    run: >-
+      dart pub global run melos exec --no-flutter -- dart pub upgrade --major-versions &&
+      dart pub global run melos exec --flutter -- flutter pub upgrade --major-versions
+    description: Run 'pub get' in all projects
+
   build:
     run: >-
       dart pub global run melos exec --depends-on=build_runner -- dart run build_runner build &&

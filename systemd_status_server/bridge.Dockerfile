@@ -25,20 +25,28 @@ RUN apt-get update ; \
 # install dart sdk
 FROM dart:stable AS build
 
-WORKDIR /app
-COPY pubspec.* ./
+WORKDIR /app/systemd_status_client
+COPY systemd_status_client/pubspec.* ./
+
+WORKDIR /app/systemd_status_bridge
+COPY systemd_status_bridge/pubspec.* ./
 RUN dart pub get
 
-COPY . .
+WORKDIR /app/systemd_status_client
+COPY systemd_status_client .
+
+WORKDIR /app/systemd_status_bridge
+COPY systemd_status_bridge .
 RUN dart pub get --offline
-# RUN dart run build_runner build --delete-conflicting-outputs
+RUN dart run build_runner build --delete-conflicting-outputs
 RUN dart compile exe bin/bridge.dart -o bin/bridge
 
 FROM systemd
 
-COPY --from=build /app/bin/bridge /app/bin/
-COPY docker/bridge.service /etc/systemd/system/bridge.service
+COPY --from=build /app/systemd_status_bridge/bin/bridge /app/bin/
+COPY systemd_status_bridge/docker/bridge.service /etc/systemd/system/bridge.service
 RUN ln -s /etc/systemd/system/bridge.service /etc/systemd/system/multi-user.target.wants/bridge.service
+RUN echo 'test-key' > /app/key.txt
 
 VOLUME [ "/sys/fs/cgroup" ]
 

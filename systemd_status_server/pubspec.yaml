@@ -11,6 +11,9 @@ dependencies:
   serverpod: 1.2.5
 
 dev_dependencies:
-  custom_lint: ^0.6.2
+  custom_lint: ^0.6.4
   dart_pre_commit: ^5.3.0
-  dart_test_tools: ^5.6.2
+  dart_test_tools: ^5.7.0
+
+dart_pre_commit:
+  flutter-compat: false

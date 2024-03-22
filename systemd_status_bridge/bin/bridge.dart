@@ -1,13 +1,54 @@
+import 'dart:io';
+
+import 'package:args/args.dart';
 import 'package:logging/logging.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:systemd_status_bridge/src/bridge_client.dart';
-import 'package:systemd_status_bridge/src/key_manager.dart';
-import 'package:systemd_status_bridge/src/systemctl_bridge_handler.dart';
+import 'package:systemd_status_bridge/src/options.dart';
 
 Future<void> main(List<String> arguments) async {
-  Logger.root
-    ..level = Level.ALL
-    ..onRecord.listen(print);
+  final argParser = Options.buildArgParser();
+  ProviderContainer? container;
+  try {
+    final argResults = argParser.parse(arguments);
+    final options = Options.parseOptions(argResults);
 
-  final client = BridgeClient(SystemctlBridgeHandler(), KeyManager(''));
-  await client.run();
+    if (options.help) {
+      stdout
+        ..writeln('Usage:')
+        ..writeln(argParser.usage);
+      return;
+    }
+
+    Logger.root
+      ..level = options.logLevel
+      ..onRecord.listen(
+        (event) {
+          stdout.writeln(event);
+          if (event.error != null) {
+            stdout.writeln(event.error);
+          }
+          if (event.stackTrace != null) {
+            stdout.writeln(event.stackTrace);
+          }
+        },
+      );
+
+    container = ProviderContainer(
+      overrides: [
+        optionsProvider.overrideWithValue(options),
+      ],
+    );
+
+    final client = container.read(bridgeClientProvider);
+    await client.run();
+  } on ArgParserException catch (e) {
+    stderr
+      ..writeln(e.message)
+      ..writeln()
+      ..writeln(argParser.usage);
+    exit(127);
+  } finally {
+    container?.dispose();
+  }
 }

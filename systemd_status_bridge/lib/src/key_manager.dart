@@ -1,28 +1,26 @@
-import 'dart:io';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_client/systemd_status_client.dart';
 
-import 'riverpod_config.dart';
+import 'options.dart';
 
 part 'key_manager.g.dart';
 
 @riverpod
 KeyManager keyManager(KeyManagerRef ref) => KeyManager(
-      ref.conf((c) => c.keyPath),
+      ref.watch(optionsProvider),
     );
 
 class KeyManager implements AuthenticationKeyManager {
-  final File _keyFile;
+  final Options _options;
 
-  KeyManager(String keyPath) : _keyFile = File(keyPath);
+  KeyManager(this._options);
 
   @override
   Future<String?> get() async {
-    if (!_keyFile.existsSync()) {
+    if (!_options.keyFile.existsSync()) {
       return null;
     }
-    final key = await _keyFile.readAsString();
+    final key = await _options.keyFile.readAsString();
     return key.trim();
   }
 

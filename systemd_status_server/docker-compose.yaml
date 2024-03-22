@@ -20,11 +20,12 @@ services:
       - REDIS_REPLICATION_MODE=master
   bridge:
     build:
-      context: ../systemd_status_bridge
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: systemd_status_server/bridge.Dockerfile
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup
     tty: true
+    network_mode: host
     tmpfs:
       - /tmp
       - /run
