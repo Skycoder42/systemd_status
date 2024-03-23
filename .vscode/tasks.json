@@ -28,14 +28,26 @@
 				"watch"
 			],
 			"problemMatcher": [],
-			"label": "dart: dart run build_runner watch",
-			"detail": "systemd_status_bridge"
+			"label": "build systemd_status_bridge",
+		},
+		{
+			"type": "dart",
+			"command": "dart",
+			"cwd": "systemd_status_server",
+			"args": [
+				"run",
+				"build_runner",
+				"watch"
+			],
+			"problemMatcher": [],
+			"label": "build systemd_status_server",
 		},
 		{
 			"label": "Build",
 			"dependsOn": [
 				"serverpod: generate -w",
-				"dart: dart run build_runner watch",
+				"build systemd_status_bridge",
+				"build systemd_status_server",
 			],
 			"group": {
 				"kind": "build",

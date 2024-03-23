@@ -1,4 +1,4 @@
-FROM ubuntu:latest as systemd
+FROM docker.io/library/ubuntu:latest as systemd
 
 ENV container docker
 
@@ -23,7 +23,7 @@ RUN apt-get update ; \
   rm -f /lib/systemd/system/systemd-update-utmp*
 
 # install dart sdk
-FROM dart:stable AS build
+FROM docker.io/library/dart:stable AS build
 
 WORKDIR /app/systemd_status_client
 COPY systemd_status_client/pubspec.* ./

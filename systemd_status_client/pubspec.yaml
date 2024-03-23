@@ -6,3 +6,4 @@ environment:
 
 dependencies:
   serverpod_client: 1.2.5
+  stream_channel: ^2.1.2

@@ -13,40 +13,70 @@ import '../protocol.dart' as _i2;
 import 'package:serverpod_serialization/serverpod_serialization.dart';
 
 abstract class ListUnitsResponse extends _i1.SerializableEntity {
-  ListUnitsResponse._({required this.units});
+  ListUnitsResponse._({
+    required this.success,
+    required this.units,
+  });
 
-  factory ListUnitsResponse({required List<_i2.UnitState> units}) =
-      _ListUnitsResponseImpl;
+  factory ListUnitsResponse({
+    required bool success,
+    required List<_i2.UnitState> units,
+  }) = _ListUnitsResponseImpl;
 
   factory ListUnitsResponse.fromJson(
     Map<String, dynamic> jsonSerialization,
     _i1.SerializationManager serializationManager,
   ) {
     return ListUnitsResponse(
-        units: serializationManager
-            .deserialize<List<_i2.UnitState>>(jsonSerialization['units']));
+      success:
+          serializationManager.deserialize<bool>(jsonSerialization['success']),
+      units: serializationManager
+          .deserialize<List<_i2.UnitState>>(jsonSerialization['units']),
+    );
   }
+
+  bool success;
 
   List<_i2.UnitState> units;
 
-  ListUnitsResponse copyWith({List<_i2.UnitState>? units});
+  ListUnitsResponse copyWith({
+    bool? success,
+    List<_i2.UnitState>? units,
+  });
   @override
   Map<String, dynamic> toJson() {
-    return {'units': units.toJson(valueToJson: (v) => v.toJson())};
+    return {
+      'success': success,
+      'units': units.toJson(valueToJson: (v) => v.toJson()),
+    };
   }
 
   @override
   Map<String, dynamic> allToJson() {
-    return {'units': units.toJson(valueToJson: (v) => v.allToJson())};
+    return {
+      'success': success,
+      'units': units.toJson(valueToJson: (v) => v.allToJson()),
+    };
   }
 }
 
 class _ListUnitsResponseImpl extends ListUnitsResponse {
-  _ListUnitsResponseImpl({required List<_i2.UnitState> units})
-      : super._(units: units);
+  _ListUnitsResponseImpl({
+    required bool success,
+    required List<_i2.UnitState> units,
+  }) : super._(
+          success: success,
+          units: units,
+        );
 
   @override
-  ListUnitsResponse copyWith({List<_i2.UnitState>? units}) {
-    return ListUnitsResponse(units: units ?? this.units.clone());
+  ListUnitsResponse copyWith({
+    bool? success,
+    List<_i2.UnitState>? units,
+  }) {
+    return ListUnitsResponse(
+      success: success ?? this.success,
+      units: units ?? this.units.clone(),
+    );
   }
 }

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:serverpod/serverpod.dart';
 
-import '../generated/protocol.dart';
+import '../rpc/endpoint_stream_channel.dart';
 
-class SystemctlBridgeEndpoint extends Endpoint {
+class SystemctlBridgeEndpoint extends Endpoint with EndpointStreamChannelMixin {
   static const _authKeyPasswordName = 'systemctlBridgeAuthKey';
 
   @override
@@ -12,45 +12,15 @@ class SystemctlBridgeEndpoint extends Endpoint {
     if (!await _ensureAuthenticated(session)) {
       return;
     }
-
-    await sendStreamMessage(session, SystemctlCommand.listUnits);
+    await super.streamOpened(session);
   }
 
   @override
-  Future<void> streamClosed(StreamingSession session) async {}
-
-  @override
-  Future<void> handleStreamMessage(
-    StreamingSession session,
-    SerializableEntity message,
-  ) async {
+  Future<void> streamClosed(StreamingSession session) async {
     if (!await _ensureAuthenticated(session)) {
       return;
     }
-
-    try {
-      switch (message) {
-        case ListUnitsResponse():
-          await _onListUnitsResponse(session, message);
-        default:
-          // TODO type
-          throw Exception(
-            'Invalid stream message: ${message.runtimeType}',
-          );
-      }
-    } on Exception catch (error, stackTrace) {
-      await session.close(
-        error: error,
-        stackTrace: stackTrace,
-      );
-    }
-  }
-
-  Future<void> _onListUnitsResponse(
-    StreamingSession session,
-    ListUnitsResponse response,
-  ) async {
-    session.log('onListUnitsResponse: $response', level: LogLevel.debug);
+    await super.streamClosed(session);
   }
 
   // TODO use authentication handler

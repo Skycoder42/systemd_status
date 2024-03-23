@@ -1,5 +1,4 @@
-import 'package:serverpod/serverpod.dart';
-
+import 'src/di/river_serverpod.dart';
 import 'src/generated/endpoints.dart';
 import 'src/generated/protocol.dart';
 
@@ -9,7 +8,7 @@ import 'src/generated/protocol.dart';
 
 Future<void> run(List<String> args) async {
   // Initialize Serverpod and connect it with your generated code.
-  final pod = Serverpod(
+  final pod = RiverServerpod(
     args,
     Protocol(),
     Endpoints(),

@@ -35,7 +35,7 @@ class BridgeClient {
             await _processCommand(message);
           default:
             _logger.warning(
-              'Received invalid message of type ${message.runtimeType}',
+              'Received invalid message of type: ${message.runtimeType}',
             );
         }
       }
@@ -48,14 +48,8 @@ class BridgeClient {
     try {
       _logger.fine('>>> Processing command: $message');
       final response = await _bridgeHandler(message);
-      if (response != null) {
-        _logger.finer(
-          '<<< Sending command reply of type ${response.runtimeType}',
-        );
-        await _client.systemctlBridge.sendStreamMessage(response);
-      } else {
-        _logger.finer('<<< Finished without response');
-      }
+      _logger.finer('<<< Sending reply of type: ${response.runtimeType}');
+      await _client.systemctlBridge.sendStreamMessage(response);
     } on Exception catch (e, s) {
       _logger.severe('<<< Finished with exception', e, s);
     }
