@@ -8,6 +8,7 @@ import 'package:systemd_status_client/systemd_status_client.dart';
 // The client is set up to connect to a Serverpod running on a local server on
 // the default port. You will need to modify this to connect to staging or
 // production servers.
+// ignore: unreachable_from_main
 Client client = Client('http://$localhost:8080/')
   ..connectivityMonitor = FlutterConnectivityMonitor();
 
@@ -55,11 +56,11 @@ class MyHomePageState extends State<MyHomePage> {
   // is successful.
   Future<void> _callHello() async {
     try {
-      final result = await client.example.hello(_textEditingController.text);
-      setState(() {
-        _errorMessage = null;
-        _resultMessage = result;
-      });
+      // final result = await client.example.hello(_textEditingController.text);
+      // setState(() {
+      //   _errorMessage = null;
+      //   _resultMessage = result;
+      // });
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       setState(() {

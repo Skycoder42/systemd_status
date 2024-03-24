@@ -1,3 +1,5 @@
 type: server
-
+modules:
+  serverpod_json_rpc_2:
+    nickname: rpc
 client_package_path: ../systemd_status_client

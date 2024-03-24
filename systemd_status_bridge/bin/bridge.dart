@@ -9,6 +9,7 @@ import 'package:systemd_status_bridge/src/options.dart';
 Future<void> main(List<String> arguments) async {
   final argParser = Options.buildArgParser();
   ProviderContainer? container;
+  ProviderSubscription<BridgeClient>? clientSub;
   try {
     final argResults = argParser.parse(arguments);
     final options = Options.parseOptions(argResults);
@@ -40,8 +41,8 @@ Future<void> main(List<String> arguments) async {
       ],
     );
 
-    final client = container.read(bridgeClientProvider);
-    await client.run();
+    clientSub = container.watch(bridgeClientProvider);
+    await clientSub.read().run();
   } on ArgParserException catch (e) {
     stderr
       ..writeln(e.message)
@@ -49,6 +50,12 @@ Future<void> main(List<String> arguments) async {
       ..writeln(argParser.usage);
     exit(127);
   } finally {
+    clientSub?.close();
     container?.dispose();
   }
+}
+
+extension on ProviderContainer {
+  ProviderSubscription<T> watch<T>(ProviderListenable<T> provider) =>
+      listen(provider, (_, __) {});
 }

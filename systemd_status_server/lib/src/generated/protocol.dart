@@ -11,12 +11,11 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
-import 'example.dart' as _i3;
+import 'package:serverpod_json_rpc_2_server/module.dart' as _i3;
 import 'systemctl/list_units_response.dart' as _i4;
 import 'systemctl/systemctl_command.dart' as _i5;
 import 'systemctl/unit_state.dart' as _i6;
 import 'protocol.dart' as _i7;
-export 'example.dart';
 export 'systemctl/list_units_response.dart';
 export 'systemctl/systemctl_command.dart';
 export 'systemctl/unit_state.dart';
@@ -31,7 +30,8 @@ class Protocol extends _i1.SerializationManagerServer {
   static final Protocol _instance = Protocol._();
 
   static final List<_i2.TableDefinition> targetTableDefinitions = [
-    ..._i2.Protocol.targetTableDefinitions
+    ..._i3.Protocol.targetTableDefinitions,
+    ..._i2.Protocol.targetTableDefinitions,
   ];
 
   @override
@@ -43,9 +43,6 @@ class Protocol extends _i1.SerializationManagerServer {
     if (customConstructors.containsKey(t)) {
       return customConstructors[t]!(data, this) as T;
     }
-    if (t == _i3.Example) {
-      return _i3.Example.fromJson(data, this) as T;
-    }
     if (t == _i4.ListUnitsResponse) {
       return _i4.ListUnitsResponse.fromJson(data, this) as T;
     }
@@ -54,9 +51,6 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (t == _i6.UnitState) {
       return _i6.UnitState.fromJson(data, this) as T;
-    }
-    if (t == _i1.getType<_i3.Example?>()) {
-      return (data != null ? _i3.Example.fromJson(data, this) : null) as T;
     }
     if (t == _i1.getType<_i4.ListUnitsResponse?>()) {
       return (data != null ? _i4.ListUnitsResponse.fromJson(data, this) : null)
@@ -73,6 +67,9 @@ class Protocol extends _i1.SerializationManagerServer {
           as dynamic;
     }
     try {
+      return _i3.Protocol().deserialize<T>(data, t);
+    } catch (_) {}
+    try {
       return _i2.Protocol().deserialize<T>(data, t);
     } catch (_) {}
     return super.deserialize<T>(data, t);
@@ -80,8 +77,10 @@ class Protocol extends _i1.SerializationManagerServer {
 
   @override
   String? getClassNameForObject(Object data) {
-    if (data is _i3.Example) {
-      return 'Example';
+    String? className;
+    className = _i3.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod_json_rpc_2.$className';
     }
     if (data is _i4.ListUnitsResponse) {
       return 'ListUnitsResponse';
@@ -97,8 +96,9 @@ class Protocol extends _i1.SerializationManagerServer {
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
-    if (data['className'] == 'Example') {
-      return deserialize<_i3.Example>(data['data']);
+    if (data['className'].startsWith('serverpod_json_rpc_2.')) {
+      data['className'] = data['className'].substring(21);
+      return _i3.Protocol().deserializeByClassName(data);
     }
     if (data['className'] == 'ListUnitsResponse') {
       return deserialize<_i4.ListUnitsResponse>(data['data']);
@@ -114,6 +114,12 @@ class Protocol extends _i1.SerializationManagerServer {
 
   @override
   _i1.Table? getTableForType(Type t) {
+    {
+      var table = _i3.Protocol().getTableForType(t);
+      if (table != null) {
+        return table;
+      }
+    }
     {
       var table = _i2.Protocol().getTableForType(t);
       if (table != null) {

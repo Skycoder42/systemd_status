@@ -4,16 +4,22 @@ import 'dart:io';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_client/systemd_status_client.dart';
+import 'package:systemd_status_rpc/systemd_status_rpc.dart';
 
 import 'client_provider.dart';
 
-part 'systemctl_bridge_handler.g.dart';
+part 'systemctl_server_impl.g.dart';
 
 @riverpod
-SystemctlBridgeHandler systemctlBridgeHandler(SystemctlBridgeHandlerRef ref) =>
-    SystemctlBridgeHandler(
-      ref.watch(systemdStatusSerializationManagerProvider),
-    );
+SystemctlServer systemctlServer(SystemctlServerRef ref) {
+  final client = ref.watch(systemdStatusClientProvider);
+  final rpcServer = client.systemctlBridge.createServer(
+    onUnhandledError: SystemctlServerImpl._onUnhandledError,
+  );
+  final instance = SystemctlServerImpl(rpcServer);
+  ref.onDispose(instance.close);
+  return instance;
+}
 
 class InvalidExitCode implements Exception {
   final List<String> arguments;
@@ -31,35 +37,35 @@ class InvalidExitCode implements Exception {
       'with exit code $actualExitCode. (Expected $expectedExitCode)';
 }
 
-class SystemctlBridgeHandler {
-  final SerializationManager _serializationManager;
-  final _logger = Logger('SystemctlBridgeHandler');
+class SystemctlServerImpl extends SystemctlServer {
+  static final _logger = Logger('SystemctlServer');
 
-  SystemctlBridgeHandler(this._serializationManager);
+  SystemctlServerImpl(super.jsonRpcInstance) : super.fromServer();
 
-  Future<SerializableEntity> call(SystemctlCommand cmd) => switch (cmd) {
-        SystemctlCommand.listUnits => _listUnits(),
-      };
-
-  Future<ListUnitsResponse> _listUnits() async {
-    try {
-      final units = await _systemctlJson<List, List<UnitState>>(
-        const [
-          'list-units',
-          '--all',
-          '--recursive',
-        ],
-        fromJson: (json) => json
-            .cast<Map<String, dynamic>>()
-            .map((e) => UnitState.fromJson(e, _serializationManager))
-            .toList(),
-      );
-      return ListUnitsResponse(success: true, units: units);
-    } on Exception catch (e, s) {
-      _logger.severe('listUnits failed with exception', e, s);
-      return ListUnitsResponse(success: false, units: const []);
-    }
+  @override
+  FutureOr<List<UnitInfo>> listUnits(bool all) async {
+    _logger.fine('Calling listUnits');
+    final units = await _systemctlJson<List, List<UnitInfo>>(
+      [
+        'list-units',
+        if (all) '--all',
+        '--recursive',
+      ],
+      fromJson: (json) =>
+          json.cast<Map<String, dynamic>>().map(UnitInfo.fromJson).toList(),
+    );
+    return units;
   }
+
+  static void _onUnhandledError(
+    dynamic error,
+    dynamic stackTrace,
+  ) =>
+      _logger.severe(
+        'Unhandled JSON RPC error:',
+        error,
+        stackTrace as StackTrace?,
+      );
 
   Future<TData> _systemctlJson<TJson, TData>(
     List<String> args, {

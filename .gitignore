@@ -30,3 +30,4 @@ custom_lint.log
 
 # generated files
 *.g.dart
+*.freezed.dart

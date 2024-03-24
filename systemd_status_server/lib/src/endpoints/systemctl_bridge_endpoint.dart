@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_json_rpc_2_server/serverpod_json_rpc_2_server.dart';
+import 'package:systemd_status_rpc/systemd_status_rpc.dart';
 
-import '../rpc/endpoint_stream_channel.dart';
-
-class SystemctlBridgeEndpoint extends Endpoint with EndpointStreamChannelMixin {
+class SystemctlBridgeEndpoint extends Endpoint with EndpointStreamChannel {
   static const _authKeyPasswordName = 'systemctlBridgeAuthKey';
 
   @override
@@ -13,6 +14,25 @@ class SystemctlBridgeEndpoint extends Endpoint with EndpointStreamChannelMixin {
       return;
     }
     await super.streamOpened(session);
+
+    final client = createClient(session);
+    if (client == null) {
+      session.log(
+        'Failed to create RPC client for session',
+        level: LogLevel.error,
+      );
+      return;
+    }
+
+    final systemctlClient = SystemctlClient.fromClient(client);
+    unawaited(systemctlClient.listen());
+    session.log('calling listUnits', level: LogLevel.info);
+    unawaited(
+      systemctlClient.listUnits().then(
+            (units) =>
+                session.log('Received units: $units', level: LogLevel.info),
+          ),
+    );
   }
 
   @override

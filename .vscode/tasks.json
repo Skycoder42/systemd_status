@@ -21,6 +21,18 @@
 		{
 			"type": "dart",
 			"command": "dart",
+			"cwd": "systemd_status_rpc",
+			"args": [
+				"run",
+				"build_runner",
+				"watch"
+			],
+			"problemMatcher": [],
+			"label": "build systemd_status_rpc",
+		},
+		{
+			"type": "dart",
+			"command": "dart",
 			"cwd": "systemd_status_bridge",
 			"args": [
 				"run",
@@ -46,6 +58,7 @@
 			"label": "Build",
 			"dependsOn": [
 				"serverpod: generate -w",
+				"build systemd_status_rpc",
 				"build systemd_status_bridge",
 				"build systemd_status_server",
 			],
