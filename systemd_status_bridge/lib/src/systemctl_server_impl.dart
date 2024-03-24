@@ -49,7 +49,6 @@ class SystemctlServerImpl extends SystemctlServer {
       [
         'list-units',
         if (all) '--all',
-        '--recursive',
       ],
       fromJson: (json) =>
           json.cast<Map<String, dynamic>>().map(UnitInfo.fromJson).toList(),

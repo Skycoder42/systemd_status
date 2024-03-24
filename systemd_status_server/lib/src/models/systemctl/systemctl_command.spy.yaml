@@ -1,4 +1,0 @@
-enum: SystemctlCommand
-serialized: byName
-values:
-  - listUnits

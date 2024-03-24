@@ -1,4 +1,0 @@
-class: ListUnitsResponse
-fields:
-  success: bool
-  units: List<UnitState>

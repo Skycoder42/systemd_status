@@ -39,6 +39,6 @@ scripts:
 
   pre-commit:run:
     run: >-
-      dart pub global run melos exec -c1 --no-flutter --depends-on=dart_pre_commit -- dart run dart_pre_commit &&
-      dart pub global run melos exec -c1 --flutter --depends-on=dart_pre_commit -- flutter pub run dart_pre_commit
+      dart pub global run melos exec --no-flutter --depends-on=dart_pre_commit -- dart run dart_pre_commit &&
+      dart pub global run melos exec --flutter --depends-on=dart_pre_commit -- flutter pub run dart_pre_commit
     description: Run pre commit hooks in all projects

@@ -9,8 +9,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'package:serverpod_json_rpc_2_client/module.dart' as _i2;
-import 'protocol.dart' as _i3;
+import 'dart:async' as _i2;
+import 'package:serverpod_json_rpc_2_client/module.dart' as _i3;
+import 'protocol.dart' as _i4;
 
 /// {@category Endpoint}
 class EndpointSystemctlBridge extends _i1.EndpointRef {
@@ -20,12 +21,26 @@ class EndpointSystemctlBridge extends _i1.EndpointRef {
   String get name => 'systemctlBridge';
 }
 
+/// {@category Endpoint}
+class EndpointUnits extends _i1.EndpointRef {
+  EndpointUnits(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'units';
+
+  _i2.Future<String> listUnitsRaw() => caller.callServerEndpoint<String>(
+        'units',
+        'listUnitsRaw',
+        {},
+      );
+}
+
 class _Modules {
   _Modules(Client client) {
-    rpc = _i2.Caller(client);
+    rpc = _i3.Caller(client);
   }
 
-  late final _i2.Caller rpc;
+  late final _i3.Caller rpc;
 }
 
 class Client extends _i1.ServerpodClient {
@@ -37,23 +52,28 @@ class Client extends _i1.ServerpodClient {
     Duration? connectionTimeout,
   }) : super(
           host,
-          _i3.Protocol(),
+          _i4.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
           connectionTimeout: connectionTimeout,
         ) {
     systemctlBridge = EndpointSystemctlBridge(this);
+    units = EndpointUnits(this);
     modules = _Modules(this);
   }
 
   late final EndpointSystemctlBridge systemctlBridge;
 
+  late final EndpointUnits units;
+
   late final _Modules modules;
 
   @override
-  Map<String, _i1.EndpointRef> get endpointRefLookup =>
-      {'systemctlBridge': systemctlBridge};
+  Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'systemctlBridge': systemctlBridge,
+        'units': units,
+      };
 
   @override
   Map<String, _i1.ModuleEndpointCaller> get moduleLookup =>

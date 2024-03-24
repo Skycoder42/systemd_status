@@ -12,13 +12,6 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_json_rpc_2_server/module.dart' as _i3;
-import 'systemctl/list_units_response.dart' as _i4;
-import 'systemctl/systemctl_command.dart' as _i5;
-import 'systemctl/unit_state.dart' as _i6;
-import 'protocol.dart' as _i7;
-export 'systemctl/list_units_response.dart';
-export 'systemctl/systemctl_command.dart';
-export 'systemctl/unit_state.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -43,29 +36,6 @@ class Protocol extends _i1.SerializationManagerServer {
     if (customConstructors.containsKey(t)) {
       return customConstructors[t]!(data, this) as T;
     }
-    if (t == _i4.ListUnitsResponse) {
-      return _i4.ListUnitsResponse.fromJson(data, this) as T;
-    }
-    if (t == _i5.SystemctlCommand) {
-      return _i5.SystemctlCommand.fromJson(data) as T;
-    }
-    if (t == _i6.UnitState) {
-      return _i6.UnitState.fromJson(data, this) as T;
-    }
-    if (t == _i1.getType<_i4.ListUnitsResponse?>()) {
-      return (data != null ? _i4.ListUnitsResponse.fromJson(data, this) : null)
-          as T;
-    }
-    if (t == _i1.getType<_i5.SystemctlCommand?>()) {
-      return (data != null ? _i5.SystemctlCommand.fromJson(data) : null) as T;
-    }
-    if (t == _i1.getType<_i6.UnitState?>()) {
-      return (data != null ? _i6.UnitState.fromJson(data, this) : null) as T;
-    }
-    if (t == List<_i7.UnitState>) {
-      return (data as List).map((e) => deserialize<_i7.UnitState>(e)).toList()
-          as dynamic;
-    }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
     } catch (_) {}
@@ -82,15 +52,6 @@ class Protocol extends _i1.SerializationManagerServer {
     if (className != null) {
       return 'serverpod_json_rpc_2.$className';
     }
-    if (data is _i4.ListUnitsResponse) {
-      return 'ListUnitsResponse';
-    }
-    if (data is _i5.SystemctlCommand) {
-      return 'SystemctlCommand';
-    }
-    if (data is _i6.UnitState) {
-      return 'UnitState';
-    }
     return super.getClassNameForObject(data);
   }
 
@@ -99,15 +60,6 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data['className'].startsWith('serverpod_json_rpc_2.')) {
       data['className'] = data['className'].substring(21);
       return _i3.Protocol().deserializeByClassName(data);
-    }
-    if (data['className'] == 'ListUnitsResponse') {
-      return deserialize<_i4.ListUnitsResponse>(data['data']);
-    }
-    if (data['className'] == 'SystemctlCommand') {
-      return deserialize<_i5.SystemctlCommand>(data['data']);
-    }
-    if (data['className'] == 'UnitState') {
-      return deserialize<_i6.UnitState>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
