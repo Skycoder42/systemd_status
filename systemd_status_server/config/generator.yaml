@@ -3,3 +3,6 @@ modules:
   serverpod_json_rpc_2:
     nickname: rpc
 client_package_path: ../systemd_status_client
+
+extraClasses:
+  - package:systemd_status_rpc/systemd_status_rpc.dart:UnitInfo

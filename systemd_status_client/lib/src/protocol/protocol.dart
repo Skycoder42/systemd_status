@@ -10,7 +10,9 @@
 library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixes
 
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'package:serverpod_json_rpc_2_client/module.dart' as _i2;
+import 'package:systemd_status_rpc/src/models/unit_info.dart' as _i2;
+import 'package:systemd_status_rpc/systemd_status_rpc.dart' as _i3;
+import 'package:serverpod_json_rpc_2_client/module.dart' as _i4;
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -31,8 +33,18 @@ class Protocol extends _i1.SerializationManager {
     if (customConstructors.containsKey(t)) {
       return customConstructors[t]!(data, this) as T;
     }
+    if (t == List<_i2.UnitInfo>) {
+      return (data as List).map((e) => deserialize<_i2.UnitInfo>(e)).toList()
+          as dynamic;
+    }
+    if (t == _i3.UnitInfo) {
+      return _i3.UnitInfo.fromJson(data, this) as T;
+    }
+    if (t == _i1.getType<_i3.UnitInfo?>()) {
+      return (data != null ? _i3.UnitInfo.fromJson(data, this) : null) as T;
+    }
     try {
-      return _i2.Protocol().deserialize<T>(data, t);
+      return _i4.Protocol().deserialize<T>(data, t);
     } catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -40,9 +52,12 @@ class Protocol extends _i1.SerializationManager {
   @override
   String? getClassNameForObject(Object data) {
     String? className;
-    className = _i2.Protocol().getClassNameForObject(data);
+    className = _i4.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_json_rpc_2.$className';
+    }
+    if (data is _i3.UnitInfo) {
+      return 'UnitInfo';
     }
     return super.getClassNameForObject(data);
   }
@@ -51,7 +66,10 @@ class Protocol extends _i1.SerializationManager {
   dynamic deserializeByClassName(Map<String, dynamic> data) {
     if (data['className'].startsWith('serverpod_json_rpc_2.')) {
       data['className'] = data['className'].substring(21);
-      return _i2.Protocol().deserializeByClassName(data);
+      return _i4.Protocol().deserializeByClassName(data);
+    }
+    if (data['className'] == 'UnitInfo') {
+      return deserialize<_i3.UnitInfo>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

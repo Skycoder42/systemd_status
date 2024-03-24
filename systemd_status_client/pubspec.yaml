@@ -9,3 +9,5 @@ dependencies:
   serverpod_client: 1.2.5
   serverpod_json_rpc_2_client: ^1.0.1
   stream_channel: ^2.1.2
+  systemd_status_rpc:
+    path: ../systemd_status_rpc

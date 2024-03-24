@@ -39,3 +39,8 @@ redis:
   enabled: false
   host: localhost
   port: 8091
+
+systemd:
+  unitFilters:
+    - app-.*
+    - podman.*

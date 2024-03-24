@@ -48,7 +48,10 @@ class SystemctlServerImpl extends SystemctlServer {
     final units = await _systemctlJson<List, List<UnitInfo>>(
       [
         'list-units',
+        '--user',
         if (all) '--all',
+        '*.service',
+        '*.timer',
       ],
       fromJson: (json) =>
           json.cast<Map<String, dynamic>>().map(UnitInfo.fromJson).toList(),

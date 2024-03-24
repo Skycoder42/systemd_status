@@ -1,13 +1,15 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_rpc_codegen/json_rpc_codegen.dart'; // TODO fix this
+import 'package:json_rpc_codegen/json_rpc_codegen.dart';
+import 'package:serverpod_serialization/serverpod_serialization.dart'; // TODO fix this
 
 part 'unit_info.freezed.dart';
 part 'unit_info.g.dart';
 
 @freezed
 sealed class UnitInfo with _$UnitInfo {
+  @With<SerializableEntity>()
   const factory UnitInfo({
     @JsonKey(name: 'unit') required String name,
     @JsonKey(name: 'load') required String loadState,
@@ -16,6 +18,9 @@ sealed class UnitInfo with _$UnitInfo {
     @JsonKey(includeIfNull: false) String? description,
   }) = _UnitInfo;
 
-  factory UnitInfo.fromJson(Map<String, dynamic> json) =>
+  factory UnitInfo.fromJson(
+    Map<String, dynamic> json, [
+    SerializationManager? _,
+  ]) =>
       _$UnitInfoFromJson(json);
 }

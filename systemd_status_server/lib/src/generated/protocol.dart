@@ -12,6 +12,8 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_json_rpc_2_server/module.dart' as _i3;
+import 'package:systemd_status_rpc/src/models/unit_info.dart' as _i4;
+import 'package:systemd_status_rpc/systemd_status_rpc.dart' as _i5;
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -36,6 +38,16 @@ class Protocol extends _i1.SerializationManagerServer {
     if (customConstructors.containsKey(t)) {
       return customConstructors[t]!(data, this) as T;
     }
+    if (t == List<_i4.UnitInfo>) {
+      return (data as List).map((e) => deserialize<_i4.UnitInfo>(e)).toList()
+          as dynamic;
+    }
+    if (t == _i5.UnitInfo) {
+      return _i5.UnitInfo.fromJson(data, this) as T;
+    }
+    if (t == _i1.getType<_i5.UnitInfo?>()) {
+      return (data != null ? _i5.UnitInfo.fromJson(data, this) : null) as T;
+    }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
     } catch (_) {}
@@ -52,6 +64,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (className != null) {
       return 'serverpod_json_rpc_2.$className';
     }
+    if (data is _i5.UnitInfo) {
+      return 'UnitInfo';
+    }
     return super.getClassNameForObject(data);
   }
 
@@ -60,6 +75,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data['className'].startsWith('serverpod_json_rpc_2.')) {
       data['className'] = data['className'].substring(21);
       return _i3.Protocol().deserializeByClassName(data);
+    }
+    if (data['className'] == 'UnitInfo') {
+      return deserialize<_i5.UnitInfo>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

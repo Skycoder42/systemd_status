@@ -1,0 +1,141 @@
+Available unit load states:
+stub
+loaded
+not-found
+bad-setting
+error
+merged
+masked
+
+Available unit active states:
+active
+reloading
+inactive
+failed
+activating
+deactivating
+maintenance
+
+Available unit file states:
+enabled
+enabled-runtime
+linked
+linked-runtime
+alias
+masked
+masked-runtime
+static
+disabled
+indirect
+generated
+transient
+bad
+
+Available automount unit substates:
+dead
+waiting
+running
+failed
+
+Available device unit substates:
+dead
+tentative
+plugged
+
+Available mount unit substates:
+dead
+mounting
+mounting-done
+mounted
+remounting
+unmounting
+remounting-sigterm
+remounting-sigkill
+unmounting-sigterm
+unmounting-sigkill
+failed
+cleaning
+
+Available path unit substates:
+dead
+waiting
+running
+failed
+
+Available scope unit substates:
+dead
+start-chown
+running
+abandoned
+stop-sigterm
+stop-sigkill
+failed
+
+Available service unit substates:
+dead
+condition
+start-pre
+start
+start-post
+running
+exited
+reload
+reload-signal
+reload-notify
+stop
+stop-watchdog
+stop-sigterm
+stop-sigkill
+stop-post
+final-watchdog
+final-sigterm
+final-sigkill
+failed
+dead-before-auto-restart
+failed-before-auto-restart
+dead-resources-pinned
+auto-restart
+auto-restart-queued
+cleaning
+
+Available slice unit substates:
+dead
+active
+
+Available socket unit substates:
+dead
+start-pre
+start-chown
+start-post
+listening
+running
+stop-pre
+stop-pre-sigterm
+stop-pre-sigkill
+stop-post
+final-sigterm
+final-sigkill
+failed
+cleaning
+
+Available swap unit substates:
+dead
+activating
+activating-done
+active
+deactivating
+deactivating-sigterm
+deactivating-sigkill
+failed
+cleaning
+
+Available target unit substates:
+dead
+active
+
+Available timer unit substates:
+dead
+waiting
+running
+elapsed
+failed
