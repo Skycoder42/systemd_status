@@ -8,7 +8,7 @@
 PRODUCT_NAME = systemd_status_flutter
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.systemdStatusFlutter
+PRODUCT_BUNDLE_IDENTIFIER = de.skycoder42.systemdStatusFlutter
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2024 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 de.skycoder42. All rights reserved.
