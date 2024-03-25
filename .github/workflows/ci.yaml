@@ -113,26 +113,26 @@ jobs:
         systemd_status_rpc
         systemd_status_client
       unitTestPaths: ""
-  flutter_cd:
-    name: systemd_status_flutter - CD
-    uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
-    needs:
-      - rpc_package
-      - client_package
-      - flutter_ci
-    with:
-      enabledPlatforms: ${{ needs.flutter_ci.outputs.enabledPlatforms }}
-      workingDirectory: systemd_status_flutter
-      artifactDependencies: >-
-        systemd_status_rpc
-        systemd_status_client
-      tagPrefix: flutter/v
-      googlePlayTrack: internal
-      googlePlayReleaseStatus: draft
-    secrets:
-      dartDefines: |
-        SENTRY_DSN=${{ secrets.SENTRY_DSN }}
-      keystore: ${{ secrets.UPLOAD_KEYSTORE }}
-      keystorePassword: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
-      sentryAuthToken: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
+  # flutter_cd:
+  #   name: systemd_status_flutter - CD
+  #   uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
+  #   needs:
+  #     - rpc_package
+  #     - client_package
+  #     - flutter_ci
+  #   with:
+  #     enabledPlatforms: ${{ needs.flutter_ci.outputs.enabledPlatforms }}
+  #     workingDirectory: systemd_status_flutter
+  #     artifactDependencies: >-
+  #       systemd_status_rpc
+  #       systemd_status_client
+  #     tagPrefix: flutter/v
+  #     googlePlayTrack: internal
+  #     googlePlayReleaseStatus: draft
+  #   secrets:
+  #     dartDefines: |
+  #       SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+  #     keystore: ${{ secrets.UPLOAD_KEYSTORE }}
+  #     keystorePassword: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+  #     sentryAuthToken: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  #     googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
