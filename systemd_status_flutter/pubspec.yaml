@@ -30,19 +30,22 @@ dev_dependencies:
   go_router_builder: ^2.4.1
   riverpod_generator: ^2.4.0
   riverpod_lint: ^2.3.10
-  rps: ^0.8.1
 
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/icons/
 
 flutter_native_splash:
   color: "#f6f5f4"
   color_dark: "#211F23"
-  image: assets/native/splash-light.png
-  image_dark: assets/native/splash-dark.png
+  image: assets/splash/splash-light.png
+  image_dark: assets/splash/splash-dark.png
 
 scripts:
   gen:
     splash: dart run flutter_native_splash:create
-  run: flutter run -d web-server --web-port 8081
+  start:
+    linux: flutter run -d linux
+    web: flutter run -d web-server --web-port 8081
