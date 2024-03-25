@@ -1,8 +1,9 @@
 name: systemd_status_client
-description: Starting point for a Serverpod client.
+version: 1.0.0
+publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ^3.3.0
 
 dependencies:
   json_rpc_2: ^3.0.2

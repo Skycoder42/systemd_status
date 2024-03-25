@@ -26,6 +26,25 @@ jobs:
       workingDirectory: systemd_status_rpc
       buildRunner: true
 
+  client_ci:
+    name: systemd_status_client - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
+    needs:
+      - rpc_package
+    with:
+      workingDirectory: systemd_status_client
+      artifactDependencies: systemd_status_rpc
+      unitTestPaths: ""
+  client_package:
+    name: systemd_status_client - Package
+    uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
+    needs:
+      - rpc_package
+      - client_ci
+    with:
+      workingDirectory: systemd_status_client
+      artifactDependencies: systemd_status_rpc
+
   server_ci:
     name: systemd_status_server - CI
     uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
@@ -33,17 +52,31 @@ jobs:
       - rpc_package
     with:
       workingDirectory: systemd_status_server
-      artifactDependencies: |
-        systemd_status_rpc
+      artifactDependencies: systemd_status_rpc
       buildRunner: true
       unitTestPaths: ""
-  server_package:
-    name: systemd_status_server - Package
-    uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
+
+  bridge_ci:
+    name: systemd_status_bridge - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
     needs:
       - rpc_package
-      - server_ci
+      - client_package
     with:
-      workingDirectory: systemd_status_server
+      workingDirectory: systemd_status_bridge
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
       buildRunner: true
+      unitTestPaths: ""
+
+  flutter_ci:
+    name: systemd_status_flutter - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
+    needs:
+      - client_package
+    with:
+      workingDirectory: systemd_status_flutter
+      artifactDependencies: systemd_status_client
+      unitTestPaths: ""
 
