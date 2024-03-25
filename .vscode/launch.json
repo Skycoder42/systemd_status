@@ -32,7 +32,8 @@
       "program": "bin/main.dart",
       "args": [
         "--apply-migrations"
-      ]
+      ],
+      "preLaunchTask": "podman-compose up -d"
     },
     {
       "name": "systemd_status_bridge",

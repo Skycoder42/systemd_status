@@ -1,7 +1,7 @@
 import 'package:serverpod/serverpod.dart';
 import 'package:systemd_status_rpc/systemd_status_rpc.dart';
 
-import '../config/systemd_config.dart';
+import '../config/custom_configs.dart';
 import '../di/session_ref.dart';
 import '../services/systemctl_service.dart';
 

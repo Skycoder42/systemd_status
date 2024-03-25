@@ -42,5 +42,4 @@ redis:
 
 systemd:
   unitFilters:
-    - app-.*
-    - podman.*
+    - .*

@@ -22,29 +22,42 @@ RUN apt-get update ; \
   rm -f /lib/systemd/system/plymouth* ; \
   rm -f /lib/systemd/system/systemd-update-utmp*
 
-# install dart sdk
-FROM docker.io/library/dart:stable AS build
+# build rpc
+FROM docker.io/library/dart:stable AS build_rpc
+WORKDIR /src/systemd_status_rpc
+COPY systemd_status_rpc/pubspec.* ./
+RUN dart pub get
+COPY systemd_status_rpc .
+RUN dart pub get --offline
+RUN dart run build_runner build --delete-conflicting-outputs
 
-WORKDIR /app/systemd_status_client
+# build client
+FROM docker.io/library/dart:stable AS build_client
+COPY --from=build_rpc /src/systemd_status_rpc/pubspec.* /src/systemd_status_rpc/
+WORKDIR /src/systemd_status_client
 COPY systemd_status_client/pubspec.* ./
+RUN dart pub get
+COPY --from=build_rpc /src/systemd_status_rpc /src/systemd_status_rpc
+COPY systemd_status_client .
+RUN dart pub get --offline
 
-WORKDIR /app/systemd_status_bridge
+# build bridge
+FROM docker.io/library/dart:stable AS build_bridge
+COPY --from=build_rpc /src/systemd_status_rpc/pubspec.* /src/systemd_status_rpc/
+COPY --from=build_client /src/systemd_status_client/pubspec.* /src/systemd_status_client/
+WORKDIR /src/systemd_status_bridge
 COPY systemd_status_bridge/pubspec.* ./
 RUN dart pub get
-
-WORKDIR /app/systemd_status_client
-COPY systemd_status_client .
-
-WORKDIR /app/systemd_status_bridge
+COPY --from=build_rpc /src/systemd_status_rpc /src/systemd_status_rpc
+COPY --from=build_client /src/systemd_status_client /src/systemd_status_client
 COPY systemd_status_bridge .
 RUN dart pub get --offline
 RUN dart run build_runner build --delete-conflicting-outputs
-RUN dart compile exe bin/bridge.dart -o bin/bridge
+RUN dart compile exe bin/main.dart -o bin/bridge
 
 FROM systemd
-
-COPY --from=build /app/systemd_status_bridge/bin/bridge /app/bin/
-COPY systemd_status_bridge/docker/bridge.service /etc/systemd/system/bridge.service
+COPY --from=build_bridge /src/systemd_status_bridge/bin/bridge /app/bin/
+COPY tool/docker/bridge/bridge.service /etc/systemd/system/bridge.service
 RUN ln -s /etc/systemd/system/bridge.service /etc/systemd/system/multi-user.target.wants/bridge.service
 RUN echo 'test-key' > /app/key.txt
 

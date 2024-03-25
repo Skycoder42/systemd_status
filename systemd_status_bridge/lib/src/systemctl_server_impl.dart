@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:logging/logging.dart';
+import 'package:posix/posix.dart' as posix;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_client/systemd_status_client.dart';
 import 'package:systemd_status_rpc/systemd_status_rpc.dart';
@@ -48,7 +49,7 @@ class SystemctlServerImpl extends SystemctlServer {
     final units = await _systemctlJson<List, List<UnitInfo>>(
       [
         'list-units',
-        '--user',
+        if (posix.geteuid() != 0) '--user',
         if (all) '--all',
         '*.service',
         '*.timer',

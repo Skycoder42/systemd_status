@@ -66,6 +66,17 @@
 				"kind": "build",
 				"isDefault": true
 			}
-		}
+		},
+		{
+			"type": "shell",
+			"command": "podman-compose",
+			"args": [
+				"up",
+				"-d"
+			],
+			"problemMatcher": [],
+			"label": "podman-compose up -d",
+			"detail": "systemd_status_server",
+		},
 	]
 }
