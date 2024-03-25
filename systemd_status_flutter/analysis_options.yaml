@@ -1,1 +1,5 @@
 include: package:dart_test_tools/strict.yaml
+
+custom_lint:
+  rules:
+    - no_self_package_imports: false

@@ -39,6 +39,10 @@ flutter:
   assets:
     - assets/icons/
 
+flutter_gen:
+  integrations:
+    flutter_svg: true
+
 flutter_native_splash:
   color: "#f6f5f4"
   color_dark: "#211F23"
