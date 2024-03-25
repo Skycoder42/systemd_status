@@ -6,6 +6,12 @@ publish_to: none
 environment:
   sdk: ^3.3.0
 
+platforms:
+  linux:
+
+executables:
+  systemd-status-systemctl-bridge: main
+
 dependencies:
   args: ^2.4.2
   build_cli_annotations: ^2.1.0

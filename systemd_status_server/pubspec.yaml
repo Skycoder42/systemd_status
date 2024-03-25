@@ -5,6 +5,9 @@ publish_to: none
 environment:
   sdk: ^3.3.0
 
+executables:
+  systemd-status-server: main
+
 dependencies:
   checked_yaml: ^2.0.3
   freezed_annotation: ^2.4.1
