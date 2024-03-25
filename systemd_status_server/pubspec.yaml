@@ -5,6 +5,11 @@ publish_to: none
 environment:
   sdk: ^3.3.0
 
+platforms:
+  linux:
+  macos:
+  windows:
+
 executables:
   systemd-status-server: main
 
