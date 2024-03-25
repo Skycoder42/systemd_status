@@ -20,6 +20,8 @@ dependencies:
   serverpod_flutter: 1.2.5
   systemd_status_client:
     path: ../systemd_status_client
+  systemd_status_rpc:
+    path: ../systemd_status_rpc
 
 dev_dependencies:
   build_runner: ^2.4.8
