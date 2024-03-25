@@ -12,3 +12,6 @@ dependencies:
   stream_channel: ^2.1.2
   systemd_status_rpc:
     path: ../systemd_status_rpc
+
+dev_dependencies:
+  custom_lint: ^0.6.4
