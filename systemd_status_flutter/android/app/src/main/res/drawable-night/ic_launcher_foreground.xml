@@ -9,7 +9,7 @@
       android:translateY="22.766111">
     <path
         android:pathData="M0,30L0,56L10,56L10,52L4,52L4,34h6v-4zM76,30v4h6v18h-6v4L86,56L86,30Z"
-        android:fillColor="#241f31"/>
+        android:fillColor="#ddd9d5"/>
     <path
         android:pathData="M45,43 L63,33v20z"
         android:fillColor="#30d475"/>
