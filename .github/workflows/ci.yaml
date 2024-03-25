@@ -57,7 +57,7 @@ jobs:
       unitTestPaths: ""
   server_cd:
     name: systemd_status_server - CD
-    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
+    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
     needs:
       - rpc_package
       - server_ci
@@ -70,7 +70,7 @@ jobs:
 
   bridge_ci:
     name: systemd_status_bridge - CI
-    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
     needs:
       - rpc_package
       - client_package
