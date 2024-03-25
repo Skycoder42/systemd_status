@@ -9,16 +9,43 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_native_splash: ^2.4.0
+  flutter_riverpod: ^2.5.1
+  go_router: ^13.2.1
+  logging: ^1.2.0
+  riverpod_annotation: ^2.3.5
   serverpod_flutter: 1.2.5
   systemd_status_client:
     path: ../systemd_status_client
 
 dev_dependencies:
-  custom_lint: ^0.6.2
+  build_runner: ^2.4.8
+  custom_lint: ^0.6.4
   dart_pre_commit: ^5.3.0
-  dart_test_tools: ^5.6.2
+  dart_test_tools: ^5.7.0
   flutter_test:
     sdk: flutter
+  go_router_builder: ^2.4.1
+  riverpod_generator: ^2.4.0
+  riverpod_lint: ^2.3.10
+  rps: ^0.8.1
 
 flutter:
   uses-material-design: true
+  generate: true
+
+flutter_native_splash:
+  color: "#f6f5f4"
+  color_dark: "#211F23"
+  image: assets/native/splash.png
+  image_dark: assets/native/splash.png
+  android: true
+  ios: true
+  web: true
+
+scripts:
+  gen:
+    splash: dart run flutter_native_splash:create
+  run: flutter run -d web-server --web-port 8081

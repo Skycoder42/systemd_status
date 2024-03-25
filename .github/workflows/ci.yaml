@@ -130,9 +130,6 @@ jobs:
   #     googlePlayTrack: internal
   #     googlePlayReleaseStatus: draft
   #   secrets:
-  #     dartDefines: |
-  #       SENTRY_DSN=${{ secrets.SENTRY_DSN }}
   #     keystore: ${{ secrets.UPLOAD_KEYSTORE }}
   #     keystorePassword: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
-  #     sentryAuthToken: ${{ secrets.SENTRY_AUTH_TOKEN }}
   #     googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
