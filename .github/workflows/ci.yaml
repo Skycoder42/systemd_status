@@ -61,6 +61,8 @@ jobs:
     needs:
       - rpc_package
       - server_ci
+    permissions:
+      contents: write
     with:
       enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
       workingDirectory: systemd_status_server
@@ -88,6 +90,8 @@ jobs:
       - rpc_package
       - client_package
       - bridge_ci
+    permissions:
+      contents: write
     with:
       enabledPlatforms: ${{ needs.bridge_ci.outputs.enabledPlatforms }}
       workingDirectory: systemd_status_bridge
