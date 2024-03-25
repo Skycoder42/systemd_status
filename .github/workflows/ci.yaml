@@ -1,0 +1,49 @@
+name: CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  rpc_ci:
+    name: systemd_status_rpc - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
+    with:
+      workingDirectory: systemd_status_rpc
+      buildRunner: true
+      unitTestPaths: ""
+  rpc_package:
+    name: systemd_status_rpc - Package
+    uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
+    needs:
+      - rpc_ci
+    with:
+      workingDirectory: systemd_status_rpc
+      buildRunner: true
+
+  server_ci:
+    name: systemd_status_server - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
+    needs:
+      - rpc_package
+    with:
+      workingDirectory: systemd_status_server
+      artifactDependencies: |
+        systemd_status_rpc
+      buildRunner: true
+      unitTestPaths: ""
+  server_package:
+    name: systemd_status_server - Package
+    uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
+    needs:
+      - rpc_package
+      - server_ci
+    with:
+      workingDirectory: systemd_status_server
+      buildRunner: true
+
