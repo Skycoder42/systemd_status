@@ -19,3 +19,7 @@ abstract base class SystemdStatusTheme {
         ),
       );
 }
+
+extension BuildContextThemeX on BuildContext {
+  ThemeData get theme => Theme.of(this);
+}

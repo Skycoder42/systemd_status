@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_rpc/systemd_status_rpc.dart';
 
 import '../../providers/client_provider.dart';
+import 'widgets/unit_card.dart';
 
 part 'units_page.g.dart';
 
@@ -22,7 +23,7 @@ class UnitsPage extends ConsumerWidget {
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: [
-                  for (final unit in units) ListTile(title: Text(unit.name)),
+                  for (final unit in units) UnitCard(unit: unit),
                 ],
               ),
             ),
