@@ -26,13 +26,15 @@ class UnitCard extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  StateIcon(activeState: unit.activeState),
+                  StateIcon(unit: unit),
                   const SizedBox(width: 8),
-                  Text(
-                    unit.name,
-                    style: context.theme.textTheme.titleLarge,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Expanded(
+                    child: Text(
+                      unit.name,
+                      style: context.theme.textTheme.titleLarge,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),

@@ -22,5 +22,6 @@ class SystemdStatusApp extends ConsumerWidget {
         color: SystemdStatusTheme.appColor,
         theme: ref.watch(appThemeProvider(Brightness.light)),
         darkTheme: ref.watch(appThemeProvider(Brightness.dark)),
+        themeMode: ThemeMode.light,
       );
 }

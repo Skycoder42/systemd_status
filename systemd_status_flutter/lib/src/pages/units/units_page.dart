@@ -20,12 +20,20 @@ class UnitsPage extends ConsumerWidget {
         body: switch (ref.watch(unitsProvider)) {
           AsyncData(value: final units) => RefreshIndicator(
               onRefresh: () async => ref.refresh(unitsProvider.future),
-              child: ListView(
+              child: GridView.extent(
+                maxCrossAxisExtent: 600,
+                childAspectRatio: 2,
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: [
                   for (final unit in units) UnitCard(unit: unit),
                 ],
               ),
+              // child: ListView(
+              //   physics: const AlwaysScrollableScrollPhysics(),
+              //   children: [
+              //     for (final unit in units) UnitCard(unit: unit),
+              //   ],
+              // ),
             ),
           AsyncError(error: final error, stackTrace: final stackTrace) =>
             Column(
