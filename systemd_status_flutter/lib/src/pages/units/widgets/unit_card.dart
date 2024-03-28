@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:systemd_status_rpc/systemd_status_rpc.dart';
 
 import '../../../app/theme.dart';
+import '../../models/state_group.dart';
 import 'state_icon.dart';
 
 class UnitCard extends StatelessWidget {
@@ -15,7 +16,7 @@ class UnitCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-        surfaceTintColor: _activeColor(context) ?? Colors.transparent,
+        surfaceTintColor: unit.group.color(context) ?? Colors.transparent,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -51,12 +52,16 @@ class UnitCard extends StatelessWidget {
                 children: [
                   Text(
                     unit.loadState.name,
-                    style: TextStyle(color: _loadColor(context)),
+                    style: TextStyle(
+                      color: unit.loadState.group.color(context),
+                    ),
                   ),
                   const VerticalDivider(thickness: 2),
                   Text(
                     unit.activeState.name,
-                    style: TextStyle(color: _activeColor(context)),
+                    style: TextStyle(
+                      color: unit.activeState.group.color(context),
+                    ),
                   ),
                   const VerticalDivider(thickness: 2),
                   Text(unit.subState),
@@ -72,26 +77,4 @@ class UnitCard extends StatelessWidget {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<UnitInfo>('unit', unit));
   }
-
-  Color? _activeColor(BuildContext context) => switch (unit.activeState) {
-        ActiveActiveState() => context.theme.colorScheme.primary,
-        ReloadingActiveState() => context.theme.colorScheme.secondary,
-        InactiveActiveState() => null,
-        FailedActiveState() => context.theme.colorScheme.error,
-        ActivatingActiveState() => context.theme.colorScheme.secondary,
-        DeactivatingActiveState() => context.theme.colorScheme.secondary,
-        MaintenanceActiveState() => context.theme.colorScheme.tertiary,
-        UnknownActiveState() => null,
-      };
-
-  Color? _loadColor(BuildContext context) => switch (unit.loadState) {
-        StubLoadState() => null,
-        LoadedLoadState() => context.theme.colorScheme.primary,
-        NotFoundLoadState() => context.theme.colorScheme.error,
-        BadSettingLoadState() => context.theme.colorScheme.error,
-        ErrorLoadState() => context.theme.colorScheme.error,
-        MergedLoadState() => context.theme.colorScheme.secondary,
-        MaskedLoadState() => context.theme.colorScheme.secondary,
-        UnknownLoadState() => null,
-      };
 }
