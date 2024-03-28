@@ -17,7 +17,7 @@ dependencies:
   go_router: ^13.2.1
   logging: ^1.2.0
   riverpod_annotation: ^2.3.5
-  serverpod_flutter: 1.2.5
+  serverpod_flutter: 1.2.6
   systemd_status_client:
     path: ../systemd_status_client
   systemd_status_rpc:

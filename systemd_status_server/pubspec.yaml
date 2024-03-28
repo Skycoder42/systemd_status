@@ -20,9 +20,9 @@ dependencies:
   meta: ^1.12.0
   riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
-  serverpod: 1.2.5
+  serverpod: 1.2.6
   serverpod_json_rpc_2_server: ^1.0.0
-  serverpod_shared: 1.2.5
+  serverpod_shared: 1.2.6
   stream_channel: ^2.1.2
   systemd_status_rpc:
     path: ../systemd_status_rpc
