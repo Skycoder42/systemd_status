@@ -11,7 +11,8 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/systemctl_bridge_endpoint.dart' as _i2;
 import '../endpoints/units_endpoint.dart' as _i3;
-import 'package:serverpod_json_rpc_2_server/module.dart' as _i4;
+import 'package:serverpod_auth_server/module.dart' as _i4;
+import 'package:serverpod_json_rpc_2_server/module.dart' as _i5;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -50,7 +51,8 @@ class Endpoints extends _i1.EndpointDispatch {
         )
       },
     );
-    modules['serverpod_json_rpc_2'] = _i4.Endpoints()
+    modules['serverpod_auth'] = _i4.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_json_rpc_2'] = _i5.Endpoints()
       ..initializeEndpoints(server);
   }
 }

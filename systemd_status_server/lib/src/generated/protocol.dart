@@ -11,9 +11,10 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
-import 'package:serverpod_json_rpc_2_server/module.dart' as _i3;
-import 'package:systemd_status_rpc/src/models/unit_info.dart' as _i4;
-import 'package:systemd_status_rpc/systemd_status_rpc.dart' as _i5;
+import 'package:serverpod_auth_server/module.dart' as _i3;
+import 'package:serverpod_json_rpc_2_server/module.dart' as _i4;
+import 'package:systemd_status_rpc/src/models/unit_info.dart' as _i5;
+import 'package:systemd_status_rpc/systemd_status_rpc.dart' as _i6;
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -26,6 +27,7 @@ class Protocol extends _i1.SerializationManagerServer {
 
   static final List<_i2.TableDefinition> targetTableDefinitions = [
     ..._i3.Protocol.targetTableDefinitions,
+    ..._i4.Protocol.targetTableDefinitions,
     ..._i2.Protocol.targetTableDefinitions,
   ];
 
@@ -38,18 +40,21 @@ class Protocol extends _i1.SerializationManagerServer {
     if (customConstructors.containsKey(t)) {
       return customConstructors[t]!(data, this) as T;
     }
-    if (t == List<_i4.UnitInfo>) {
-      return (data as List).map((e) => deserialize<_i4.UnitInfo>(e)).toList()
+    if (t == List<_i5.UnitInfo>) {
+      return (data as List).map((e) => deserialize<_i5.UnitInfo>(e)).toList()
           as dynamic;
     }
-    if (t == _i5.UnitInfo) {
-      return _i5.UnitInfo.fromJson(data, this) as T;
+    if (t == _i6.UnitInfo) {
+      return _i6.UnitInfo.fromJson(data, this) as T;
     }
-    if (t == _i1.getType<_i5.UnitInfo?>()) {
-      return (data != null ? _i5.UnitInfo.fromJson(data, this) : null) as T;
+    if (t == _i1.getType<_i6.UnitInfo?>()) {
+      return (data != null ? _i6.UnitInfo.fromJson(data, this) : null) as T;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
+    } catch (_) {}
+    try {
+      return _i4.Protocol().deserialize<T>(data, t);
     } catch (_) {}
     try {
       return _i2.Protocol().deserialize<T>(data, t);
@@ -62,9 +67,13 @@ class Protocol extends _i1.SerializationManagerServer {
     String? className;
     className = _i3.Protocol().getClassNameForObject(data);
     if (className != null) {
+      return 'serverpod_auth.$className';
+    }
+    className = _i4.Protocol().getClassNameForObject(data);
+    if (className != null) {
       return 'serverpod_json_rpc_2.$className';
     }
-    if (data is _i5.UnitInfo) {
+    if (data is _i6.UnitInfo) {
       return 'UnitInfo';
     }
     return super.getClassNameForObject(data);
@@ -72,12 +81,16 @@ class Protocol extends _i1.SerializationManagerServer {
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
-    if (data['className'].startsWith('serverpod_json_rpc_2.')) {
-      data['className'] = data['className'].substring(21);
+    if (data['className'].startsWith('serverpod_auth.')) {
+      data['className'] = data['className'].substring(15);
       return _i3.Protocol().deserializeByClassName(data);
     }
+    if (data['className'].startsWith('serverpod_json_rpc_2.')) {
+      data['className'] = data['className'].substring(21);
+      return _i4.Protocol().deserializeByClassName(data);
+    }
     if (data['className'] == 'UnitInfo') {
-      return deserialize<_i5.UnitInfo>(data['data']);
+      return deserialize<_i6.UnitInfo>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
@@ -86,6 +99,12 @@ class Protocol extends _i1.SerializationManagerServer {
   _i1.Table? getTableForType(Type t) {
     {
       var table = _i3.Protocol().getTableForType(t);
+      if (table != null) {
+        return table;
+      }
+    }
+    {
+      var table = _i4.Protocol().getTableForType(t);
       if (table != null) {
         return table;
       }

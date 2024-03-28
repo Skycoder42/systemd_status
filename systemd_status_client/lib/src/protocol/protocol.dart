@@ -12,7 +12,8 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'package:systemd_status_rpc/src/models/unit_info.dart' as _i2;
 import 'package:systemd_status_rpc/systemd_status_rpc.dart' as _i3;
-import 'package:serverpod_json_rpc_2_client/module.dart' as _i4;
+import 'package:serverpod_auth_client/module.dart' as _i4;
+import 'package:serverpod_json_rpc_2_client/module.dart' as _i5;
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -46,6 +47,9 @@ class Protocol extends _i1.SerializationManager {
     try {
       return _i4.Protocol().deserialize<T>(data, t);
     } catch (_) {}
+    try {
+      return _i5.Protocol().deserialize<T>(data, t);
+    } catch (_) {}
     return super.deserialize<T>(data, t);
   }
 
@@ -53,6 +57,10 @@ class Protocol extends _i1.SerializationManager {
   String? getClassNameForObject(Object data) {
     String? className;
     className = _i4.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod_auth.$className';
+    }
+    className = _i5.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_json_rpc_2.$className';
     }
@@ -64,9 +72,13 @@ class Protocol extends _i1.SerializationManager {
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
+    if (data['className'].startsWith('serverpod_auth.')) {
+      data['className'] = data['className'].substring(15);
+      return _i4.Protocol().deserializeByClassName(data);
+    }
     if (data['className'].startsWith('serverpod_json_rpc_2.')) {
       data['className'] = data['className'].substring(21);
-      return _i4.Protocol().deserializeByClassName(data);
+      return _i5.Protocol().deserializeByClassName(data);
     }
     if (data['className'] == 'UnitInfo') {
       return deserialize<_i3.UnitInfo>(data['data']);

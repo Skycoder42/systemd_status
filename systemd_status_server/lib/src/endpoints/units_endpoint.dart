@@ -6,6 +6,9 @@ import '../di/session_ref.dart';
 import '../services/systemctl_service.dart';
 
 class UnitsEndpoint extends Endpoint {
+  @override
+  bool get requireLogin => true;
+
   Future<List<UnitInfo>> listUnits(Session session) async {
     final service = session.ref.read(systemctlServiceProvider);
     final units = await service.listUnits(all: true);

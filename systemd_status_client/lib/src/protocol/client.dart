@@ -11,8 +11,9 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:systemd_status_rpc/src/models/unit_info.dart' as _i3;
-import 'package:serverpod_json_rpc_2_client/module.dart' as _i4;
-import 'protocol.dart' as _i5;
+import 'package:serverpod_auth_client/module.dart' as _i4;
+import 'package:serverpod_json_rpc_2_client/module.dart' as _i5;
+import 'protocol.dart' as _i6;
 
 /// {@category Endpoint}
 class EndpointSystemctlBridge extends _i1.EndpointRef {
@@ -39,10 +40,13 @@ class EndpointUnits extends _i1.EndpointRef {
 
 class _Modules {
   _Modules(Client client) {
-    rpc = _i4.Caller(client);
+    auth = _i4.Caller(client);
+    rpc = _i5.Caller(client);
   }
 
-  late final _i4.Caller rpc;
+  late final _i4.Caller auth;
+
+  late final _i5.Caller rpc;
 }
 
 class Client extends _i1.ServerpodClient {
@@ -54,7 +58,7 @@ class Client extends _i1.ServerpodClient {
     Duration? connectionTimeout,
   }) : super(
           host,
-          _i5.Protocol(),
+          _i6.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -78,6 +82,8 @@ class Client extends _i1.ServerpodClient {
       };
 
   @override
-  Map<String, _i1.ModuleEndpointCaller> get moduleLookup =>
-      {'rpc': modules.rpc};
+  Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {
+        'auth': modules.auth,
+        'rpc': modules.rpc,
+      };
 }

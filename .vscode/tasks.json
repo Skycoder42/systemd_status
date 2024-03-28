@@ -85,8 +85,7 @@
 			"command": "podman-compose",
 			"args": [
 				"up",
-				"-d",
-				"--build"
+				"-d"
 			],
 			"problemMatcher": [],
 			"label": "podman-compose up -d",
