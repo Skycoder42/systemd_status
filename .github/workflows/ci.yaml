@@ -74,6 +74,8 @@ jobs:
   server_deploy:
     name: systemd_status_server - Publish docker image
     uses: Skycoder42/dart_test_tools/.github/workflows/docker.yml@main
+    needs:
+      - server_cd
     with:
       imageName: skycoder42/systemd-status-server
       version: ${{ needs.server_cd.outputs.releaseVersion }}
