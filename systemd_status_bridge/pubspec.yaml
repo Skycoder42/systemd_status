@@ -1,6 +1,7 @@
 name: systemd_status_bridge
 description: A sample command-line application.
 version: 0.1.0
+homepage: https://github.com/Skycoder42/systemd_status
 publish_to: none
 
 environment:
