@@ -111,7 +111,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/deb.yml@main
     with:
       workingDirectory: systemd_status_bridge
-      packagecloudRepository: systemd_status_bridge/ubuntu/jammy
+      packagecloudRepository: systemd_status/ubuntu/jammy
     secrets:
       packagecloudToken: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
