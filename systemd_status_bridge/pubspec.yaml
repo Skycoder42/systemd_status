@@ -35,6 +35,10 @@ dev_dependencies:
   riverpod_generator: ^2.4.0
   riverpod_lint: ^2.3.10
 
+aur:
+  maintainer: Skycoder42 <Skycoder42@users.noreply.github.com>
+  license: BSD
+
 dart_pre_commit:
   flutter-compat: false
 
