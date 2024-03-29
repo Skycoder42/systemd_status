@@ -16,6 +16,20 @@ Future<void> run(List<String> args) async {
     Endpoints(),
   );
 
+  auth.AuthConfig.set(
+    auth.AuthConfig(
+      sendValidationEmail: (session, email, validationCode) async {
+        print('sendValidationEmail for $email: $validationCode');
+        return true;
+      },
+      sendPasswordResetEmail: (session, userInfo, validationCode) async {
+        print('sendPasswordResetEmail for $userInfo: $validationCode');
+        return true;
+      },
+      allowUnsecureRandom: false,
+    ),
+  );
+
   // If you are using any future calls, they need to be registered here.
   // pod.registerFutureCall(ExampleFutureCall(), 'exampleFutureCall');
 
