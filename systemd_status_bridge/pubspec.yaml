@@ -1,6 +1,6 @@
 name: systemd_status_bridge
 description: A sample command-line application.
-version: 1.0.0
+version: 1.0.1
 publish_to: none
 
 environment:

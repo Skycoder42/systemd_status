@@ -102,37 +102,17 @@ jobs:
       buildRunner: true
       archivePrefix: systemd-status-systemctl-bridge
       tagPrefix: bridge/v
-  bridge_package:
+  bridge_deploy:
     name: systemd_status_bridge - Create debian package
     needs:
       - bridge_cd
     if: needs.bridge_cd.outputs.releaseCreated == 'true'
     uses: Skycoder42/dart_test_tools/.github/workflows/deb.yml@main
-    permissions:
-      contents: write
     with:
-      tagPrefix: bridge/v
-      version: ${{ needs.bridge_cd.outputs.releaseVersion }}
-  bridge_deploy:
-    name: systemd_status_bridge - Upload to package cloud
-    needs:
-      - bridge_cd
-      - bridge_package
-    if: needs.bridge_cd.outputs.releaseCreated == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download debian package from release
-        run: >-
-          curl -fL
-          -o 'systemd_status_bridge_${{ needs.bridge_cd.outputs.releaseVersion }}-1_amd64.deb'
-          'https://github.com/Skycoder42/systemd_status_bridge/releases/download/v${{ needs.bridge_cd.outputs.releaseVersion }}/systemd_status_bridge_${{ needs.bridge_cd.outputs.releaseVersion }}-1_amd64.deb'
-      - name: Deploy to packagecloud.io
-        uses: lpenz/ghaction-packagecloud@v0.4
-        with:
-          repository: systemd_status_bridge/ubuntu/jammy
-          files: systemd_status_bridge_${{ needs.bridge_cd.outputs.releaseVersion }}-1_amd64.deb
-        env:
-          PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
+      workingDirectory: systemd_status_bridge
+      packagecloudRepository: systemd_status_bridge/ubuntu/jammy
+    secrets:
+      packagecloudToken: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
   flutter_ci:
     name: systemd_status_flutter - CI
