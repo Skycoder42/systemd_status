@@ -1,6 +1,6 @@
 name: systemd_status_bridge
 description: A sample command-line application.
-version: 1.0.1
+version: 0.1.0
 publish_to: none
 
 environment:
@@ -37,3 +37,8 @@ dev_dependencies:
 
 dart_pre_commit:
   flutter-compat: false
+
+cider:
+  link_template:
+    tag: https://github.com/Skycoder42/systemd_status/releases/tag/bridge%2Fv%tag%
+    diff: https://github.com/Skycoder42/systemd_status/compare/bridge%2Fv%from%...v%to%
