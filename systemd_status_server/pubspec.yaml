@@ -1,5 +1,5 @@
 name: systemd_status_server
-version: 1.0.0
+version: 0.1.0
 publish_to: none
 
 environment:
@@ -40,3 +40,8 @@ dev_dependencies:
 
 dart_pre_commit:
   flutter-compat: false
+
+cider:
+  link_template:
+    tag: https://github.com/Skycoder42/systemd_status/releases/tag/server%2Fv%tag%
+    diff: https://github.com/Skycoder42/systemd_status/compare/server%2Fv%from%...v%to%
