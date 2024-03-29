@@ -1,3 +1,4 @@
+import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/module.dart' as auth;
 
 import 'src/di/river_serverpod.dart';
@@ -19,11 +20,17 @@ Future<void> run(List<String> args) async {
   auth.AuthConfig.set(
     auth.AuthConfig(
       sendValidationEmail: (session, email, validationCode) async {
-        print('sendValidationEmail for $email: $validationCode');
+        session.log(
+          'sendValidationEmail for $email: $validationCode',
+          level: LogLevel.info,
+        );
         return true;
       },
       sendPasswordResetEmail: (session, userInfo, validationCode) async {
-        print('sendPasswordResetEmail for $userInfo: $validationCode');
+        session.log(
+          'sendPasswordResetEmail for ${userInfo.email}: $validationCode',
+          level: LogLevel.info,
+        );
         return true;
       },
       allowUnsecureRandom: false,

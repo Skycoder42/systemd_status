@@ -4,7 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
 import 'package:serverpod_auth_google_flutter/serverpod_auth_google_flutter.dart';
 
+import '../../app/app_config.dart';
 import '../../app/router.dart';
+import '../../app/theme.dart';
+import '../../localization/localization.dart';
 import '../../providers/client_provider.dart';
 
 class LoginPage extends ConsumerWidget {
@@ -17,14 +20,21 @@ class LoginPage extends ConsumerWidget {
           children: [
             SignInWithGoogleButton(
               caller: ref.watch(systemdStatusClientProvider).modules.auth,
-              serverClientId:
-                  '71998325916-aek6tmbtcdlkd157dp1t61r7u59vje5s.apps.googleusercontent.com',
-              redirectUri: Uri.parse('http://localhost:8082/googlesignin'),
+              serverClientId: AppConfig.serverClientId,
+              redirectUri: AppConfig.redirectUri,
               debug: kDebugMode,
               onSignedIn: () => const RootRoute().go(context),
-              onFailure: () {
-                print('FAILED TO LOGIN!!!');
-              },
+              onFailure: () => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: context.theme.colorScheme.error,
+                  content: Text(
+                    context.strings.google_auth_failed,
+                    style: TextStyle(
+                      color: context.theme.colorScheme.onError,
+                    ),
+                  ),
+                ),
+              ),
             ),
             SignInWithEmailButton(
               caller: ref.watch(systemdStatusClientProvider).modules.auth,

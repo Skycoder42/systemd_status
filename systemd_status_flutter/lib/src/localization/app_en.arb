@@ -1,3 +1,4 @@
 {
-  "app_name": "Systemd Status"
+  "app_name": "Systemd Status",
+  "google_auth_failed": "Authentication via Google Account failed. Try another method."
 }
