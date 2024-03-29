@@ -39,6 +39,8 @@ dev_dependencies:
 aur:
   maintainer: Skycoder42 <Skycoder42@users.noreply.github.com>
   license: BSD
+  tagPrefix: bridge/v
+  binariesArchivePrefix: systemd-status-systemctl-bridge
 
 dart_pre_commit:
   flutter-compat: false
