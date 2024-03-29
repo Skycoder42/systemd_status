@@ -70,6 +70,17 @@ jobs:
       buildRunner: true
       archivePrefix: systemd-status-server
       tagPrefix: server/v
+      releaseRef: refs/heads/server_pod
+  server_deploy:
+    name: systemd_status_server - Publish docker image
+    uses: Skycoder42/dart_test_tools/.github/workflows/docker.yml@main
+    with:
+      imageName: skycoder42/systemd-status-server
+      version: ${{ needs.server_cd.outputs.releaseVersion }}
+      dockerPlatforms: linux/amd64,linux/arm64
+    secrets:
+      dockerHubUsername: ${{ secrets.DOCKER_USERNAME }}
+      dockerHubToken: ${{ secrets.DOCKER_TOKEN }}
 
   bridge_ci:
     name: systemd_status_bridge - CI
