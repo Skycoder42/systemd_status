@@ -102,6 +102,7 @@ jobs:
       buildRunner: true
       archivePrefix: systemd-status-systemctl-bridge
       tagPrefix: bridge/v
+      releaseRef: refs/heads/server_pod
   bridge_deploy:
     name: systemd_status_bridge - Create debian package
     needs:
