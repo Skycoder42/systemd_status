@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:systemd_status_rpc/systemd_status_rpc.dart';
 
-import '../../models/state_group.dart';
+import '../../../models/state_group.dart';
 
 class StateIcon extends StatelessWidget {
   final UnitInfo unit;

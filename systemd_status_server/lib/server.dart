@@ -1,3 +1,5 @@
+import 'package:serverpod_auth_server/module.dart' as auth;
+
 import 'src/di/river_serverpod.dart';
 import 'src/generated/endpoints.dart';
 import 'src/generated/protocol.dart';
@@ -22,6 +24,7 @@ Future<void> run(List<String> args) async {
   //   RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
   //   '/*',
   // );
+  pod.webServer.addRoute(auth.RouteGoogleSignIn(), '/googlesignin');
 
   // Start the server.
   await pod.start();

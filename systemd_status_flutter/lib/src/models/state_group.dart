@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:systemd_status_rpc/systemd_status_rpc.dart';
 
-import '../../app/theme.dart';
+import '../app/theme.dart';
 
 enum StateGroup implements Comparable<StateGroup> {
   success,

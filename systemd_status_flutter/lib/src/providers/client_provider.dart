@@ -12,7 +12,8 @@ const _httpScheme = 'http';
 Client systemdStatusClient(SystemdStatusClientRef ref) {
   final client = Client(
     // TODO debug only
-    Uri(scheme: _httpScheme, host: localhost, port: 8080, path: '/').toString(),
+    Uri(scheme: _httpScheme, host: 'localhost', port: 8080, path: '/')
+        .toString(),
     // TODO runMode?
     authenticationKeyManager: FlutterAuthenticationKeyManager(),
   )..connectivityMonitor = FlutterConnectivityMonitor();

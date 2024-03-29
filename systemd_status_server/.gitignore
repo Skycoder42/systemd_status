@@ -8,5 +8,6 @@ build/
 # Directory created by dartdoc
 doc/api/
 
-# Passwords file
+# Credentials files
 config/passwords.yaml
+config/google_client_secret.json
