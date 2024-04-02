@@ -40,6 +40,7 @@ aur:
   maintainer: Skycoder42 <Skycoder42@users.noreply.github.com>
   license: BSD
   tagPrefix: bridge/v
+  sourcesDir: systemd_status-bridge-v$pkgver/systemd_status_bridge
   binariesArchivePrefix: systemd-status-systemctl-bridge
 
 dart_pre_commit:
