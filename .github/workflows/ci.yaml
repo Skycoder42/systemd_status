@@ -76,6 +76,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/docker.yml@main
     needs:
       - server_cd
+    if: needs.server_cd.outputs.releaseCreated == 'true'
     with:
       imageName: skycoder42/systemd-status-server
       version: ${{ needs.server_cd.outputs.releaseVersion }}
