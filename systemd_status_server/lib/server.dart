@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/module.dart' as auth;
 
@@ -46,6 +48,14 @@ Future<void> run(List<String> args) async {
   //   '/*',
   // );
   pod.webServer.addRoute(auth.RouteGoogleSignIn(), '/googlesignin');
+
+  // register shutdown signals
+  for (final signal in [ProcessSignal.sigint, ProcessSignal.sigterm]) {
+    signal.watch().listen((signal) async {
+      pod.logVerbose('Received process signal: $signal - shutting down');
+      await pod.shutdown();
+    });
+  }
 
   // Start the server.
   await pod.start();

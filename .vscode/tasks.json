@@ -82,7 +82,7 @@
 		},
 		{
 			"type": "shell",
-			"command": "podman-compose",
+			"command": "docker-compose",
 			"args": [
 				"up",
 				"-d"

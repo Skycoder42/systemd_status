@@ -32,7 +32,7 @@ dev_dependencies:
   build_runner: ^2.4.9
   custom_lint: ^0.6.4
   dart_pre_commit: ^5.3.0
-  dart_test_tools: ^5.7.0
+  dart_test_tools: ^5.8.0
   riverpod_generator: ^2.4.0
   riverpod_lint: ^2.3.10
 

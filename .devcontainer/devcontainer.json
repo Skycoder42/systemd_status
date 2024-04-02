@@ -31,5 +31,5 @@
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
-	"postCreateCommand": "dart pub global activate serverpod_cli"
+	"postCreateCommand": "dart pub global activate serverpod_cli && dart pub global activate rps"
 }
