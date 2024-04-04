@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>de.skycoder42.systemdStatusFlutter</id>
+
+  <name>Systemd Status</name>
+  <summary>Systemd Status</summary>
+
+  <metadata_license>MIT</metadata_license>
+  <project_license>BSD-3-Clause</project_license>
+
+  <description>
+    <p>
+      Systemd Status
+    </p>
+  </description>
+
+  <launchable type="desktop-id">de.skycoder42.systemdStatusFlutter.desktop</launchable>
+</component>

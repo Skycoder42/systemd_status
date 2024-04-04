@@ -162,3 +162,87 @@ jobs:
   #     keystore: ${{ secrets.UPLOAD_KEYSTORE }}
   #     keystorePassword: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
   #     googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
+  flutter_build_linux:
+    name: systemd_status_flutter - Build Linux app
+    needs:
+      - rpc_package
+      - client_package
+      - flutter_ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install flutter dependencies
+        run: |
+          set -e
+          sudo apt-get -qq update
+          sudo apt-get -qq install ninja-build libgtk-3-dev
+      - name: Install Flutter-SDK (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Download flutter binary artifacts
+        run: flutter precache --universal --linux
+      - name: Validate flutter setup
+        run: flutter doctor -v
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: package-*
+          path: ${{ runner.temp }}/.artifacts
+      - name: Create pubspec_overrides.yaml for required packages
+        run: |
+          set -eo pipefail
+          touch pubspec_overrides.yaml
+          for package in systemd_status_rpc systemd_status_client; do
+            yq -i ".dependency_overrides.$package.path=\"${{ runner.temp }}/.artifacts/package-$package\"" pubspec_overrides.yaml
+          done
+        working-directory: systemd_status_flutter
+      - name: Restore dart packages
+        run: flutter pub get
+        working-directory: systemd_status_flutter
+      - name: Create build files
+        run: flutter pub run build_runner build --release
+        working-directory: systemd_status_flutter
+      - name: Build linux app
+        run: >-
+          flutter build linux
+          --release
+          --obfuscate --split-debug-info=build/debug-info
+          --target-platform linux-x64
+        working-directory: systemd_status_flutter
+      - name: Create artifact directory
+        run: mkdir -p '${{ runner.temp }}/artifact'
+      - name: Archive linux app
+        run: tar -cJf '${{ runner.temp }}/artifact/bundle.tar.xz' ./*
+        working-directory: systemd_status_flutter/build/linux/x64/release/bundle
+      - name: Copy flatpak files to artifact
+        run: cp -a linux/flatpak/* '${{ runner.temp }}/artifact/flatpak'
+        working-directory: systemd_status_flutter
+      - name: Upload app archive artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-linux
+          path: ${{ runner.temp }}/artifact
+  flutter_package_linux:
+    name: systemd_status_flutter - Build flatpak bundle
+    needs:
+      - flutter_build_linux
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
+      options: --privileged
+    steps:
+      - name: Download app archive artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-linux
+          path: artifact
+      - name: Build .flatpak
+        uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: de.skycoder42.systemdStatusFlutter.flatpak
+          manifest-path: artifact/flatpak/de.skycoder42.systemdStatusFlutter.yaml
