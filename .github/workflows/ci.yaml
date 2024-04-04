@@ -220,7 +220,7 @@ jobs:
         run: tar -cJf '${{ runner.temp }}/artifact/bundle.tar.xz' ./*
         working-directory: systemd_status_flutter/build/linux/x64/release/bundle
       - name: Copy flatpak files to artifact
-        run: cp -a linux/flatpak/* '${{ runner.temp }}/artifact/flatpak'
+        run: cp -a linux/flatpak '${{ runner.temp }}/artifact/flatpak'
         working-directory: systemd_status_flutter
       - name: Upload app archive artifact
         uses: actions/upload-artifact@v4
