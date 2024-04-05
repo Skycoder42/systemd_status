@@ -217,8 +217,8 @@ jobs:
       - name: Create artifact directory
         run: mkdir -p '${{ runner.temp }}/artifact'
       - name: Archive linux app
-        run: tar -cJf '${{ runner.temp }}/artifact/bundle.tar.xz' ./*
-        working-directory: systemd_status_flutter/build/linux/x64/release/bundle
+        run: tar -cJf '${{ runner.temp }}/artifact/bundle.tar.xz' bundle
+        working-directory: systemd_status_flutter/build/linux/x64/release
       - name: Copy flatpak files to artifact
         run: cp -a linux/flatpak '${{ runner.temp }}/artifact/flatpak'
         working-directory: systemd_status_flutter
@@ -241,7 +241,10 @@ jobs:
         with:
           name: app-linux
           path: artifact
-      - name: Build .flatpak
+      - name: Extract app bundle
+        run: tar -xf bundle.tar.xz
+        working-directory: artifact
+      - name: Build flatpak
         uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v6
         with:
           bundle: de.skycoder42.systemdStatusFlutter.flatpak
