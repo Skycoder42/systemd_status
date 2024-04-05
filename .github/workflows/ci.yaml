@@ -249,3 +249,5 @@ jobs:
         with:
           bundle: de.skycoder42.systemdStatusFlutter.flatpak
           manifest-path: artifact/flatpak/de.skycoder42.systemdStatusFlutter.yaml
+      - name: Debug log
+        run: cat artifact/flatpak/flatpak-github-action-modified-de.skycoder42.systemdStatusFlutter.yaml
