@@ -249,6 +249,8 @@ jobs:
         with:
           bundle: de.skycoder42.systemdStatusFlutter.flatpak
           manifest-path: artifact/flatpak/de.skycoder42.systemdStatusFlutter.yaml
+          verbose: true
+          cache: false
       - name: Debug log
         run: find .
         if: always()
