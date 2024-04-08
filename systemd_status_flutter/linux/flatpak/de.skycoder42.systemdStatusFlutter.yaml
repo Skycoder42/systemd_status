@@ -44,7 +44,6 @@ modules:
     build-commands:
       - mv flutter /app/flutter-sdk
       - mv scripts/tar /app/flutter-sdk/bin
-      - which tar
       - dart --disable-analytics
       - flutter config --disable-analytics
       - flutter precache --universal --linux
@@ -73,11 +72,23 @@ modules:
           - patch/pubspec_overrides.patch
           - patch/compiler_warnings.patch
         use-git: true
+      - type: script
+        commands:
+          - cp -a build/linux/x64/release/bundle/* /app/
+        dest-filename: install.sh
+        only-arches:
+          - x86_64
+      - type: script
+        commands:
+          - cp -a build/linux/arm64/release/bundle/* /app/
+        dest-filename: install.sh
+        only-arches:
+          - aarch64
     build-commands:
       - flutter pub get
-      - dart run build_runner build --delete-conflicting-outputs
+      - dart run build_runner build --release
       - flutter build linux --release
-      - cp -a build/linux/arm64/release/bundle/* /app/
+      - ./install.sh
   - name: systemd_status_flutter_metadata
     buildsystem: simple
     only-arches:
