@@ -6,11 +6,11 @@
   <name>Systemd Status</name>
   <summary>Monitor the server status of a systemd based server</summary>
 
-  <!--url type="homepage">https://github.com/Skycoder42/systemd_status</url-->
-  <!--developer>Skycoder42</developer-->
+  <url type="homepage">https://github.com/Skycoder42/systemd_status</url>
+  <developer>Skycoder42</developer>
   <metadata_license>MIT</metadata_license>
   <project_license>BSD-3-Clause</project_license>
-  <!--content_rating type="oars-1.1" /-->
+  <content_rating type="oars-1.1" />
 
   <description>
     <p>
