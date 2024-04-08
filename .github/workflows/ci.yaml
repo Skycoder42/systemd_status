@@ -172,7 +172,25 @@ jobs:
     container:
       image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
       options: --privileged
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          - aarch64
+
+        include:
+          - arch: aarch64
+            qemuArch: arm64
     steps:
+      - name: Install docker # Docker is required by the docker/setup-qemu-action which enables emulation
+        if: ${{ matrix.qemuArch }}
+        run: |
+          dnf -y install docker
+      - name: Setup QEMU
+        if: ${{ matrix.qemuArch }}
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: ${{ matrix.qemuArch }}
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -189,6 +207,4 @@ jobs:
           manifest-path: systemd_status_flutter/linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
           verbose: true
           cache: false
-      - name: Debug log
-        run: find .
-        if: always()
+          arch: ${{ matrix.arch }}
