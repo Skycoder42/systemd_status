@@ -5,6 +5,8 @@ id: de.skycoder42.systemdStatusFlutter
 runtime: org.freedesktop.Platform
 runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm17
 command: systemd_status_flutter
 separate-locales: false
 finish-args:
@@ -14,7 +16,62 @@ finish-args:
   - --device=dri
   - --share=network
 modules:
-  - name: systemd_status_flutter
+  - name: flutter_sdk
+    buildsystem: simple
+    only-arches:
+      - x86_64
+      - aarch64
+    cleanup:
+      - /flutter-sdk
+    build-options:
+      append-path: /usr/lib/sdk/llvm17/bin:/app/flutter-sdk/bin:/app/flutter-sdk/.pub-cache/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm17/lib
+      build-args:
+        - --share=network
+      env:
+        FLUTTER_ROOT: /app/flutter-sdk
+        PUB_CACHE: /app/flutter-sdk/.pub-cache
+    sources:
+      - type: git
+        url: https://github.com/flutter/flutter.git
+        branch: stable
+        dest: flutter
+    build-commands:
+      - mv flutter /app/flutter-sdk
+      - dart --disable-analytics
+      - flutter config --disable-analytics
+      - flutter precache --universal --linux
+  - name: systemd_status_flutter_build
+    buildsystem: simple
+    only-arches:
+      - x86_64
+      - aarch64
+    build-options:
+      append-path: /usr/lib/sdk/llvm17/bin:/app/flutter-sdk/bin:/app/flutter-sdk/.pub-cache/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm17/lib
+      build-args:
+        - --share=network
+      env:
+        FLUTTER_ROOT: /app/flutter-sdk
+        PUB_CACHE: /app/flutter-sdk/.pub-cache
+    sources:
+      - type: dir
+        path: ../..
+        dest: .
+      - type: dir
+        path: ../../../.artifacts
+        dest: .artifacts
+      - type: patch
+        paths:
+          - patch/pubspec_overrides.patch
+          - patch/compiler_warnings.patch
+        use-git: true
+    build-commands:
+      - flutter pub get
+      - dart run build_runner build --delete-conflicting-outputs
+      - flutter build linux --release
+      - cp -a build/linux/arm64/release/bundle/* /app/
+  - name: systemd_status_flutter_metadata
     buildsystem: simple
     only-arches:
       - x86_64
@@ -23,17 +80,13 @@ modules:
       - type: dir
         path: .
         dest: flatpak
-      - type: dir
-        path: ../bundle
-        dest: bundle
     build-commands:
-      - cp -a bundle/* /app/
       - mkdir -p /app/bin
       - ln -s /app/systemd_status_flutter /app/bin/systemd_status_flutter
       - mkdir -p /app/share/icons/hicolor/scalable/apps
       - >-
         cp -a
-        bundle/data/flutter_assets/assets/icons/app-icon-light.svg
+        /app/data/flutter_assets/assets/icons/app-icon-light.svg
         /app/share/icons/hicolor/scalable/apps/de.skycoder42.systemdStatusFlutter.svg
       - mkdir -p /app/share/applications
       - cp -a flatpak/de.skycoder42.systemdStatusFlutter.desktop /app/share/applications/
