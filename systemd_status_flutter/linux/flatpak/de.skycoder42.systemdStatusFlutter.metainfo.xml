@@ -1,17 +1,23 @@
-<!-- https://www.freedesktop.org/software/appstream/metainfocreator/#/guiapp -->
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- https://www.freedesktop.org/software/appstream/metainfocreator/#/guiapp -->
 <component type="desktop-application">
   <id>de.skycoder42.systemdStatusFlutter</id>
 
   <name>Systemd Status</name>
-  <summary>Systemd Status</summary>
+  <summary>Monitor the server status of a systemd based server</summary>
 
+  <!--url type="homepage">https://github.com/Skycoder42/systemd_status</url-->
+  <!--developer>Skycoder42</developer-->
   <metadata_license>MIT</metadata_license>
   <project_license>BSD-3-Clause</project_license>
+  <!--content_rating type="oars-1.1" /-->
 
   <description>
     <p>
-      Systemd Status
+      A client application to monitor the status of various server processes on a systemd based server.
+    </p>
+    <p>
+      Requires the Systemd Status server software to be installed and running on the target server.
     </p>
   </description>
 
