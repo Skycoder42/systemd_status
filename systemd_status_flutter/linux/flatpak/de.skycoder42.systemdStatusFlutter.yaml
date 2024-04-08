@@ -24,7 +24,7 @@ modules:
     cleanup:
       - /flutter-sdk
     build-options:
-      append-path: /usr/lib/sdk/llvm17/bin:/app/flutter-sdk/bin:/app/flutter-sdk/.pub-cache/bin
+      prepend-path: /usr/lib/sdk/llvm17/bin:/app/flutter-sdk/bin:/app/flutter-sdk/.pub-cache/bin
       prepend-ld-library-path: /usr/lib/sdk/llvm17/lib
       build-args:
         - --share=network
@@ -36,8 +36,15 @@ modules:
         url: https://github.com/flutter/flutter.git
         branch: stable
         dest: flutter
+      - type: script
+        dest: scripts
+        dest-filename: tar
+        commands:
+          - /usr/bin/tar "$@" --no-same-owner
     build-commands:
       - mv flutter /app/flutter-sdk
+      - mv scripts/tar /app/flutter-sdk/bin
+      - which tar
       - dart --disable-analytics
       - flutter config --disable-analytics
       - flutter precache --universal --linux
