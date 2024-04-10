@@ -176,6 +176,50 @@ jobs:
         systemd_status_client
       manifestPath: linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
       bundleName: de.skycoder42.systemdStatusFlutter.flatpak
+  flutter_build_windows:
+    name: systemd_status_flutter - Build msix installer
+    needs:
+      - rpc_package
+      - client_package
+      - flutter_ci
+    runs-on: windows-latest
+    steps:
+      - name: Install Flutter-SDK
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+      - name: Download flutter binary artifacts
+        run: flutter precache --universal --windows
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: package-*
+          path: ${{ runner.temp }}/.artifacts
+      - name: Create pubspec_overrides.yaml for artifact packages
+        run: |
+          set -eo pipefail
+          touch pubspec_overrides.yaml
+          for package in systemd_status_rpc systemd_status_client; do
+            yq -i ".dependency_overrides.$package.path=\"${{ runner.temp }}/.artifacts/package-$package\"" pubspec_overrides.yaml
+          done
+        working-directory: systemd_status_flutter
+        shell: bash
+      - name: Restore dart packages
+        run: flutter pub get
+        working-directory: systemd_status_flutter
+      - name: Create build files
+        run: flutter pub run build_runner build --release
+        working-directory: systemd_status_flutter
+      - name: Build windows binaries
+        run: flutter build windows --release
+        working-directory: systemd_status_flutter
+      - name: Create msix package
+        run: dart run msix:create
+        working-directory: systemd_status_flutter
   # flutter_cd:
   #   name: systemd_status_flutter - CD
   #   uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main

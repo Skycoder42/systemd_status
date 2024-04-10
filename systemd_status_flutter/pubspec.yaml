@@ -35,6 +35,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   go_router_builder: ^2.4.1
+  msix: ^3.16.7
   riverpod_generator: ^2.4.0
   riverpod_lint: ^2.3.10
 
@@ -53,6 +54,18 @@ flutter_native_splash:
   color_dark: "#211F23"
   image: assets/splash/splash-light.png
   image_dark: assets/splash/splash-dark.png
+
+msix_config:
+  display_name: Systemd Status
+  publisher_display_name: Skycoder42
+  identity_name: de.skycoder42.systemdStatusFlutter
+  logo_path: windows/runner/resources/app_icon.ico
+  capabilities: internetClient
+  languages: en-us
+  execution_alias: systemd_status_flutter
+  output_path: build/windows/msix
+  output_name: de.skycoder42.systemdStatusFlutter
+  build_windows: false
 
 scripts:
   gen:
