@@ -168,7 +168,7 @@ jobs:
       - rpc_package
       - client_package
       - flutter_ci
-    uses: Skycoder42/dart_test_tools/.github/workflows/build/linux.yml@main
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-linux.yml@main
     with:
       workingDirectory: systemd_status_flutter
       artifactDependencies:  >-
