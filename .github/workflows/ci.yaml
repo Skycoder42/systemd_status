@@ -190,6 +190,13 @@ jobs:
           cache: true
       - name: Download flutter binary artifacts
         run: flutter precache --universal --windows
+      - name: Install scoop
+        run: |
+          iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+          Join-Path (Resolve-Path ~).Path "scoop\shims" >> $Env:GITHUB_PATH
+        shell: pwsh
+      - name: Install yq
+        run: scoop install yq
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
