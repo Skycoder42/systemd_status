@@ -227,6 +227,14 @@ jobs:
       - name: Create msix package
         run: dart run msix:create --install-certificate false
         working-directory: systemd_status_flutter
+      - name: Upload msix installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: msix-installer
+          path: build/windows/msix/de.skycoder42.systemdStatusFlutter.msix
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 1
   # flutter_cd:
   #   name: systemd_status_flutter - CD
   #   uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
