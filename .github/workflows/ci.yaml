@@ -211,18 +211,15 @@ jobs:
         uses: docker/setup-qemu-action@v3
         with:
           platforms: ${{ matrix.qemuArch }}
-      - name: Create GPG key file
-        run: echo '${{ env.FLUTTER_SDK_GPG_KEY }}' > /tmp/flatpak.key
+      - name: Import GPG public key
+        run: echo '${{ env.FLUTTER_SDK_GPG_KEY }}' | gpg --import
       - name: Download flatpak flutter SDK
         run: >-
           curl --fail-with-body -L
           -o '/tmp/flutter.flatpak'
           'https://github.com/Skycoder42/dart_test_tools/releases/download/flatpak-flutter-extension%2F${{ env.SDK_VERSION }}/org.freedesktop.Sdk.Extension.flutter_${{ env.SDK_VERSION }}_${{ matrix.arch }}.flatpak'
       - name: Install flatpak flutter SDK
-        run: >-
-          flatpak install --system -y --noninteractive
-          --gpg-file /tmp/flatpak.key
-          '/tmp/flutter.flatpak'
+        run: flatpak install --system -y --noninteractive '/tmp/flutter.flatpak'
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
