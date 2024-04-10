@@ -213,14 +213,14 @@ jobs:
       - name: Download flatpak flutter SDK
         run: >-
           curl --fail-with-body -L
-          -o '${{ runner.temp }}/flutter.flatpak'
+          -o '/tmp/flutter.flatpak'
           'https://github.com/Skycoder42/dart_test_tools/releases/download/flatpak-flutter-extension%2F${{ env.SDK_VERSION }}/org.freedesktop.Sdk.Extension.flutter_${{ env.SDK_VERSION }}_${{ matrix.arch }}.flatpak'
       - name: Install flatpak flutter SDK
         run: >-
           echo '${{ env.FLUTTER_SDK_GPG_KEY }}' |
           flatpak install --system -y --noninteractive
           --gpg-file -
-          '${{ runner.temp }}/flutter.flatpak'
+          '/tmp/flutter.flatpak'
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
