@@ -9,6 +9,26 @@ on:
     branches:
       - "*"
 
+env:
+  SDK_VERSION: "23.08"
+  FLUTTER_SDK_GPG_KEY: |
+    -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+    mDMEZhVSPhYJKwYBBAHaRw8BAQdAyUCjyTVvL0R5RQZw6NeF1mcjTyxjz56RjWRE
+    x+qI6dC0dFNreWNvZGVyNDIgKEdQRyBLZXkgZm9yIG9yZy5mcmVlZGVza3RvcC5T
+    ZGsuRXh0ZW5zaW9uLmZsdXR0ZXIgZmxhdHBhayBidW5kbGVzKSA8U2t5Y29kZXI0
+    MkB1c2Vycy5ub3JlcGx5LmdpdGh1Yi5jb20+iJMEExYKADsWIQRM3jbjqquCG4iR
+    YqdbEIdDIpRYLgUCZhVSPgIbAwULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAK
+    CRBbEIdDIpRYLmBgAP40jr4173kOMnhnIsLwgwOIunXht/KZkVRGWjHUV7wP5wD8
+    C2ebyeiaya6PrQ/u+AG/mIbTPm2qgl58ESWpQXVmawC4OARmFVI+EgorBgEEAZdV
+    AQUBAQdARVAUlIBUyukjFlGYscv8T49PdW4PAexZRqE1JnyMr1cDAQgHiHgEGBYK
+    ACAWIQRM3jbjqquCG4iRYqdbEIdDIpRYLgUCZhVSPgIbDAAKCRBbEIdDIpRYLv5A
+    AQD1vBoAhv6iM+ePgHGAnl01VyKuJfcRcsOQ7bQl5j/bKAEAzXtbKs3/rLkKlBF5
+    08PRzDxSMStKeNf+L6NVrSKNVgc=
+    =Cnso
+    -----END PGP PUBLIC KEY BLOCK-----
+
+
 jobs:
   rpc_ci:
     name: systemd_status_rpc - CI
@@ -184,13 +204,23 @@ jobs:
     steps:
       - name: Install docker # Docker is required by the docker/setup-qemu-action which enables emulation
         if: ${{ matrix.qemuArch }}
-        run: |
-          dnf -y install docker
+        run: dnf -y install docker
       - name: Setup QEMU
         if: ${{ matrix.qemuArch }}
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: ${{ matrix.qemuArch }}
+      - name: Download flatpak flutter SDK
+        run: >-
+          curl --fail-with-body -L
+          -o '${{ runner.temp }}/flutter.flatpak'
+          'https://github.com/Skycoder42/dart_test_tools/releases/download/flatpak-flutter-extension%2F${{ env.SDK_VERSION }}/org.freedesktop.Sdk.Extension.flutter_${{ env.SDK_VERSION }}_${{ matrix.arch }}.flatpak'
+      - name: Install flatpak flutter SDK
+        run: >-
+          echo '${{ env.FLUTTER_SDK_GPG_KEY }}' |
+          flatpak install --system -y --noninteractive
+          --gpg-file -
+          '${{ runner.temp }}/flutter.flatpak'
       - name: Checkout repository
         uses: actions/checkout@v4
         with:

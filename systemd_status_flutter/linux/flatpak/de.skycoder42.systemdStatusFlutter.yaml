@@ -7,6 +7,7 @@ runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm17
+  - org.freedesktop.Sdk.Extension.flutter
 command: systemd_status_flutter
 separate-locales: false
 finish-args:
@@ -15,51 +16,21 @@ finish-args:
   - --socket=wayland
   - --device=dri
   - --share=network
+writable-sdk: true
 modules:
-  - name: flutter_sdk
-    buildsystem: simple
-    only-arches:
-      - x86_64
-      - aarch64
-    cleanup:
-      - /flutter-sdk
-    build-options:
-      prepend-path: /usr/lib/sdk/llvm17/bin:/app/flutter-sdk/bin:/app/flutter-sdk/.pub-cache/bin
-      prepend-ld-library-path: /usr/lib/sdk/llvm17/lib
-      build-args:
-        - --share=network
-      env:
-        FLUTTER_ROOT: /app/flutter-sdk
-        PUB_CACHE: /app/flutter-sdk/.pub-cache
-    sources:
-      - type: git
-        url: https://github.com/flutter/flutter.git
-        branch: stable
-        dest: flutter
-      - type: script
-        dest: scripts
-        dest-filename: tar
-        commands:
-          - /usr/bin/tar "$@" --no-same-owner
-    build-commands:
-      - mv flutter /app/flutter-sdk
-      - mv scripts/tar /app/flutter-sdk/bin
-      - dart --disable-analytics
-      - flutter config --disable-analytics
-      - flutter precache --universal --linux
-  - name: systemd_status_flutter_build
+  - name: systemd_status_flutter-build
     buildsystem: simple
     only-arches:
       - x86_64
       - aarch64
     build-options:
-      append-path: /usr/lib/sdk/llvm17/bin:/app/flutter-sdk/bin:/app/flutter-sdk/.pub-cache/bin
+      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/.pub-cache/bin:/usr/lib/sdk/llvm17/bin
       prepend-ld-library-path: /usr/lib/sdk/llvm17/lib
       build-args:
         - --share=network
       env:
-        FLUTTER_ROOT: /app/flutter-sdk
-        PUB_CACHE: /app/flutter-sdk/.pub-cache
+        FLUTTER_ROOT: /usr/lib/sdk/flutter
+        PUB_CACHE: /usr/lib/sdk/flutter/.pub-cache
     sources:
       - type: dir
         path: ../..
@@ -89,11 +60,8 @@ modules:
       - dart run build_runner build --release
       - flutter build linux --release
       - ./install.sh
-  - name: systemd_status_flutter_metadata
+  - name: systemd_status_flutter-metadata
     buildsystem: simple
-    only-arches:
-      - x86_64
-      - aarch64
     sources:
       - type: dir
         path: .
