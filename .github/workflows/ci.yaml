@@ -162,6 +162,20 @@ jobs:
         systemd_status_client
       buildRunner: true
       unitTestPaths: ""
+  flutter_build_linux:
+    name: systemd_status_flutter - Build flatpak bundles
+    needs:
+      - rpc_package
+      - client_package
+      - flutter_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build/linux.yml@main
+    with:
+      workingDirectory: systemd_status_flutter
+      artifactDependencies:  >-
+        systemd_status_rpc
+        systemd_status_client
+      manifestPath: linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
+      bundleName: de.skycoder42.systemdStatusFlutter.flatpak
   # flutter_cd:
   #   name: systemd_status_flutter - CD
   #   uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
@@ -182,58 +196,3 @@ jobs:
   #     keystore: ${{ secrets.UPLOAD_KEYSTORE }}
   #     keystorePassword: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
   #     googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
-  flutter_build_linux:
-    name: systemd_status_flutter - Build flatpak bundle
-    needs:
-      - rpc_package
-      - client_package
-      - flutter_ci
-    runs-on: ubuntu-latest
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
-      options: --privileged
-    strategy:
-      fail-fast: false
-      matrix:
-        arch:
-          - x86_64
-          - aarch64
-
-        include:
-          - arch: aarch64
-            qemuArch: arm64
-    steps:
-      - name: Install docker # Docker is required by the docker/setup-qemu-action which enables emulation
-        if: ${{ matrix.qemuArch }}
-        run: dnf -y install docker
-      - name: Setup QEMU
-        if: ${{ matrix.qemuArch }}
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: ${{ matrix.qemuArch }}
-      - name: Import GPG public key
-        run: echo '${{ env.FLUTTER_SDK_GPG_KEY }}' | gpg --import
-      - name: Download flatpak flutter SDK
-        run: >-
-          curl --fail-with-body -L
-          -o '/tmp/flutter.flatpak'
-          'https://github.com/Skycoder42/dart_test_tools/releases/download/flatpak-flutter-extension%2F${{ env.SDK_VERSION }}/org.freedesktop.Sdk.Extension.flutter_${{ env.SDK_VERSION }}_${{ matrix.arch }}.flatpak'
-      - name: Install flatpak flutter SDK
-        run: flatpak install --system -y --noninteractive '/tmp/flutter.flatpak'
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: package-*
-          path: ${{ github.workspace }}/.artifacts
-      - name: Build flatpak
-        uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v6
-        with:
-          bundle: de.skycoder42.systemdStatusFlutter.flatpak
-          manifest-path: systemd_status_flutter/linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
-          verbose: true
-          cache: false
-          arch: ${{ matrix.arch }}
