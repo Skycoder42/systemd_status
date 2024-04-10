@@ -56,6 +56,8 @@ modules:
         only-arches:
           - aarch64
     build-commands:
+      - rm -f /etc/resolv.conf
+      - echo 'nameserver 1.1.1.1' > /etc/resolv.conf
       - flutter pub get
       - dart run build_runner build --release
       - flutter build linux --release
