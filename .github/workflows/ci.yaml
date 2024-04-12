@@ -200,7 +200,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: de.skycoder42.systemdStatusFlutter-*
+          pattern: flatpak-bundle-*
           path: bundles
       - name: Import GPG key
         run: echo '${{ secrets.GPG_KEY }}' | gpg --import
