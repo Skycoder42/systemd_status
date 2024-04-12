@@ -7,9 +7,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/router.dart';
 import '../../localization/localization.dart';
+import '../../services/app_settings.dart';
 import '../../widgets/async_action.dart';
 import '../../widgets/scrollable_expanded_box.dart';
 import 'setup_controller.dart';
+import 'widgets/google_auth_settings_card.dart';
 
 class SetupPage extends ConsumerStatefulWidget {
   final String? redirectTo;
@@ -34,6 +36,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
 
   bool _isValid = false;
   Uri? _savedUrl;
+  GoogleAuthSettings? _googleAuthSettings;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -53,9 +56,14 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     TextFormField(
+                      decoration: InputDecoration(
+                        label: Text(
+                          context.strings.setup_page_server_url_label,
+                        ),
+                      ),
                       initialValue: ref.watch(setupControllerProvider).urlInput,
                       keyboardType: TextInputType.url,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: TextInputAction.next,
                       autofocus: true,
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
@@ -73,6 +81,10 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                       ]),
                       onSaved: (newValue) => _savedUrl =
                           newValue != null ? Uri.parse(newValue) : null,
+                    ),
+                    const SizedBox(height: 16),
+                    GoogleAuthSettingsCard(
+                      onSaved: (newValue) => _googleAuthSettings = newValue,
                     ),
                     const SizedBox(height: 16),
                     AsyncAction(
@@ -113,9 +125,10 @@ class _SetupPageState extends ConsumerState<SetupPage> {
     state.save();
 
     final router = GoRouter.of(context);
-    await ref
-        .read(setupControllerProvider.notifier)
-        .submit(serverUrl: _savedUrl!);
+    await ref.read(setupControllerProvider.notifier).submit(
+          serverUrl: _savedUrl!,
+          googleAuthSettings: _googleAuthSettings,
+        );
     router.go(widget.redirectTo ?? const RootRoute().location);
   }
 

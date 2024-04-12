@@ -11,6 +11,7 @@ part 'setup_controller.g.dart';
 class SetupState with _$SetupState {
   const factory SetupState({
     required Uri? serverUrl,
+    required GoogleAuthSettings? googleAuthSettings,
   }) = _SetupState;
 
   const SetupState._();
@@ -21,18 +22,34 @@ class SetupState with _$SetupState {
 @riverpod
 class SetupController extends _$SetupController {
   @override
-  SetupState build() => SetupState(
-        serverUrl: ref.read(appSettingsProvider).serverUrl,
-      );
+  SetupState build() {
+    final settings = ref.read(appSettingsProvider);
+    return SetupState(
+      serverUrl: settings.serverUrl,
+      googleAuthSettings: settings.googleAuthSettings,
+    );
+  }
 
-  Future<void> submit({required Uri serverUrl}) async {
+  Future<void> submit({
+    required Uri serverUrl,
+    required GoogleAuthSettings? googleAuthSettings,
+  }) async {
     final appSettings = ref.read(appSettingsProvider.notifier);
     try {
       await appSettings.setServerUrl(serverUrl);
       // ignore: unused_result
       await ref.refresh(sessionManagerProvider.future);
 
-      state = state.copyWith(serverUrl: serverUrl);
+      if (googleAuthSettings != null) {
+        await appSettings.setGoogleAuthSettings(googleAuthSettings);
+      } else {
+        await appSettings.removeGoogleAuthSettings();
+      }
+
+      state = state.copyWith(
+        serverUrl: serverUrl,
+        googleAuthSettings: googleAuthSettings,
+      );
 
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {
