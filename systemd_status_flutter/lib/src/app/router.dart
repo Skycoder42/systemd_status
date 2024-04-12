@@ -36,7 +36,7 @@ class _GlobalRedirect {
     final sessionManager = await ref.read(sessionManagerProvider.future);
     if (!sessionManager.isSignedIn) {
       _logger.config('User is not signed in. Redirecting to login page');
-      return const LoginRoute().location;
+      return LoginRoute(redirectTo: state.matchedLocation).location;
     }
 
     _logger.finest(
@@ -74,16 +74,18 @@ class SetupRoute extends GoRouteData {
   const SetupRoute({this.redirectTo});
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => SetupPage(
-        redirectTo: redirectTo,
-      );
+  Widget build(BuildContext context, GoRouterState state) =>
+      SetupPage(redirectTo: redirectTo);
 }
 
 @TypedGoRoute<LoginRoute>(path: '/login')
 @immutable
 class LoginRoute extends GoRouteData {
-  const LoginRoute();
+  final String? redirectTo;
+
+  const LoginRoute({this.redirectTo});
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const LoginPage();
+  Widget build(BuildContext context, GoRouterState state) =>
+      LoginPage(redirectTo: redirectTo);
 }

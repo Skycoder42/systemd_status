@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../app/router.dart';
 import '../../providers/client_provider.dart';
 import '../../services/app_settings.dart';
 
@@ -33,6 +34,7 @@ class SetupController extends _$SetupController {
   Future<void> submit({
     required Uri serverUrl,
     required GoogleAuthSettings? googleAuthSettings,
+    String? redirectTo,
   }) async {
     final appSettings = ref.read(appSettingsProvider.notifier);
     try {
@@ -50,6 +52,8 @@ class SetupController extends _$SetupController {
         serverUrl: serverUrl,
         googleAuthSettings: googleAuthSettings,
       );
+
+      ref.read(routerProvider).go(redirectTo ?? const RootRoute().location);
 
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {

@@ -10,5 +10,6 @@
   "setup_page_save_button_text": "Save",
   "setup_page_url_validator_text": "Must be a valid HTTP or HTTPS url ending with '/'.",
   "setup_page_google_auth_validator_text": "Either all three or none of the google auth settings must be set.",
-  "setup_page_configure_failed": "Failed to connect to Systemd Status server. Please make sure it is running and reachable for your network."
+  "setup_page_configure_failed": "Failed to connect to Systemd Status server. Please make sure it is running and reachable for your network.",
+  "login_page_title": "Systemd Status — Login"
 }

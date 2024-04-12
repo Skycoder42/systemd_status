@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../app/router.dart';
 import '../../localization/localization.dart';
 import '../../services/app_settings.dart';
 import '../../widgets/async_action.dart';
@@ -124,12 +122,11 @@ class _SetupPageState extends ConsumerState<SetupPage> {
 
     state.save();
 
-    final router = GoRouter.of(context);
     await ref.read(setupControllerProvider.notifier).submit(
           serverUrl: _savedUrl!,
           googleAuthSettings: _googleAuthSettings,
+          redirectTo: widget.redirectTo,
         );
-    router.go(widget.redirectTo ?? const RootRoute().location);
   }
 
   void _reset() {
