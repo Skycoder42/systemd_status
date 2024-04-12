@@ -176,6 +176,9 @@ jobs:
         systemd_status_client
       manifestPath: linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
       bundleName: de.skycoder42.systemdStatusFlutter.flatpak
+    secrets:
+      gpgKeyId: ${{ secrets.GPG_KEY_ID }}
+      gpgKey: ${{ secrets.GPG_KEY }}
   flutter_build_windows:
     name: systemd_status_flutter - Build msix installer
     needs:
