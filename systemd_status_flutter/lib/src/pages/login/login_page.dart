@@ -6,9 +6,9 @@ import 'package:serverpod_auth_google_flutter/serverpod_auth_google_flutter.dart
 
 import '../../app/app_config.dart';
 import '../../app/router.dart';
-import '../../app/theme.dart';
 import '../../localization/localization.dart';
 import '../../providers/client_provider.dart';
+import '../../widgets/error_snack_bar.dart';
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
@@ -25,14 +25,9 @@ class LoginPage extends ConsumerWidget {
               debug: kDebugMode,
               onSignedIn: () => const RootRoute().go(context),
               onFailure: () => ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: context.theme.colorScheme.error,
-                  content: Text(
-                    context.strings.google_auth_failed,
-                    style: TextStyle(
-                      color: context.theme.colorScheme.onError,
-                    ),
-                  ),
+                ErrorSnackBar(
+                  context: context,
+                  content: Text(context.strings.google_auth_failed),
                 ),
               ),
             ),

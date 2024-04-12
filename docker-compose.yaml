@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   postgres:
     image: docker.io/library/postgres:14.1

@@ -4,17 +4,24 @@ import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 import 'package:systemd_status_client/systemd_status_client.dart';
 
+import '../services/app_settings.dart';
+
 part 'client_provider.g.dart';
 
-const _httpScheme = 'http';
+class SessionManagerInitializationFailed implements Exception {
+  @override
+  String toString() => 'Failed to initialize session manager';
+}
 
 @Riverpod(keepAlive: true)
 Client systemdStatusClient(SystemdStatusClientRef ref) {
+  final serverUrl = ref.watch(appSettingsProvider.select((s) => s.serverUrl));
+  if (serverUrl == null) {
+    throw Exception('Unable to read server URL from settings!');
+  }
+
   final client = Client(
-    // TODO debug only
-    Uri(scheme: _httpScheme, host: 'localhost', port: 8080, path: '/')
-        .toString(),
-    // TODO runMode?
+    serverUrl.toString(),
     authenticationKeyManager: FlutterAuthenticationKeyManager(),
   )..connectivityMonitor = FlutterConnectivityMonitor();
 
@@ -28,10 +35,13 @@ Future<Raw<SessionManager>> sessionManager(SessionManagerRef ref) async {
   final sm = SessionManager(
     caller: ref.watch(systemdStatusClientProvider).modules.auth,
   );
-  ref.onDispose(sm.dispose);
+
   if (!await sm.initialize()) {
-    throw Exception('Failed to initialize session manager');
+    sm.dispose();
+    throw SessionManagerInitializationFailed();
   }
+
+  ref.onDispose(sm.dispose);
   return sm;
 }
 

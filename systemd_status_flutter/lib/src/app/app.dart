@@ -3,16 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../localization/localization.dart';
-import '../providers/client_provider.dart';
+import '../providers/shared_preferences_provider.dart';
 import 'router.dart';
 import 'theme.dart';
 
 part 'app.g.dart';
 
 @riverpod
-Future<void> appInit(AppInitRef ref) async {
-  await ref.watch(sessionManagerProvider.future);
-}
+Future<void> appInit(AppInitRef ref) async => Future.wait([
+      ref.watch(sharedPreferencesInitProvider.future),
+    ]);
 
 class SystemdStatusApp extends ConsumerWidget {
   const SystemdStatusApp({super.key});
@@ -25,7 +25,7 @@ class SystemdStatusApp extends ConsumerWidget {
             restorationScopeId: 'systemd-status-app',
 
             // localization
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            localizationsDelegates: localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             onGenerateTitle: (context) => context.strings.app_name,
 
@@ -37,7 +37,7 @@ class SystemdStatusApp extends ConsumerWidget {
           ),
         _ => MaterialApp(
             // localization
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            localizationsDelegates: localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             onGenerateTitle: (context) => context.strings.app_name,
 
