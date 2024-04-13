@@ -187,6 +187,7 @@ jobs:
       contents: write
     with:
       enabledPlatforms: ${{ needs.flutter_ci.outputs.enabledPlatforms }}
+      workingDirectory: systemd_status_flutter
       tagPrefix: app/v
     secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
