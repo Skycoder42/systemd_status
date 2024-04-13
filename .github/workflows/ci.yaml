@@ -182,6 +182,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
     needs:
       - flutter_ci
+      - flutter_build_linux
     permissions:
       contents: write
     with:
