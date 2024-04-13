@@ -182,6 +182,8 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
     needs:
       - flutter_ci
+    permissions:
+      contents: write
     with:
       enabledPlatforms: ${{ needs.flutter_ci.outputs.enabledPlatforms }}
       tagPrefix: app/v
