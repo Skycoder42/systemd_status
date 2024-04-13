@@ -1,5 +1,5 @@
 name: systemd_status_flutter
-version: 1.0.0+1
+version: 0.1.0+1
 publish_to: none
 
 environment:
@@ -72,6 +72,11 @@ msix_config:
   output_path: build/windows/msix
   output_name: de.skycoder42.systemdStatusFlutter
   build_windows: false
+
+cider:
+  link_template:
+    tag: https://github.com/Skycoder42/systemd_status/releases/tag/app%2Fv%tag%
+    diff: https://github.com/Skycoder42/systemd_status/compare/app%2Fv%from%...v%to%
 
 scripts:
   gen:

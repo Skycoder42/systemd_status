@@ -90,7 +90,6 @@ jobs:
       buildRunner: true
       archivePrefix: systemd-status-server
       tagPrefix: server/v
-      releaseRef: refs/heads/server_pod
   server_deploy:
     name: systemd_status_server - Publish docker image
     uses: Skycoder42/dart_test_tools/.github/workflows/docker.yml@main
@@ -136,7 +135,6 @@ jobs:
       buildRunner: true
       archivePrefix: systemd-status-systemctl-bridge
       tagPrefix: bridge/v
-      releaseRef: refs/heads/server_pod
   bridge_deploy:
     name: systemd_status_bridge - Create debian package
     needs:
@@ -179,58 +177,17 @@ jobs:
     secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
-  flutter_deploy_linux:
-    name: systemd_status_flutter - Deploy flatpak bundles
+  flutter_deploy:
+    name: systemd_status_flutter - Deploy apps
+    uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
     needs:
-      - flutter_build_linux
-    runs-on: ubuntu-latest
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
-      options: --privileged
-    environment: flatpak
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: repo
-          persist-credentials: true
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: flatpak-bundle-*
-          path: bundles
-      - name: Import GPG key
-        run: echo '${{ secrets.GPG_KEY }}' | gpg --import
-      - name: Import bundles into repository
-        run: |
-          for bundle in bundles/*/*.flatpak; do
-            echo "Importing $bundle..."
-            flatpak build-import-bundle \
-              --update-appstream \
-              --gpg-sign=${{ secrets.GPG_KEY_ID }} \
-              repo \
-              "$bundle"
-          done
-      - name: Generate static deltas
-        run: >-
-          flatpak build-update-repo
-          --generate-static-deltas
-          --prune
-          --gpg-sign=${{ secrets.GPG_KEY_ID }}
-          repo
-      - name: Delete GPG key
-        if: always()
-        continue-on-error: true
-        run: gpg --batch --yes --delete-secret-keys '${{ secrets.GPG_KEY_ID }}'
-      - name: Update Github Pages
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          branch: gh-pages
-          repository: repo
-          skip_dirty_check: true
+      - flutter_ci
+    with:
+      enabledPlatforms: ${{ needs.flutter_ci.outputs.enabledPlatforms }}
+      tagPrefix: app/v
+    secrets:
+      gpgKeyId: ${{ secrets.GPG_KEY_ID }}
+      gpgKey: ${{ secrets.GPG_KEY }}
 
   flutter_build_windows:
     name: systemd_status_flutter - Build msix installer
