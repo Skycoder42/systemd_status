@@ -18,7 +18,7 @@ finish-args:
   - --share=network
 writable-sdk: true
 modules:
-  - name: systemd_status_flutter-build
+  - name: systemd_status_flutter
     buildsystem: simple
     only-arches:
       - x86_64
@@ -31,6 +31,8 @@ modules:
       env:
         FLUTTER_ROOT: /usr/lib/sdk/flutter
         PUB_CACHE: /usr/lib/sdk/flutter/.pub-cache
+      secret-env:
+        - BUILD_NUMBER
     sources:
       - type: dir
         path: ../..
@@ -56,13 +58,14 @@ modules:
         only-arches:
           - aarch64
     build-commands:
+      - 'echo "BUILD_NUMBER: $BUILD_NUMBER"'
       - rm -f /etc/resolv.conf
       - echo 'nameserver 1.1.1.1' > /etc/resolv.conf
       - flutter pub get
       - dart run build_runner build --release
-      - flutter build linux --release
+      - flutter build linux --release --build-number="$BUILD_NUMBER"
       - ./install.sh
-  - name: systemd_status_flutter-metadata
+  - name: metadata
     buildsystem: simple
     sources:
       - type: dir
@@ -80,3 +83,18 @@ modules:
       - cp -a flatpak/de.skycoder42.systemdStatusFlutter.desktop /app/share/applications/
       - mkdir -p /app/share/metainfo
       - cp -a flatpak/de.skycoder42.systemdStatusFlutter.metainfo.xml /app/share/metainfo/
+  - name: changelog
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/.pub-cache/bin:/usr/lib/sdk/llvm17/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm17/lib
+      build-args:
+        - --share=network
+      env:
+        FLUTTER_ROOT: /usr/lib/sdk/flutter
+        PUB_CACHE: /usr/lib/sdk/flutter/.pub-cache
+    sources:
+      - type: file
+        path: ../../CHANGELOG.md
+    build-commands:
+      - export-xml-changelog --output /app/share/metainfo/de.skycoder42.systemdStatusFlutter.metainfo.xml
