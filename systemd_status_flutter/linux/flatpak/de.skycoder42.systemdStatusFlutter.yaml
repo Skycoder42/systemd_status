@@ -58,7 +58,6 @@ modules:
         only-arches:
           - aarch64
     build-commands:
-      - 'echo "BUILD_NUMBER: $BUILD_NUMBER"'
       - rm -f /etc/resolv.conf
       - echo 'nameserver 1.1.1.1' > /etc/resolv.conf
       - flutter pub get

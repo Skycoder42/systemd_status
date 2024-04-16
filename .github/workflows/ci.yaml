@@ -9,26 +9,6 @@ on:
     branches:
       - "*"
 
-env:
-  SDK_VERSION: "23.08"
-  FLUTTER_SDK_GPG_KEY: |
-    -----BEGIN PGP PUBLIC KEY BLOCK-----
-
-    mDMEZhVSPhYJKwYBBAHaRw8BAQdAyUCjyTVvL0R5RQZw6NeF1mcjTyxjz56RjWRE
-    x+qI6dC0dFNreWNvZGVyNDIgKEdQRyBLZXkgZm9yIG9yZy5mcmVlZGVza3RvcC5T
-    ZGsuRXh0ZW5zaW9uLmZsdXR0ZXIgZmxhdHBhayBidW5kbGVzKSA8U2t5Y29kZXI0
-    MkB1c2Vycy5ub3JlcGx5LmdpdGh1Yi5jb20+iJMEExYKADsWIQRM3jbjqquCG4iR
-    YqdbEIdDIpRYLgUCZhVSPgIbAwULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAK
-    CRBbEIdDIpRYLmBgAP40jr4173kOMnhnIsLwgwOIunXht/KZkVRGWjHUV7wP5wD8
-    C2ebyeiaya6PrQ/u+AG/mIbTPm2qgl58ESWpQXVmawC4OARmFVI+EgorBgEEAZdV
-    AQUBAQdARVAUlIBUyukjFlGYscv8T49PdW4PAexZRqE1JnyMr1cDAQgHiHgEGBYK
-    ACAWIQRM3jbjqquCG4iRYqdbEIdDIpRYLgUCZhVSPgIbDAAKCRBbEIdDIpRYLv5A
-    AQD1vBoAhv6iM+ePgHGAnl01VyKuJfcRcsOQ7bQl5j/bKAEAzXtbKs3/rLkKlBF5
-    08PRzDxSMStKeNf+L6NVrSKNVgc=
-    =Cnso
-    -----END PGP PUBLIC KEY BLOCK-----
-
-
 jobs:
   rpc_ci:
     name: systemd_status_rpc - CI
@@ -200,6 +180,7 @@ jobs:
       - client_package
       - flutter_ci
     runs-on: windows-latest
+    environment: msix
     steps:
       - name: Install Flutter-SDK
         uses: subosito/flutter-action@v2
@@ -241,9 +222,19 @@ jobs:
       - name: Build windows binaries
         run: flutter build windows --release
         working-directory: systemd_status_flutter
+      - name: Prepare signing certificate
+        run: echo '${{ secrets.SIGNING_CERT }}' | openssl base64 -d -out '${{ runner.temp }}/signing-cert.pfx'
       - name: Create msix package
-        run: dart run msix:create --install-certificate false
+        run: >-
+          dart run msix:create
+          --install-certificate false
+          --certificate-path '${{ runner.temp }}/signing-cert.pfx'
+          --certificate-password '${{ secrets.SIGNING_CERT_PASSWORD }}'
         working-directory: systemd_status_flutter
+      - name: Cleanup signing certificate
+        if: always()
+        continue-on-error: true
+        run: rm -rf '${{ runner.temp }}/signing-cert.pfx'
       - name: Upload msix installer
         uses: actions/upload-artifact@v4
         with:
