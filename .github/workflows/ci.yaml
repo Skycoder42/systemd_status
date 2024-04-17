@@ -157,12 +157,28 @@ jobs:
     secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
+  flutter_build_windows:
+    name: systemd_status_flutter - Build msix installer
+    needs:
+      - rpc_package
+      - client_package
+      - flutter_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-windows.yml@main
+    with:
+      workingDirectory: systemd_status_flutter
+      artifactDependencies:  >-
+        systemd_status_rpc
+        systemd_status_client
+    secrets:
+      signingCert: ${{ secrets.SIGNING_CERT }}
+      signingCertPassword: ${{ secrets.SIGNING_CERT_PASSWORD }}
   flutter_deploy:
     name: systemd_status_flutter - Deploy apps
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
     needs:
       - flutter_ci
       - flutter_build_linux
+      - flutter_build_windows
     permissions:
       contents: write
     with:
@@ -173,76 +189,6 @@ jobs:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
 
-  flutter_build_windows:
-    name: systemd_status_flutter - Build msix installer
-    needs:
-      - rpc_package
-      - client_package
-      - flutter_ci
-    runs-on: windows-latest
-    environment: msix
-    steps:
-      - name: Install Flutter-SDK
-        uses: subosito/flutter-action@v2
-        with:
-          cache: true
-      - name: Download flutter binary artifacts
-        run: flutter precache --universal --windows
-      - name: Install scoop
-        run: |
-          iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
-          Join-Path (Resolve-Path ~).Path "scoop\shims" >> $Env:GITHUB_PATH
-        shell: pwsh
-      - name: Install yq
-        run: scoop install yq
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: package-*
-          path: ${{ runner.temp }}/.artifacts
-      - name: Create pubspec_overrides.yaml for artifact packages
-        run: |
-          set -eo pipefail
-          touch pubspec_overrides.yaml
-          for package in systemd_status_rpc systemd_status_client; do
-            yq -i ".dependency_overrides.$package.path=\"${{ runner.temp }}/.artifacts/package-$package\"" pubspec_overrides.yaml
-          done
-        working-directory: systemd_status_flutter
-        shell: bash
-      - name: Restore dart packages
-        run: flutter pub get
-        working-directory: systemd_status_flutter
-      - name: Create build files
-        run: flutter pub run build_runner build --release
-        working-directory: systemd_status_flutter
-      - name: Build windows binaries
-        run: flutter build windows --release
-        working-directory: systemd_status_flutter
-      - name: Prepare signing certificate
-        run: echo '${{ secrets.SIGNING_CERT }}' | openssl base64 -d -out '${{ runner.temp }}/signing-cert.pfx'
-      - name: Create msix package
-        run: >-
-          dart run msix:create
-          --install-certificate false
-          --certificate-path '${{ runner.temp }}/signing-cert.pfx'
-          --certificate-password '${{ secrets.SIGNING_CERT_PASSWORD }}'
-        working-directory: systemd_status_flutter
-      - name: Cleanup signing certificate
-        if: always()
-        continue-on-error: true
-        run: rm -rf '${{ runner.temp }}/signing-cert.pfx'
-      - name: Upload msix installer
-        uses: actions/upload-artifact@v4
-        with:
-          name: msix-installer
-          path: systemd_status_flutter/build/windows/msix/de.skycoder42.systemdStatusFlutter.msix
-          compression-level: 0
-          if-no-files-found: error
-          retention-days: 1
   # flutter_cd:
   #   name: systemd_status_flutter - CD
   #   uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
