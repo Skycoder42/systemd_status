@@ -1,6 +1,6 @@
 [Flatpak Repo]
-Title=Systemd Status Repository
 Url=https://skycoder42.github.io/systemd_status/
+Title=Systemd Status Repository
 Homepage=https://github.com/Skycoder42/systemd_status
 Comment=Monitor the server status of a systemd based server
 Description=A client application to monitor the status of various server processes on a systemd based server. Requires the Systemd Status server software to be installed and running on the target server.
