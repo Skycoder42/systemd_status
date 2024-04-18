@@ -27,6 +27,7 @@ doc/api/
 .flutter-plugins-dependencies
 
 custom_lint.log
+.artifacts
 
 # generated files
 *.g.dart

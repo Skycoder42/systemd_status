@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- SPDX-License-Identifier: LGPL-2.1-or-later -->
-<!-- Icon based on Systemd Logo from https://github.com/systemd/systemd -->
-<!-- Using elements from https://github.com/Remix-Design/remixicon in Apache License, loaded from https://www.svgrepo.com -->
 <svg
    width="512"
    height="512"
@@ -38,3 +35,6 @@
        id="path2-2"
        d="m 14.999942,3.0000026 v 2.0000558 h 3 V 18.999947 h -3 v 2.000056 h 5.000056 V 3.0000026 Z"
        style="fill:#211b27;fill-opacity:1" /></g></svg>
+<!-- SPDX-License-Identifier: LGPL-2.1-or-later -->
+<!-- Icon based on Systemd Logo from https://github.com/systemd/systemd -->
+<!-- Using elements from https://github.com/Remix-Design/remixicon in Apache License, loaded from https://www.svgrepo.com -->

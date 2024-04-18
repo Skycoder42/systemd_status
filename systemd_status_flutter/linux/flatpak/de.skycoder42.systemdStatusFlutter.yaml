@@ -44,7 +44,7 @@ modules:
         paths:
           - patch/pubspec_overrides.patch
           - patch/compiler_warnings.patch
-        use-git: true
+        use-git: false
       - type: script
         commands:
           - cp -a build/linux/x64/release/bundle/* /app/
