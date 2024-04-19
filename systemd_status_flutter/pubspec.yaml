@@ -63,6 +63,7 @@ flutter_native_splash:
 
 msix_config:
   display_name: Systemd Status
+  publisher: CN=de.skycoder42.systemdStatusFlutter, O=Skycoder42, C=DE
   publisher_display_name: Skycoder42
   identity_name: de.skycoder42.systemdStatusFlutter
   logo_path: windows/runner/resources/app_icon.ico
