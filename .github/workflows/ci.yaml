@@ -170,9 +170,6 @@ jobs:
         systemd_status_rpc
         systemd_status_client
       buildRunner: true
-    secrets:
-      signingCert: ${{ secrets.SIGNING_CERT }}
-      signingCertPassword: ${{ secrets.SIGNING_CERT_PASSWORD }}
   flutter_deploy:
     name: systemd_status_flutter - Deploy apps
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
