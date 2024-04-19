@@ -6,3 +6,6 @@
 # Xcode-related
 **/dgph
 **/xcuserdata/
+
+# lockfile
+Podfile.lock

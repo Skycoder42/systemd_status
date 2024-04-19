@@ -149,7 +149,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/build-linux.yml@main
     with:
       workingDirectory: systemd_status_flutter
-      artifactDependencies:  >-
+      artifactDependencies: >-
         systemd_status_rpc
         systemd_status_client
       manifestPath: linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
@@ -166,10 +166,24 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/build-windows.yml@main
     with:
       workingDirectory: systemd_status_flutter
-      artifactDependencies:  >-
+      artifactDependencies: >-
         systemd_status_rpc
         systemd_status_client
       buildRunner: true
+  flutter_build_macos:
+    name: systemd_status_flutter - Build DMG image installer
+    needs:
+      - rpc_package
+      - client_package
+      - flutter_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-macos.yml@main
+    with:
+      workingDirectory: systemd_status_flutter
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      buildRunner: true
+      dmgConfigPath: macos/dmg-config.json
   flutter_deploy:
     name: systemd_status_flutter - Deploy apps
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
@@ -177,6 +191,7 @@ jobs:
       - flutter_ci
       - flutter_build_linux
       - flutter_build_windows
+      - flutter_build_macos
     permissions:
       contents: write
     with:
