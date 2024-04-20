@@ -1,5 +1,5 @@
 name: systemd_status_flutter
-version: 0.1.3
+version: 0.1.4
 publish_to: none
 
 environment:
@@ -61,17 +61,17 @@ flutter_native_splash:
   image: assets/splash/splash-light.png
   image_dark: assets/splash/splash-dark.png
 
-msix_config:
-  display_name: Systemd Status
-  publisher: CN=de.skycoder42.systemdStatusFlutter, O=Skycoder42, C=DE
+msix_config:description:
+  publisher: CN=E6ED0CED-8505-45BA-AA8A-1C0D6BCB2B76
   publisher_display_name: Skycoder42
-  identity_name: de.skycoder42.systemdStatusFlutter
+  identity_name: Skycoder42.SystemdStatus
+  display_name: Systemd Status
   logo_path: windows/runner/resources/app_icon.ico
   capabilities: internetClient
   languages: en-us
   execution_alias: systemd_status_flutter
   output_path: build/windows/msix
-  output_name: de.skycoder42.systemdStatusFlutter
+  output_name: Systemd Status
   build_windows: false
 
 cider:
