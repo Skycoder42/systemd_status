@@ -61,7 +61,7 @@ flutter_native_splash:
   image: assets/splash/splash-light.png
   image_dark: assets/splash/splash-dark.png
 
-msix_config:description:
+msix_config:
   publisher: CN=E6ED0CED-8505-45BA-AA8A-1C0D6BCB2B76
   publisher_display_name: Skycoder42
   identity_name: Skycoder42.SystemdStatus
