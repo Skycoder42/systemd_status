@@ -198,9 +198,11 @@ jobs:
       enabledPlatforms: ${{ needs.flutter_ci.outputs.enabledPlatforms }}
       workingDirectory: systemd_status_flutter
       tagPrefix: app/v
+      targetRepo: Skycoder42/homebrew-systemd_status
     secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
+      targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
 
   # flutter_cd:
   #   name: systemd_status_flutter - CD

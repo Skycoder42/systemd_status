@@ -1,5 +1,7 @@
 name: systemd_status_flutter
-version: 0.1.4
+description: Monitor the server status of a systemd based server.
+homepage: https://github.com/Skycoder42/systemd_status
+version: 0.1.5
 publish_to: none
 
 environment:
@@ -73,6 +75,9 @@ msix_config:
   output_path: build/windows/msix
   output_name: Systemd Status
   build_windows: false
+
+cask:
+  downloadUrl: https://github.com/Skycoder42/systemd_status/releases/download/app%2F#{version}/Systemd.Status.dmg
 
 cider:
   link_template:
