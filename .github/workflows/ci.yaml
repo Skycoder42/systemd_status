@@ -10,34 +10,20 @@ on:
       - "*"
 
 jobs:
-  rpc:
+  packages:
     name: systemd_status_rpc
-    uses: ./.github/workflows/rpc_ci.yaml
-
-  client:
-    name: systemd_status_client
-    needs:
-      - rpc
-    uses: ./.github/workflows/client_ci.yaml
-
-  bridge:
-    name: systemd_status_bridge
-    needs:
-      - rpc
-      - client
-    uses: ./.github/workflows/bridge_ci.yaml
+    uses: ./.github/workflows/packages_ci.yaml
 
   flutter:
     name: systemd_status_flutter
     needs:
-      - rpc
-      - client
+      - packages
     uses: ./.github/workflows/flutter_ci.yaml
 
   server_ci:
     name: systemd_status_server
     needs:
-      - rpc
+      - packages
     uses: ./.github/workflows/server_ci.yaml
 
   server_cd:

@@ -7,6 +7,46 @@ on:
         value: ${{ jobs.server_cd.outputs.releaseVersion }}
 
 jobs:
+  bridge_ci:
+    name: CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
+    with:
+      workingDirectory: systemd_status_bridge
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      buildRunner: true
+      unitTestPaths: ""
+
+  bridge_cd:
+    name: Compile and Release
+    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
+    needs:
+      - bridge_ci
+    permissions:
+      contents: write
+    with:
+      enabledPlatforms: ${{ needs.bridge_ci.outputs.enabledPlatforms }}
+      workingDirectory: systemd_status_bridge
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      buildRunner: true
+      archivePrefix: systemd-status-systemctl-bridge
+      tagPrefix: bridge/v
+
+  bridge_deploy:
+    name: Create debian package
+    needs:
+      - bridge_cd
+    if: needs.bridge_cd.outputs.releaseCreated == 'true'
+    uses: Skycoder42/dart_test_tools/.github/workflows/deb.yml@main
+    with:
+      workingDirectory: systemd_status_bridge
+      packagecloudRepository: systemd_status/ubuntu/jammy
+    secrets:
+      packagecloudToken: ${{ secrets.PACKAGECLOUD_TOKEN }}
+
   server_ci:
     name: systemd_status_server - CI
     uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
