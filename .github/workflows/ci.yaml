@@ -11,32 +11,15 @@ on:
 
 jobs:
   packages:
-    name: systemd_status_rpc
+    name: Packages
     uses: ./.github/workflows/packages_ci.yaml
+    secrets: inherit
 
-  flutter:
-    name: systemd_status_flutter
+  apps:
+    name: Apps
     needs:
       - packages
-    uses: ./.github/workflows/flutter_ci.yaml
+    uses: ./.github/workflows/apps_ci.yaml
     permissions:
       contents: write
-
-  server_ci:
-    name: systemd_status_server
-    needs:
-      - packages
-    uses: ./.github/workflows/server_ci.yaml
-    permissions:
-      contents: write
-
-  server_cd:
-    name: systemd_status_server
-    needs:
-      - server_ci
-      - flutter
-    uses: ./.github/workflows/server_cd.yaml
-    with:
-      releaseCreated: ${{ needs.server_ci.outputs.releaseCreated }}
-      releaseVersion: ${{ needs.server_ci.outputs.releaseVersion }}
-      appVersion: ${{ needs.flutter.outputs.releaseVersion }}
+    secrets: inherit

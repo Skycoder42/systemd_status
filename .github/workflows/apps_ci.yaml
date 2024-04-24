@@ -1,0 +1,169 @@
+on:
+  workflow_call:
+
+jobs:
+  flutter_ci:
+    name: Flutter - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
+    with:
+      workingDirectory: systemd_status_flutter
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      buildRunner: true
+      unitTestPaths: ""
+
+  flutter_build_linux:
+    name: Flutter - Build flatpak bundles
+    needs:
+      - flutter_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-linux.yml@main
+    with:
+      workingDirectory: systemd_status_flutter
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      manifestPath: linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
+      bundleName: de.skycoder42.systemdStatusFlutter.flatpak
+    secrets:
+      gpgKeyId: ${{ secrets.GPG_KEY_ID }}
+      gpgKey: ${{ secrets.GPG_KEY }}
+
+  flutter_build_windows:
+    name: Flutter - Build msix installer
+    needs:
+      - flutter_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-windows.yml@main
+    with:
+      workingDirectory: systemd_status_flutter
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      buildRunner: true
+
+  flutter_build_macos:
+    name: Flutter - Build DMG image
+    needs:
+      - flutter_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-macos.yml@main
+    with:
+      workingDirectory: systemd_status_flutter
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      buildRunner: true
+      dmgConfigPath: macos/dmg-config.json
+
+  flutter_build_web:
+    name: Flutter - Build web archive
+    needs:
+      - flutter_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-web.yml@main
+    with:
+      workingDirectory: systemd_status_flutter
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      buildRunner: true
+
+  flutter_deploy:
+    name: Flutter - Deploy
+    uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
+    needs:
+      - flutter_ci
+      - flutter_build_linux
+      - flutter_build_windows
+      - flutter_build_macos
+      - flutter_build_web
+    permissions:
+      contents: write
+    with:
+      enabledPlatforms: ${{ needs.flutter_ci.outputs.enabledPlatforms }}
+      workingDirectory: systemd_status_flutter
+      tagPrefix: app/v
+      targetRepo: Skycoder42/homebrew-systemd_status
+    secrets:
+      gpgKeyId: ${{ secrets.GPG_KEY_ID }}
+      gpgKey: ${{ secrets.GPG_KEY }}
+      targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
+
+  bridge_ci:
+    name: Bridge - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
+    with:
+      workingDirectory: systemd_status_bridge
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      buildRunner: true
+      unitTestPaths: ""
+
+  bridge_cd:
+    name: Bridge - Compile and Release
+    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
+    needs:
+      - bridge_ci
+    permissions:
+      contents: write
+    with:
+      enabledPlatforms: ${{ needs.bridge_ci.outputs.enabledPlatforms }}
+      workingDirectory: systemd_status_bridge
+      artifactDependencies: >-
+        systemd_status_rpc
+        systemd_status_client
+      buildRunner: true
+      archivePrefix: systemd-status-systemctl-bridge
+      tagPrefix: bridge/v
+
+  bridge_deploy:
+    name: Bridge - Deploy
+    needs:
+      - bridge_cd
+    if: needs.bridge_cd.outputs.releaseCreated == 'true'
+    uses: Skycoder42/dart_test_tools/.github/workflows/deb.yml@main
+    with:
+      workingDirectory: systemd_status_bridge
+      packagecloudRepository: systemd_status/ubuntu/jammy
+    secrets:
+      packagecloudToken: ${{ secrets.PACKAGECLOUD_TOKEN }}
+
+  server_ci:
+    name: Server - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
+    with:
+      workingDirectory: systemd_status_server
+      artifactDependencies: systemd_status_rpc
+      buildRunner: true
+      unitTestPaths: ""
+
+  server_cd:
+    name: Server - Compile and Release
+    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
+    needs:
+      - server_ci
+    permissions:
+      contents: write
+    with:
+      enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
+      workingDirectory: systemd_status_server
+      artifactDependencies: systemd_status_rpc
+      buildRunner: true
+      archivePrefix: systemd-status-server
+      tagPrefix: server/v
+
+  server_deploy:
+    name: Server - Deploy
+    uses: Skycoder42/dart_test_tools/.github/workflows/docker.yml@main
+    needs:
+      - server_cd
+      - flutter_deploy
+    if: needs.server_cd.outputs.releaseCreated == 'true'
+    with:
+      imageName: skycoder42/systemd-status-server
+      version: ${{ needs.server_cd.outputs.releaseVersion }}
+      dockerPlatforms: linux/amd64,linux/arm64
+      dockerBuildArgs: |
+        APP_VERSION=${{ needs.flutter_deploy.outputs.releaseVersion }}
+    secrets:
+      dockerHubUsername: ${{ secrets.DOCKER_USERNAME }}
+      dockerHubToken: ${{ secrets.DOCKER_TOKEN }}

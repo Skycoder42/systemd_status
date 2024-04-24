@@ -3,7 +3,7 @@ on:
 
 jobs:
   rpc_ci:
-    name: CI
+    name: RPC - CI
     uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
     with:
       workingDirectory: systemd_status_rpc
@@ -11,7 +11,7 @@ jobs:
       unitTestPaths: ""
 
   rpc_package:
-    name: Package
+    name: RPC - Package
     uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
     needs:
       - rpc_ci
@@ -20,7 +20,7 @@ jobs:
       buildRunner: true
 
   client_ci:
-    name: CI
+    name: Client - CI
     uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
     needs:
       - rpc_package
@@ -30,7 +30,7 @@ jobs:
       unitTestPaths: ""
 
   client_package:
-    name: Package
+    name: Client - Package
     uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
     needs:
       - client_ci
