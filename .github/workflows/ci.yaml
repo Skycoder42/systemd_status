@@ -19,12 +19,16 @@ jobs:
     needs:
       - packages
     uses: ./.github/workflows/flutter_ci.yaml
+    permissions:
+      contents: write
 
   server_ci:
     name: systemd_status_server
     needs:
       - packages
     uses: ./.github/workflows/server_ci.yaml
+    permissions:
+      contents: write
 
   server_cd:
     name: systemd_status_server
