@@ -1,0 +1,20 @@
+on:
+  workflow_call:
+
+jobs:
+  client_ci:
+    name: CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
+    with:
+      workingDirectory: systemd_status_client
+      artifactDependencies: systemd_status_rpc
+      unitTestPaths: ""
+
+  client_package:
+    name: Package
+    uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
+    needs:
+      - client_ci
+    with:
+      workingDirectory: systemd_status_client
+      artifactDependencies: systemd_status_rpc

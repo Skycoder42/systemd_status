@@ -1,0 +1,32 @@
+on:
+  workflow_call:
+    outputs:
+      releaseCreated:
+        value: ${{ jobs.server_cd.outputs.releaseCreated }}
+      releaseVersion:
+        value: ${{ jobs.server_cd.outputs.releaseVersion }}
+
+jobs:
+  server_ci:
+    name: systemd_status_server - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
+    with:
+      workingDirectory: systemd_status_server
+      artifactDependencies: systemd_status_rpc
+      buildRunner: true
+      unitTestPaths: ""
+
+  server_cd:
+    name: systemd_status_server - CD
+    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
+    needs:
+      - server_ci
+    permissions:
+      contents: write
+    with:
+      enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
+      workingDirectory: systemd_status_server
+      artifactDependencies: systemd_status_rpc
+      buildRunner: true
+      archivePrefix: systemd-status-server
+      tagPrefix: server/v
