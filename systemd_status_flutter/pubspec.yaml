@@ -1,7 +1,7 @@
 name: systemd_status_flutter
 description: Monitor the server status of a systemd based server.
 homepage: https://github.com/Skycoder42/systemd_status
-version: 0.1.6
+version: 0.1.7
 publish_to: none
 
 environment:
