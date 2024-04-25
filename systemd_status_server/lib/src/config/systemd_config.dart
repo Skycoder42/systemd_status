@@ -6,7 +6,7 @@ part 'systemd_config.freezed.dart';
 part 'systemd_config.g.dart';
 
 @freezed
-class SystemdConfig with _$SystemdConfig {
+sealed class SystemdConfig with _$SystemdConfig {
   @JsonSerializable(
     anyMap: true,
     checked: true,

@@ -39,15 +39,13 @@ Future<void> run(List<String> args) async {
     ),
   );
 
-  // If you are using any future calls, they need to be registered here.
-  // pod.registerFutureCall(ExampleFutureCall(), 'exampleFutureCall');
-
-  // Serve all files in the /static directory.
-  // pod.webServer.addRoute(
-  //   RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
-  //   '/*',
-  // );
-  pod.webServer.addRoute(auth.RouteGoogleSignIn(), '/googlesignin');
+  pod.webServer
+    ..addRoute(auth.RouteGoogleSignIn(), '/googlesignin')
+    ..addRoute(
+      // TODO create PR for fix
+      RouteStaticDirectory(serverDirectory: 'app', basePath: '/app'),
+      '/app/*',
+    );
 
   // register shutdown signals
   for (final signal in [ProcessSignal.sigint, ProcessSignal.sigterm]) {

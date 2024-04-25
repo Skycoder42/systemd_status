@@ -43,3 +43,6 @@ redis:
 systemd:
   unitFilters:
     - .*
+
+app:
+  exportTo: /tmp/systemd-status-flutter
