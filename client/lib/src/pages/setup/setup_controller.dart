@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../app/router.dart';
-import '../../providers/client_provider.dart';
 import '../../services/app_settings.dart';
 
 part 'setup_controller.freezed.dart';
@@ -40,7 +39,7 @@ class SetupController extends _$SetupController {
     try {
       await appSettings.setServerUrl(serverUrl);
       // ignore: unused_result
-      await ref.refresh(sessionManagerProvider.future);
+      // await ref.refresh(sessionManagerProvider.future);
 
       if (googleAuthSettings != null) {
         await appSettings.setGoogleAuthSettings(googleAuthSettings);

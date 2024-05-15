@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:systemd_status_rpc/systemd_status_rpc.dart';
+import 'package:systemd_status_server/api.dart';
 
 import '../app/theme.dart';
 

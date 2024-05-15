@@ -6,7 +6,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../pages/login/login_page.dart';
 import '../pages/setup/setup_page.dart';
 import '../pages/units/units_page.dart';
-import '../providers/client_provider.dart';
 import '../services/app_settings.dart';
 
 part 'router.g.dart';
@@ -31,12 +30,6 @@ class _GlobalRedirect {
     if (appSettings.serverUrl == null) {
       _logger.config('No serverUrl configured. Redirecting to setup page');
       return SetupRoute(redirectTo: state.matchedLocation).location;
-    }
-
-    final sessionManager = await ref.read(sessionManagerProvider.future);
-    if (!sessionManager.isSignedIn) {
-      _logger.config('User is not signed in. Redirecting to login page');
-      return LoginRoute(redirectTo: state.matchedLocation).location;
     }
 
     _logger.finest(

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:systemd_status_rpc/systemd_status_rpc.dart';
+import 'package:systemd_status_server/api.dart';
 
 import '../../../models/state_group.dart';
 

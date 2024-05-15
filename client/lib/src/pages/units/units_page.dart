@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:systemd_status_rpc/systemd_status_rpc.dart';
+import 'package:systemd_status_server/api.dart';
 
 import '../../providers/client_provider.dart';
 import 'widgets/unit_card.dart';
@@ -10,7 +10,7 @@ part 'units_page.g.dart';
 
 @riverpod
 Future<List<UnitInfo>> units(UnitsRef ref) =>
-    ref.watch(systemdStatusClientProvider).units.listUnits();
+    ref.watch(systemdStatusApiClientProvider).unitsList();
 
 class UnitsPage extends ConsumerWidget {
   const UnitsPage({super.key});
