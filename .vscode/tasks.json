@@ -2,47 +2,6 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "shell",
-			"command": "serverpod",
-			"args": [
-				"generate",
-				"-w"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}/systemd_status_server"
-			},
-			"problemMatcher": [],
-			"label": "serverpod: generate -w",
-			"detail": "systemd_status_server",
-			"group": {
-				"kind": "build"
-			}
-		},
-		{
-			"type": "dart",
-			"command": "dart",
-			"cwd": "systemd_status_rpc",
-			"args": [
-				"run",
-				"build_runner",
-				"watch"
-			],
-			"problemMatcher": [],
-			"label": "build systemd_status_rpc",
-		},
-		{
-			"type": "dart",
-			"command": "dart",
-			"cwd": "systemd_status_bridge",
-			"args": [
-				"run",
-				"build_runner",
-				"watch"
-			],
-			"problemMatcher": [],
-			"label": "build systemd_status_bridge",
-		},
-		{
 			"type": "dart",
 			"command": "dart",
 			"cwd": "systemd_status_server",
@@ -69,9 +28,6 @@
 		{
 			"label": "Build",
 			"dependsOn": [
-				"serverpod: generate -w",
-				"build systemd_status_rpc",
-				"build systemd_status_bridge",
 				"build systemd_status_server",
 				"build systemd_status_flutter",
 			],
@@ -83,12 +39,15 @@
 		{
 			"type": "shell",
 			"command": "docker-compose",
+			"options": {
+				"cwd": "${workspaceFolder}/systemd_status_server"
+			},
 			"args": [
 				"up",
 				"-d"
 			],
 			"problemMatcher": [],
-			"label": "podman-compose up -d",
+			"label": "docker-compose up -d",
 			"detail": "systemd_status_server",
 		},
 	]

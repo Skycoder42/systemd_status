@@ -9,7 +9,7 @@ part 'app_settings.freezed.dart';
 part 'app_settings.g.dart';
 
 @freezed
-class GoogleAuthSettings with _$GoogleAuthSettings {
+sealed class GoogleAuthSettings with _$GoogleAuthSettings {
   const factory GoogleAuthSettings({
     required String clientId,
     required String serverClientId,
@@ -21,7 +21,7 @@ class GoogleAuthSettings with _$GoogleAuthSettings {
 }
 
 @freezed
-class Settings with _$Settings {
+sealed class Settings with _$Settings {
   const factory Settings({
     Uri? serverUrl,
     GoogleAuthSettings? googleAuthSettings,

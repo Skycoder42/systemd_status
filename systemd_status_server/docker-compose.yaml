@@ -1,0 +1,13 @@
+services:
+  systemd:
+    build:
+      context: tool/systemd-docker
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    tty: true
+    network_mode: host
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    cgroup: private

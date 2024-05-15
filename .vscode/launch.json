@@ -29,18 +29,13 @@
       "cwd": "systemd_status_server",
       "request": "launch",
       "type": "dart",
-      "program": "bin/main.dart",
+      "program": "bin/server.dart",
       "args": [
-        "--apply-migrations"
+        "-Lall",
+        "--debug-overwrite-systemctl",
+        "${workspaceFolder}/systemd_status_server/tool/systemd-docker/systemctl-docker.sh"
       ],
-      "preLaunchTask": "podman-compose up -d"
-    },
-    {
-      "name": "systemd_status_bridge",
-      "cwd": "systemd_status_bridge",
-      "request": "launch",
-      "type": "dart",
-      "program": "bin/bridge.dart",
+      "preLaunchTask": "docker-compose up -d"
     }
   ]
 }

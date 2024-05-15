@@ -1,44 +1,30 @@
 name: systemd_status
 
 packages:
-  - systemd_status_rpc
-  - systemd_status_bridge
   - systemd_status_server
-  - systemd_status_client
   - systemd_status_flutter
 
 scripts:
-  get:
-    run: >-
-      dart pub global run melos exec --no-flutter -- dart pub get &&
-      dart pub global run melos exec --flutter -- flutter pub get
-    description: Run 'pub get' in all projects
+  get: >-
+    dart pub global run melos exec --no-flutter -- dart pub get &&
+    dart pub global run melos exec --flutter -- flutter pub get
 
-  upgrade:
-    run: >-
-      dart pub global run melos exec --no-flutter -- dart pub upgrade --major-versions &&
-      dart pub global run melos exec --flutter -- flutter pub upgrade --major-versions
-    description: Run 'pub get' in all projects
+  upgrade: >-
+    dart pub global run melos exec --no-flutter -- dart pub upgrade --major-versions &&
+    dart pub global run melos exec --flutter -- flutter pub upgrade --major-versions
 
   build:
-    run: >-
-      dart pub global run melos exec --depends-on=build_runner -- dart run build_runner build &&
-      dart pub global run melos exec --depends-on=serverpod -- serverpod generate
-    description: Run the build runner in all projects
+    run: dart run build_runner build
+    exec:
+      orderDependents: true
 
-  pre-commit:init:
-    run: >-
-      bash -c "echo -e
-      '#!/bin/sh\nexec dart pub global run melos run pre-commit:run'
-      > .git/hooks/pre-commit && chmod a+x .git/hooks/pre-commit"
-    description: Setup pre commit hooks
+  pre-commit:init: >-
+    bash -c "echo -e
+    '#!/bin/sh\nexec dart pub global run melos run pre-commit:run'
+    > .git/hooks/pre-commit && chmod a+x .git/hooks/pre-commit"
 
-  pre-commit:remove:
-    run: rm -f .git/hooks/pre-commit
-    description: Remove pre commit hooks
+  pre-commit:remove: rm -f .git/hooks/pre-commit
 
-  pre-commit:run:
-    run: >-
-      dart pub global run melos exec --no-flutter --depends-on=dart_pre_commit -- dart run dart_pre_commit &&
-      dart pub global run melos exec --flutter --depends-on=dart_pre_commit -- flutter pub run dart_pre_commit
-    description: Run pre commit hooks in all projects
+  pre-commit:run:  >-
+    dart pub global run melos exec --no-flutter --depends-on=dart_pre_commit -- dart run dart_pre_commit &&
+    dart pub global run melos exec --flutter --depends-on=dart_pre_commit -- flutter pub run dart_pre_commit

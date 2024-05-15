@@ -9,7 +9,7 @@ part 'setup_controller.freezed.dart';
 part 'setup_controller.g.dart';
 
 @freezed
-class SetupState with _$SetupState {
+sealed class SetupState with _$SetupState {
   const factory SetupState({
     required Uri? serverUrl,
     required GoogleAuthSettings? googleAuthSettings,
