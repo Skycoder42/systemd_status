@@ -8,14 +8,19 @@ environment:
 platforms:
   linux:
 
+executables:
+  systemd-status-server: server
+
 dependencies:
   args: ^2.5.0
   build_cli_annotations: ^2.1.0
+  checked_yaml: ^2.0.3
   dio: ^5.4.3+1
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
   logging: ^1.2.0
   meta: ^1.12.0
+  path: ^1.9.0
   posix: ^6.0.1
   riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5

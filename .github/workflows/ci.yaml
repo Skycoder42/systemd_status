@@ -21,6 +21,8 @@ jobs:
   server_package:
     name: Server - package
     uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
+    needs:
+      - server_ci
     with:
       workingDirectory: server
       buildRunner: true
@@ -46,17 +48,19 @@ jobs:
       - server_package
     with:
       workingDirectory: client
-      artifactDependencies: server
+      artifactDependencies: systemd_status_server
       buildRunner: true
       unitTestPaths: ""
 
   client_build_linux:
     name: Client - Build flatpak bundles
     needs:
+      - server_package
       - client_ci
     uses: Skycoder42/dart_test_tools/.github/workflows/build-linux.yml@main
     with:
       workingDirectory: client
+      artifactDependencies: systemd_status_server
       manifestPath: linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
       bundleName: de.skycoder42.systemdStatusFlutter.flatpak
     secrets:
@@ -66,29 +70,35 @@ jobs:
   client_build_windows:
     name: Client - Build msix installer
     needs:
+      - server_package
       - client_ci
     uses: Skycoder42/dart_test_tools/.github/workflows/build-windows.yml@main
     with:
       workingDirectory: client
+      artifactDependencies: systemd_status_server
       buildRunner: true
 
   client_build_macos:
     name: Client - Build DMG image
     needs:
+      - server_package
       - client_ci
     uses: Skycoder42/dart_test_tools/.github/workflows/build-macos.yml@main
     with:
       workingDirectory: client
+      artifactDependencies: systemd_status_server
       buildRunner: true
       dmgConfigPath: macos/dmg-config.json
 
   client_build_web:
     name: Client - Build web archive
     needs:
+      - server_package
       - client_ci
     uses: Skycoder42/dart_test_tools/.github/workflows/build-web.yml@main
     with:
       workingDirectory: client
+      artifactDependencies: systemd_status_server
       buildRunner: true
 
   client_deploy:
