@@ -22,5 +22,6 @@ Dio dioClient(DioClientRef ref) {
   return client;
 }
 
+@riverpod
 SystemdStatusApiClient systemdStatusApiClient(SystemdStatusApiClientRef ref) =>
     SystemdStatusApiClient.dio(ref.watch(dioClientProvider));

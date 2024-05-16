@@ -2,40 +2,40 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "systemd_status_flutter",
-      "cwd": "systemd_status_flutter",
+      "name": "client",
+      "cwd": "client",
       "request": "launch",
       "type": "dart",
       "deviceId": "web-server"
     },
     {
-      "name": "systemd_status_flutter (profile mode)",
-      "cwd": "systemd_status_flutter",
+      "name": "client (profile mode)",
+      "cwd": "client",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile",
       "deviceId": "web-server"
     },
     {
-      "name": "systemd_status_flutter (release mode)",
-      "cwd": "systemd_status_flutter",
+      "name": "client (release mode)",
+      "cwd": "client",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release",
       "deviceId": "web-server"
     },
     {
-      "name": "systemd_status_server",
-      "cwd": "systemd_status_server",
+      "name": "server",
+      "cwd": "server",
       "request": "launch",
       "type": "dart",
       "program": "bin/server.dart",
       "args": [
         "-Lall",
         "--debug-overwrite-systemctl",
-        "${workspaceFolder}/systemd_status_server/tool/systemd-docker/systemctl-docker.sh"
+        "${workspaceFolder}/server/tool/systemd-docker/systemctl-docker.sh"
       ],
-      "preLaunchTask": "docker-compose up -d"
+      "preLaunchTask": "Start systemd container"
     }
   ]
 }

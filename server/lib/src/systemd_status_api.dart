@@ -6,4 +6,5 @@ import 'endpoints/units_endpoint.dart';
   basePath: '/api',
   [UnitsEndpoint],
 )
+// ignore: unused_element
 abstract class _SystemdStatusApi {}

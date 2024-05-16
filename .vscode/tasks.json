@@ -4,32 +4,32 @@
 		{
 			"type": "dart",
 			"command": "dart",
-			"cwd": "systemd_status_server",
+			"cwd": "server",
 			"args": [
 				"run",
 				"build_runner",
 				"watch"
 			],
 			"problemMatcher": [],
-			"label": "build systemd_status_server",
+			"label": "build server",
 		},
 		{
 			"type": "dart",
 			"command": "dart",
-			"cwd": "systemd_status_flutter",
+			"cwd": "client",
 			"args": [
 				"run",
 				"build_runner",
 				"watch"
 			],
 			"problemMatcher": [],
-			"label": "build systemd_status_flutter",
+			"label": "build client",
 		},
 		{
 			"label": "Build",
 			"dependsOn": [
-				"build systemd_status_server",
-				"build systemd_status_flutter",
+				"build server",
+				"build client",
 			],
 			"group": {
 				"kind": "build",
@@ -40,15 +40,14 @@
 			"type": "shell",
 			"command": "docker-compose",
 			"options": {
-				"cwd": "${workspaceFolder}/systemd_status_server"
+				"cwd": "${workspaceFolder}/server"
 			},
 			"args": [
 				"up",
 				"-d"
 			],
 			"problemMatcher": [],
-			"label": "docker-compose up -d",
-			"detail": "systemd_status_server",
+			"label": "Start systemd container",
 		},
 	]
 }
