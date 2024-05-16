@@ -1,4 +1,4 @@
-package de.skycoder42.systemd_status_flutter
+package de.skycoder42.systemdStatusClient
 
 import io.flutter.embedding.android.FlutterActivity
 

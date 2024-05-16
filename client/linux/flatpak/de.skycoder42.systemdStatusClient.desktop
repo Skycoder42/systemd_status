@@ -6,7 +6,7 @@ Name=Systemd Status
 Comment=Systemd Status
 Categories=Utility;
 
-Icon=de.skycoder42.systemdStatusFlutter
-Exec=systemd_status_flutter
+Icon=de.skycoder42.systemdStatusClient
+Exec=systemd_status_client
 Terminal=false
-StartupWMClass=systemd_status_flutter
+StartupWMClass=systemd_status_client

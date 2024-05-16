@@ -5,7 +5,5 @@ index 0000000..98ced3b
 +++ b/pubspec_overrides.yaml
 @@ -0,0 +1,5 @@
 +dependency_overrides:
-+  systemd_status_rpc:
-+    path: ./.artifacts/package-systemd_status_rpc
-+  systemd_status_client:
-+    path: ./.artifacts/package-systemd_status_client
++  systemd_status_server:
++    path: ./.artifacts/package-systemd_status_server

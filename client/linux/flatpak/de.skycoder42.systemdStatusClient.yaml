@@ -1,14 +1,14 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json
 
 ---
-id: de.skycoder42.systemdStatusFlutter
+id: de.skycoder42.systemdStatusClient
 runtime: org.freedesktop.Platform
 runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm17
   - org.freedesktop.Sdk.Extension.flutter
-command: systemd_status_flutter
+command: systemd_status_client
 separate-locales: false
 finish-args:
   - --share=ipc
@@ -18,7 +18,7 @@ finish-args:
   - --share=network
 writable-sdk: true
 modules:
-  - name: systemd_status_flutter
+  - name: systemd_status_client
     buildsystem: simple
     only-arches:
       - x86_64
@@ -72,16 +72,16 @@ modules:
         dest: flatpak
     build-commands:
       - mkdir -p /app/bin
-      - ln -s /app/systemd_status_flutter /app/bin/systemd_status_flutter
+      - ln -s /app/systemd_status_client /app/bin/systemd_status_client
       - mkdir -p /app/share/icons/hicolor/scalable/apps
       - >-
         cp -a
         /app/data/flutter_assets/assets/icons/app-icon-light.svg
-        /app/share/icons/hicolor/scalable/apps/de.skycoder42.systemdStatusFlutter.svg
+        /app/share/icons/hicolor/scalable/apps/de.skycoder42.systemdStatusClient.svg
       - mkdir -p /app/share/applications
-      - cp -a flatpak/de.skycoder42.systemdStatusFlutter.desktop /app/share/applications/
+      - cp -a flatpak/de.skycoder42.systemdStatusClient.desktop /app/share/applications/
       - mkdir -p /app/share/metainfo
-      - cp -a flatpak/de.skycoder42.systemdStatusFlutter.metainfo.xml /app/share/metainfo/
+      - cp -a flatpak/de.skycoder42.systemdStatusClient.metainfo.xml /app/share/metainfo/
   - name: changelog
     buildsystem: simple
     build-options:
@@ -96,4 +96,4 @@ modules:
       - type: file
         path: ../../CHANGELOG.md
     build-commands:
-      - export-xml-changelog --output /app/share/metainfo/de.skycoder42.systemdStatusFlutter.metainfo.xml
+      - export-xml-changelog --output /app/share/metainfo/de.skycoder42.systemdStatusClient.metainfo.xml

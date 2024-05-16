@@ -5,8 +5,8 @@ version: 0.1.7
 publish_to: none
 
 environment:
-  sdk: ^3.3.0
-  flutter: ">=3.19.0"
+  sdk: ^3.4.0
+  flutter: ">=3.22.0"
 
 dependencies:
   dio: ^5.4.3+1
@@ -66,18 +66,18 @@ msix_config:
   logo_path: windows/runner/resources/app_icon.ico
   capabilities: internetClient
   languages: en-us
-  execution_alias: systemd_status_flutter
+  execution_alias: systemd_status_client
   output_path: build/windows/msix
   output_name: Systemd Status
   build_windows: false
 
 cask:
-  downloadUrl: https://github.com/Skycoder42/systemd_status/releases/download/app%2Fv#{version}/Systemd.Status.dmg
+  downloadUrl: https://github.com/Skycoder42/systemd_status/releases/download/client%2Fv#{version}/Systemd.Status.dmg
 
 cider:
   link_template:
-    tag: https://github.com/Skycoder42/systemd_status/releases/tag/app%2Fv%tag%
-    diff: https://github.com/Skycoder42/systemd_status/compare/app%2Fv%from%...v%to%
+    tag: https://github.com/Skycoder42/systemd_status/releases/tag/client%2Fv%tag%
+    diff: https://github.com/Skycoder42/systemd_status/compare/client%2Fv%from%...v%to%
 
 scripts:
   gen:

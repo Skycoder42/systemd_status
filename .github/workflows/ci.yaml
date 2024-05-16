@@ -74,8 +74,8 @@ jobs:
     with:
       workingDirectory: client
       artifactDependencies: systemd_status_server
-      manifestPath: linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
-      bundleName: de.skycoder42.systemdStatusFlutter.flatpak
+      manifestPath: linux/flatpak/de.skycoder42.systemdStatusClient.yaml
+      bundleName: de.skycoder42.systemdStatusClient.flatpak
     secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
@@ -128,7 +128,7 @@ jobs:
     with:
       enabledPlatforms: ${{ needs.client_ci.outputs.enabledPlatforms }}
       workingDirectory: client
-      tagPrefix: app/v
+      tagPrefix: client/v
       targetRepo: Skycoder42/homebrew-systemd_status
     secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- https://www.freedesktop.org/software/appstream/metainfocreator/#/guiapp -->
 <component type="desktop-application">
-  <id>de.skycoder42.systemdStatusFlutter</id>
+  <id>de.skycoder42.systemdStatusClient</id>
 
   <name>Systemd Status</name>
   <summary>Monitor the server status of a systemd based server</summary>
@@ -21,5 +21,5 @@
     </p>
   </description>
 
-  <launchable type="desktop-id">de.skycoder42.systemdStatusFlutter.desktop</launchable>
+  <launchable type="desktop-id">de.skycoder42.systemdStatusClient.desktop</launchable>
 </component>

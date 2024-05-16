@@ -1,4 +1,4 @@
-# systemd_status_flutter
+# systemd_status_client
 
 A new Flutter project with Serverpod.
 
