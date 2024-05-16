@@ -1,8 +1,8 @@
 name: systemd_status
 
 packages:
-  - systemd_status_server
-  - systemd_status_flutter
+  - server
+  - client
 
 scripts:
   get: >-
@@ -25,6 +25,6 @@ scripts:
 
   pre-commit:remove: rm -f .git/hooks/pre-commit
 
-  pre-commit:run:  >-
-    dart pub global run melos exec --no-flutter --depends-on=dart_pre_commit -- dart run dart_pre_commit &&
-    dart pub global run melos exec --flutter --depends-on=dart_pre_commit -- flutter pub run dart_pre_commit
+  pre-commit:run: >-
+    dart pub global run melos exec --depends-on=dart_pre_commit --
+    dart run dart_pre_commit

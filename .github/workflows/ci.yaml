@@ -10,83 +10,20 @@ on:
       - "*"
 
 jobs:
-  flutter_ci:
-    name: Flutter - CI
-    uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
-    with:
-      workingDirectory: systemd_status_flutter
-      buildRunner: true
-      unitTestPaths: ""
-
-  flutter_build_linux:
-    name: Flutter - Build flatpak bundles
-    needs:
-      - flutter_ci
-    uses: Skycoder42/dart_test_tools/.github/workflows/build-linux.yml@main
-    with:
-      workingDirectory: systemd_status_flutter
-      manifestPath: linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
-      bundleName: de.skycoder42.systemdStatusFlutter.flatpak
-    secrets:
-      gpgKeyId: ${{ secrets.GPG_KEY_ID }}
-      gpgKey: ${{ secrets.GPG_KEY }}
-
-  flutter_build_windows:
-    name: Flutter - Build msix installer
-    needs:
-      - flutter_ci
-    uses: Skycoder42/dart_test_tools/.github/workflows/build-windows.yml@main
-    with:
-      workingDirectory: systemd_status_flutter
-      buildRunner: true
-
-  flutter_build_macos:
-    name: Flutter - Build DMG image
-    needs:
-      - flutter_ci
-    uses: Skycoder42/dart_test_tools/.github/workflows/build-macos.yml@main
-    with:
-      workingDirectory: systemd_status_flutter
-      buildRunner: true
-      dmgConfigPath: macos/dmg-config.json
-
-  flutter_build_web:
-    name: Flutter - Build web archive
-    needs:
-      - flutter_ci
-    uses: Skycoder42/dart_test_tools/.github/workflows/build-web.yml@main
-    with:
-      workingDirectory: systemd_status_flutter
-      buildRunner: true
-
-  flutter_deploy:
-    name: Flutter - Deploy
-    uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
-    needs:
-      - flutter_ci
-      - flutter_build_linux
-      - flutter_build_windows
-      - flutter_build_macos
-      - flutter_build_web
-    permissions:
-      contents: write
-    with:
-      enabledPlatforms: ${{ needs.flutter_ci.outputs.enabledPlatforms }}
-      workingDirectory: systemd_status_flutter
-      tagPrefix: app/v
-      targetRepo: Skycoder42/homebrew-systemd_status
-    secrets:
-      gpgKeyId: ${{ secrets.GPG_KEY_ID }}
-      gpgKey: ${{ secrets.GPG_KEY }}
-      targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
-
   server_ci:
     name: Server - CI
     uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
     with:
-      workingDirectory: systemd_status_server
+      workingDirectory: server
       buildRunner: true
       unitTestPaths: ""
+
+  server_package:
+    name: Server - package
+    uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
+    with:
+      workingDirectory: server
+      buildRunner: true
 
   server_cd:
     name: Server - Compile and Release
@@ -97,24 +34,97 @@ jobs:
       contents: write
     with:
       enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
-      workingDirectory: systemd_status_server
+      workingDirectory: server
       buildRunner: true
       archivePrefix: systemd-status-server
       tagPrefix: server/v
+
+  client_ci:
+    name: Client - CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
+    needs:
+      - server_package
+    with:
+      workingDirectory: client
+      artifactDependencies: server
+      buildRunner: true
+      unitTestPaths: ""
+
+  client_build_linux:
+    name: Client - Build flatpak bundles
+    needs:
+      - client_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-linux.yml@main
+    with:
+      workingDirectory: client
+      manifestPath: linux/flatpak/de.skycoder42.systemdStatusFlutter.yaml
+      bundleName: de.skycoder42.systemdStatusFlutter.flatpak
+    secrets:
+      gpgKeyId: ${{ secrets.GPG_KEY_ID }}
+      gpgKey: ${{ secrets.GPG_KEY }}
+
+  client_build_windows:
+    name: Client - Build msix installer
+    needs:
+      - client_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-windows.yml@main
+    with:
+      workingDirectory: client
+      buildRunner: true
+
+  client_build_macos:
+    name: Client - Build DMG image
+    needs:
+      - client_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-macos.yml@main
+    with:
+      workingDirectory: client
+      buildRunner: true
+      dmgConfigPath: macos/dmg-config.json
+
+  client_build_web:
+    name: Client - Build web archive
+    needs:
+      - client_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-web.yml@main
+    with:
+      workingDirectory: client
+      buildRunner: true
+
+  client_deploy:
+    name: Client - Deploy
+    uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
+    needs:
+      - client_ci
+      - client_build_linux
+      - client_build_windows
+      - client_build_macos
+      - client_build_web
+    permissions:
+      contents: write
+    with:
+      enabledPlatforms: ${{ needs.client_ci.outputs.enabledPlatforms }}
+      workingDirectory: client
+      tagPrefix: app/v
+      targetRepo: Skycoder42/homebrew-systemd_status
+    secrets:
+      gpgKeyId: ${{ secrets.GPG_KEY_ID }}
+      gpgKey: ${{ secrets.GPG_KEY }}
+      targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
 
   server_deploy:
     name: Server - Deploy
     uses: Skycoder42/dart_test_tools/.github/workflows/docker.yml@main
     needs:
       - server_cd
-      - flutter_deploy
+      - client_deploy
     if: needs.server_cd.outputs.releaseCreated == 'true'
     with:
       imageName: skycoder42/systemd-status-server
       version: ${{ needs.server_cd.outputs.releaseVersion }}
       dockerPlatforms: linux/amd64,linux/arm64
       dockerBuildArgs: |
-        APP_VERSION=${{ needs.flutter_deploy.outputs.releaseVersion }}
+        APP_VERSION=${{ needs.client_deploy.outputs.releaseVersion }}
     secrets:
       dockerHubUsername: ${{ secrets.DOCKER_USERNAME }}
       dockerHubToken: ${{ secrets.DOCKER_TOKEN }}
