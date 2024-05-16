@@ -41,6 +41,18 @@ jobs:
       archivePrefix: systemd-status-server
       tagPrefix: server/v
 
+  server_deploy:
+    name: Server - Deploy
+    needs:
+      - server_cd
+    if: needs.server_cd.outputs.releaseCreated == 'true'
+    uses: Skycoder42/dart_test_tools/.github/workflows/deb.yml@main
+    with:
+      workingDirectory: server
+      packagecloudRepository: systemd_status/ubuntu/jammy
+    secrets:
+      packagecloudToken: ${{ secrets.PACKAGECLOUD_TOKEN }}
+
   client_ci:
     name: Client - CI
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
@@ -48,6 +60,7 @@ jobs:
       - server_package
     with:
       workingDirectory: client
+      removePubspecOverrides: false
       artifactDependencies: systemd_status_server
       buildRunner: true
       unitTestPaths: ""
@@ -121,20 +134,3 @@ jobs:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
       targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
-
-  server_deploy:
-    name: Server - Deploy
-    uses: Skycoder42/dart_test_tools/.github/workflows/docker.yml@main
-    needs:
-      - server_cd
-      - client_deploy
-    if: needs.server_cd.outputs.releaseCreated == 'true'
-    with:
-      imageName: skycoder42/systemd-status-server
-      version: ${{ needs.server_cd.outputs.releaseVersion }}
-      dockerPlatforms: linux/amd64,linux/arm64
-      dockerBuildArgs: |
-        APP_VERSION=${{ needs.client_deploy.outputs.releaseVersion }}
-    secrets:
-      dockerHubUsername: ${{ secrets.DOCKER_USERNAME }}
-      dockerHubToken: ${{ secrets.DOCKER_TOKEN }}

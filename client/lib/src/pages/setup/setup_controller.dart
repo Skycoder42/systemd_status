@@ -38,8 +38,6 @@ class SetupController extends _$SetupController {
     final appSettings = ref.read(appSettingsProvider.notifier);
     try {
       await appSettings.setServerUrl(serverUrl);
-      // ignore: unused_result
-      // await ref.refresh(sessionManagerProvider.future);
 
       if (googleAuthSettings != null) {
         await appSettings.setGoogleAuthSettings(googleAuthSettings);

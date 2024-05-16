@@ -9,8 +9,11 @@ import 'widgets/unit_card.dart';
 part 'units_page.g.dart';
 
 @riverpod
-Future<List<UnitInfo>> units(UnitsRef ref) =>
-    ref.watch(systemdStatusApiClientProvider).unitsList();
+Future<List<UnitInfo>> units(UnitsRef ref) async {
+  final units = await ref.watch(systemdStatusApiClientProvider).unitsList();
+  ref.keepAlive();
+  return units;
+}
 
 class UnitsPage extends ConsumerWidget {
   const UnitsPage({super.key});

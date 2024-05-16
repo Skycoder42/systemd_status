@@ -131,5 +131,6 @@ class _SetupPageState extends ConsumerState<SetupPage> {
 
   void _reset() {
     _savedUrl = null;
+    _googleAuthSettings = null;
   }
 }

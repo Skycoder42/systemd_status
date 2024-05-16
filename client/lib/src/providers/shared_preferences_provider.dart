@@ -13,5 +13,5 @@ Future<SharedPreferences> sharedPreferencesInit(
 SharedPreferences sharedPreferences(SharedPreferencesRef ref) =>
     switch (ref.watch(sharedPreferencesInitProvider)) {
       AsyncData(value: final sharedPreferences) => sharedPreferences,
-      _ => throw StateError('sharedPreferences have not been initialized!'),
+      _ => throw StateError('sharedPreferences has not been initialized!'),
     };

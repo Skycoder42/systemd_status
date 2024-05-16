@@ -32,6 +32,8 @@
       "program": "bin/server.dart",
       "args": [
         "-Lall",
+        "--config",
+        "${workspaceFolder}/server/tool/test-config.yaml",
         "--debug-overwrite-systemctl",
         "${workspaceFolder}/server/tool/systemd-docker/systemctl-docker.sh"
       ],
