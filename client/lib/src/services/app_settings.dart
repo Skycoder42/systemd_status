@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../app/app_info/app_info.dart';
 import '../providers/shared_preferences_provider.dart';
 
 part 'app_settings.freezed.dart';
@@ -36,7 +38,8 @@ class AppSettings extends _$AppSettings {
   @override
   Settings build() {
     final preferences = ref.watch(sharedPreferencesProvider);
-    final serverUrl = preferences.getString(_serverUrlKey);
+    final serverUrl =
+        kIsWeb ? AppInfo.staticServerUrl : preferences.getString(_serverUrlKey);
     final googleAuthSettings = preferences.getString(_googleAuthSettingsKey);
 
     return Settings(

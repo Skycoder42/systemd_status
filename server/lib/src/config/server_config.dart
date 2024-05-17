@@ -30,6 +30,8 @@ sealed class ServerConfig with _$ServerConfig {
     disallowUnrecognizedKeys: true,
   )
   const factory ServerConfig({
+    List<String>? allowedOrigins,
+    String? appDir,
     @Default([]) List<String> unitFilters,
   }) = _ServerConfig;
 

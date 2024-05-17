@@ -1,17 +1,26 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:content_length_validator/content_length_validator.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_api/shelf_api.dart' hide Options;
+import 'package:shelf_cors_headers/shelf_cors_headers.dart';
+import 'package:shelf_helmet/shelf_helmet.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:shelf_static/shelf_static.dart';
 
 import 'config/options.dart';
+import 'config/server_config.dart';
+import 'middlewares/enforce_tls.dart';
+import 'middlewares/rate_limit.dart';
 import 'systemd_status_api.api.dart';
 
 class Server {
+  static const _maxContentLength = 1 * 1024 * 1024; // 1 MB
+
   final Options options;
   final _logger = Logger('Server');
 
@@ -39,23 +48,76 @@ class Server {
       ],
     );
 
-    final router = Router()..mount('/', SystemdStatusApi().call);
+    final config = _providerContainer.read(serverConfigProvider);
 
     _handler = const Pipeline()
+        .addMiddleware(_middlewares(config))
+        .addHandler(_setupRouter(config));
+  }
+
+  Middleware _middlewares(ServerConfig config) {
+    final allowedOrigins = config.allowedOrigins;
+    if (allowedOrigins != null) {
+      _logger.config('Enabling CORS for: $allowedOrigins');
+    } else {
+      _logger.config('Enabling CORS for all origins');
+    }
+
+    return (next) => const Pipeline()
+        .addMiddleware(enforceTls())
+        .addMiddleware(rateLimit())
+        .addMiddleware(
+          corsHeaders(
+            originChecker: allowedOrigins != null
+                ? originOneOf(allowedOrigins)
+                : originAllowAll,
+          ),
+        )
+        .addMiddleware(
+          maxContentLengthValidator(
+            maxContentLength: _maxContentLength,
+            errorResponse: Response(HttpStatus.requestEntityTooLarge),
+          ),
+        )
+        .addMiddleware(
+          helmet(
+            options: const HelmetOptions(
+              enableContentSecurityPolicy: false,
+            ),
+          ),
+        )
         .addMiddleware(handleFormatExceptions())
         .addMiddleware(logRequests(logger: _logRequest))
         .addMiddleware(rivershelfContainer(_providerContainer))
-        .addHandler(router.call);
+        .addHandler(next);
   }
+
+  Handler _setupRouter(ServerConfig config) {
+    final router = Router();
+    if (config.appDir case final String appDir) {
+      _logger.config('Mounting app from $appDir');
+      // TODO add https://pub.dev/packages/shelf_host_validation for app?
+      router.mount(
+        '/app',
+        createStaticHandler(
+          appDir,
+          defaultDocument: 'index.html',
+          useHeaderBytesForContentType: true,
+        ),
+      );
+    }
+    router.mount('/', SystemdStatusApi().call);
+    return router.call;
+  }
+
+  void _logRequest(String message, bool isError) =>
+      isError ? _logger.severe(message) : _logger.info(message);
 
   void _setupSignals() {
     for (final signal in [ProcessSignal.sigint, ProcessSignal.sigterm]) {
       _signalSubs.add(signal.watch().listen(_onSignal));
     }
   }
-
-  void _logRequest(String message, bool isError) =>
-      isError ? _logger.severe(message) : _logger.info(message);
 
   Future<void> _onSignal(ProcessSignal signal) async {
     final forceClose = _isClosing;
