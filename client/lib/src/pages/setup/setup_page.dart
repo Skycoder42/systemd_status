@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../localization/localization.dart';
-import '../../services/app_settings.dart';
+import '../../settings/settings.dart';
 import '../../widgets/async_action.dart';
 import '../../widgets/scrollable_expanded_box.dart';
 import 'setup_controller.dart';

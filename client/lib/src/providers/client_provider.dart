@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_server/api.dart';
 
-import '../services/app_settings.dart';
+import '../settings/app_settings.dart';
 
 part 'client_provider.g.dart';
 

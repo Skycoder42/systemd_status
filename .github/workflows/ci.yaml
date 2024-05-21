@@ -101,7 +101,7 @@ jobs:
       workingDirectory: client
       artifactDependencies: systemd_status_server
       buildRunner: true
-      # TODO add base href and env vars
+      baseHref: /app/
 
   client_deploy:
     name: Client - Deploy

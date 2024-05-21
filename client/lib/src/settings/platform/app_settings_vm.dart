@@ -1,45 +1,20 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../app/app_info/app_info.dart';
-import '../providers/shared_preferences_provider.dart';
+import '../../providers/shared_preferences_provider.dart';
+import '../settings.dart';
+import 'app_settings_stub.dart' as stub;
 
-part 'app_settings.freezed.dart';
-part 'app_settings.g.dart';
-
-@freezed
-sealed class GoogleAuthSettings with _$GoogleAuthSettings {
-  const factory GoogleAuthSettings({
-    required String clientId,
-    required String serverClientId,
-    required Uri redirectUri,
-  }) = _GoogleAuthSettings;
-
-  factory GoogleAuthSettings.fromJson(Map<String, dynamic> json) =>
-      _$GoogleAuthSettingsFromJson(json);
-}
-
-@freezed
-sealed class Settings with _$Settings {
-  const factory Settings({
-    Uri? serverUrl,
-    GoogleAuthSettings? googleAuthSettings,
-  }) = _Settings;
-}
-
-@Riverpod(keepAlive: true)
-class AppSettings extends _$AppSettings {
+mixin PlatformAppSettingsMixin on Notifier<Settings>
+    implements stub.PlatformAppSettingsMixin {
   static const _serverUrlKey = 'serverUrl';
   static const _googleAuthSettingsKey = 'googleAuthSettings';
 
   @override
-  Settings build() {
+  Settings loadSettings() {
     final preferences = ref.watch(sharedPreferencesProvider);
-    final serverUrl =
-        kIsWeb ? AppInfo.staticServerUrl : preferences.getString(_serverUrlKey);
+    final serverUrl = preferences.getString(_serverUrlKey);
     final googleAuthSettings = preferences.getString(_googleAuthSettingsKey);
 
     return Settings(
@@ -52,6 +27,7 @@ class AppSettings extends _$AppSettings {
     );
   }
 
+  @override
   Future<bool> setServerUrl(Uri serverUrl) async {
     state = state.copyWith(serverUrl: serverUrl);
     return await ref
@@ -59,11 +35,13 @@ class AppSettings extends _$AppSettings {
         .setString(_serverUrlKey, serverUrl.toString());
   }
 
+  @override
   Future<bool> removeServerUrl() async {
     state = state.copyWith(serverUrl: null);
     return await ref.read(sharedPreferencesProvider).remove(_serverUrlKey);
   }
 
+  @override
   Future<bool> setGoogleAuthSettings(
     GoogleAuthSettings googleAuthSettings,
   ) async {
@@ -73,6 +51,7 @@ class AppSettings extends _$AppSettings {
         .setString(_googleAuthSettingsKey, json.encode(googleAuthSettings));
   }
 
+  @override
   Future<bool> removeGoogleAuthSettings() async {
     state = state.copyWith(googleAuthSettings: null);
     return await ref

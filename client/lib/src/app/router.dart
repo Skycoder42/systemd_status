@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../pages/login/login_page.dart';
 import '../pages/setup/setup_page.dart';
 import '../pages/units/units_page.dart';
-import '../services/app_settings.dart';
+import '../settings/app_settings.dart';
 
 part 'router.g.dart';
 

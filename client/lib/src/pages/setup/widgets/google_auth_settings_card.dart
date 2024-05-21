@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../localization/localization.dart';
-import '../../../services/app_settings.dart';
+import '../../../settings/settings.dart';
 import '../setup_controller.dart';
 
 class GoogleAuthSettingsCard extends ConsumerStatefulWidget {

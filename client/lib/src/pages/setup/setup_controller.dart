@@ -2,7 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../app/router.dart';
-import '../../services/app_settings.dart';
+import '../../settings/app_settings.dart';
+import '../../settings/settings.dart';
 
 part 'setup_controller.freezed.dart';
 part 'setup_controller.g.dart';
