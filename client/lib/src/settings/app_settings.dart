@@ -11,5 +11,11 @@ part 'app_settings.g.dart';
 @Riverpod(keepAlive: true)
 class AppSettings extends _$AppSettings with PlatformAppSettingsMixin {
   @override
-  Settings build() => loadSettings();
+  FutureOr<Settings?> build() => loadSettings();
 }
+
+@Riverpod(keepAlive: true)
+Settings? settings(SettingsRef ref) => switch (ref.watch(appSettingsProvider)) {
+      AsyncData(value: final settings) => settings,
+      _ => throw StateError('appSettingsProvider has not been initialized'),
+    };

@@ -16,14 +16,14 @@ dependencies:
     sdk: flutter
   flutter_native_splash: ^2.4.0
   flutter_riverpod: ^2.5.1
+  flutter_secure_storage: ^9.2.2
   flutter_svg: ^2.0.10+1
   form_builder_validators: ^9.1.0
   freezed_annotation: ^2.4.1
-  go_router: ^14.1.2
+  go_router: ^14.1.3
   json_annotation: ^4.9.0
   logging: ^1.2.0
   riverpod_annotation: ^2.3.5
-  shared_preferences: ^2.2.3
   systemd_status_server:
     path: ../server
   web: ^0.5.1

@@ -26,8 +26,8 @@ class _GlobalRedirect {
   _GlobalRedirect(this.ref);
 
   String? call(BuildContext context, GoRouterState state) {
-    final appSettings = ref.read(appSettingsProvider);
-    if (appSettings.serverUrl == null) {
+    final appSettings = ref.read(settingsProvider);
+    if (appSettings == null) {
       _logger.config('No serverUrl configured. Redirecting to setup page');
       return SetupRoute(redirectTo: state.matchedLocation).location;
     }

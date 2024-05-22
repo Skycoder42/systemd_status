@@ -23,6 +23,23 @@ ServerConfig serverConfig(ServerConfigRef ref) {
 }
 
 @freezed
+sealed class AppConfig with _$AppConfig {
+  @JsonSerializable(
+    anyMap: true,
+    checked: true,
+    disallowUnrecognizedKeys: true,
+  )
+  const factory AppConfig({
+    @JsonKey(required: true) required String appDir,
+    @JsonKey(required: true) required String firebaseApiKey,
+    String? sentryDsn,
+  }) = _AppConfig;
+
+  factory AppConfig.fromJson(Map<String, dynamic> json) =>
+      _$AppConfigFromJson(json);
+}
+
+@freezed
 sealed class ServerConfig with _$ServerConfig {
   @JsonSerializable(
     anyMap: true,
@@ -31,7 +48,7 @@ sealed class ServerConfig with _$ServerConfig {
   )
   const factory ServerConfig({
     List<String>? allowedOrigins,
-    String? appDir,
+    AppConfig? appConfig,
     @Default([]) List<String> unitFilters,
   }) = _ServerConfig;
 

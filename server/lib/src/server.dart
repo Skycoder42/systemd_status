@@ -10,13 +10,13 @@ import 'package:shelf_api/shelf_api.dart' hide Options;
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_helmet/shelf_helmet.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:shelf_static/shelf_static.dart';
 
+import 'api/systemd_status_api.api.dart';
+import 'app/app_handler.dart';
 import 'config/options.dart';
 import 'config/server_config.dart';
 import 'middlewares/enforce_tls.dart';
 import 'middlewares/rate_limit.dart';
-import 'systemd_status_api.api.dart';
 
 class Server {
   static const _maxContentLength = 1 * 1024 * 1024; // 1 MB
@@ -49,7 +49,6 @@ class Server {
     );
 
     final config = _providerContainer.read(serverConfigProvider);
-
     _handler = const Pipeline()
         .addMiddleware(_middlewares(config))
         .addHandler(_setupRouter(config));
@@ -94,17 +93,14 @@ class Server {
 
   Handler _setupRouter(ServerConfig config) {
     final router = Router();
-    if (config.appDir case final String appDir) {
-      _logger.config('Mounting app from $appDir');
-      // TODO add https://pub.dev/packages/shelf_host_validation for app?
-      router.mount(
-        '/app',
-        createStaticHandler(
-          appDir,
-          defaultDocument: 'index.html',
-          useHeaderBytesForContentType: true,
-        ),
-      );
+    if (config.appConfig case final AppConfig appConfig) {
+      _logger.config('Mounting app from ${appConfig.appDir}');
+      router
+        ..mount(
+          '/app',
+          AppHandler(appConfig).call,
+        )
+        ..get('/', _redirectRoot);
     }
     router.mount('/', SystemdStatusApi().call);
     return router.call;
@@ -134,4 +130,7 @@ class Server {
 
     _providerContainer.dispose();
   }
+
+  Response _redirectRoot(Request request) =>
+      Response.found(request.requestedUri.replace(path: '/app'));
 }

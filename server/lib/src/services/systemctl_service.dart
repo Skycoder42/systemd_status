@@ -6,8 +6,8 @@ import 'package:logging/logging.dart';
 import 'package:posix/posix.dart' as posix;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../api/models/unit_info.dart';
 import '../config/options.dart';
-import '../models/unit_info.dart';
 
 part 'systemctl_service.g.dart';
 

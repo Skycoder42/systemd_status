@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:logging/logging.dart';
 import 'package:shelf/shelf.dart';
 
 typedef DateTimeNow = DateTime Function();
@@ -23,6 +24,7 @@ class _IpInfo {
     windowEndTime = info.windowEndTime;
     _cleanupTimer.cancel();
     _cleanupTimer = info._cleanupTimer;
+    requestCount--; // decrement to prevent buffer overflows
   }
 }
 
@@ -32,6 +34,7 @@ class _RateLimitMiddleware {
   final DateTimeNow _dateTimeNow;
 
   final _cache = <String, _IpInfo>{};
+  final _logger = Logger('RateLimitMiddleware');
 
   _RateLimitMiddleware(
     this._maxRequests,
@@ -63,12 +66,19 @@ class _RateLimitMiddleware {
     if (ipInfo.requestCount == _maxRequests) {
       // first time offenders are not punished and only need to wait for the
       // end of the started window
-      return ipInfo.windowEndTime.difference(now);
+      final blockTime = ipInfo.windowEndTime.difference(now);
+      _logger.finer('Blocking $ip for $blockTime (first time offender)');
+      return blockTime;
     } else if (ipInfo.requestCount > _maxRequests) {
       // trying again after being blocked resets the window as penalty
+      _logger.fine('Blocking $ip for $_window (repeated offender)');
       ipInfo.resetWindow(_createInfo(ip, now));
       return _window;
     } else {
+      _logger.finest(
+        'Allowing $ip with ${ipInfo.requestCount}/$_maxRequests requests '
+        'until ${ipInfo.windowEndTime}',
+      );
       return Duration.zero;
     }
   }

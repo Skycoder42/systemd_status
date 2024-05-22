@@ -13,7 +13,7 @@ class SessionManagerInitializationFailed implements Exception {
 
 @Riverpod(keepAlive: true)
 Dio dioClient(DioClientRef ref) {
-  final serverUrl = ref.watch(appSettingsProvider.select((s) => s.serverUrl));
+  final serverUrl = ref.watch(settingsProvider.select((s) => s?.serverUrl));
   if (serverUrl == null) {
     throw Exception('Unable to read server URL from settings!');
   }

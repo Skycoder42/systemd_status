@@ -1,8 +1,8 @@
 import 'package:shelf_api/shelf_api.dart';
 
-import '../config/server_config.dart';
+import '../../config/server_config.dart';
+import '../../services/systemctl_service.dart';
 import '../models/unit_info.dart';
-import '../services/systemctl_service.dart';
 
 @ApiEndpoint('/units')
 class UnitsEndpoint extends ShelfEndpoint {

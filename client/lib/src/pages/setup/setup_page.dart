@@ -5,11 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../localization/localization.dart';
-import '../../settings/settings.dart';
 import '../../widgets/async_action.dart';
 import '../../widgets/scrollable_expanded_box.dart';
 import 'setup_controller.dart';
-import 'widgets/google_auth_settings_card.dart';
 
 class SetupPage extends ConsumerStatefulWidget {
   final String? redirectTo;
@@ -34,7 +32,8 @@ class _SetupPageState extends ConsumerState<SetupPage> {
 
   bool _isValid = false;
   Uri? _savedUrl;
-  GoogleAuthSettings? _googleAuthSettings;
+  String? _savedFirebaseApiKey;
+  String? _savedSentryDsn;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -68,21 +67,44 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                         FormBuilderValidators.url(
                           protocols: const ['http', 'https'],
                           requireProtocol: true,
-                          errorText:
-                              context.strings.setup_page_url_validator_text,
-                        ),
-                        FormBuilderValidators.match(
-                          r'.*\/$',
-                          errorText:
-                              context.strings.setup_page_url_validator_text,
                         ),
                       ]),
                       onSaved: (newValue) => _savedUrl =
                           newValue != null ? Uri.parse(newValue) : null,
                     ),
                     const SizedBox(height: 16),
-                    GoogleAuthSettingsCard(
-                      onSaved: (newValue) => _googleAuthSettings = newValue,
+                    TextFormField(
+                      decoration: InputDecoration(
+                        label: Text(
+                          context.strings.setup_page_firebase_api_key_label,
+                        ),
+                      ),
+                      initialValue:
+                          ref.watch(setupControllerProvider).firebaseApiKey,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.match('[0-9a-zA-Z]+'),
+                      ]),
+                      onSaved: (newValue) => _savedFirebaseApiKey = newValue,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        label: Text(
+                          context.strings.setup_page_sentry_dsn_label,
+                        ),
+                      ),
+                      initialValue:
+                          ref.watch(setupControllerProvider).sentryDsn,
+                      keyboardType: TextInputType.url,
+                      textInputAction: TextInputAction.next,
+                      validator: FormBuilderValidators.url(
+                        protocols: const ['https'],
+                        requireProtocol: true,
+                      ),
+                      onSaved: (newValue) => _savedSentryDsn = newValue,
                     ),
                     const SizedBox(height: 16),
                     AsyncAction(
@@ -124,13 +146,15 @@ class _SetupPageState extends ConsumerState<SetupPage> {
 
     await ref.read(setupControllerProvider.notifier).submit(
           serverUrl: _savedUrl!,
-          googleAuthSettings: _googleAuthSettings,
+          firebaseApiKey: _savedFirebaseApiKey!,
+          sentryDsn: _savedSentryDsn,
           redirectTo: widget.redirectTo,
         );
   }
 
   void _reset() {
     _savedUrl = null;
-    _googleAuthSettings = null;
+    _savedFirebaseApiKey = null;
+    _savedSentryDsn = null;
   }
 }

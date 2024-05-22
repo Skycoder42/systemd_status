@@ -12,7 +12,8 @@ part 'setup_controller.g.dart';
 sealed class SetupState with _$SetupState {
   const factory SetupState({
     required Uri? serverUrl,
-    required GoogleAuthSettings? googleAuthSettings,
+    required String? firebaseApiKey,
+    required String? sentryDsn,
   }) = _SetupState;
 
   const SetupState._();
@@ -24,39 +25,35 @@ sealed class SetupState with _$SetupState {
 class SetupController extends _$SetupController {
   @override
   SetupState build() {
-    final settings = ref.read(appSettingsProvider);
+    final settings = ref.read(settingsProvider);
     return SetupState(
-      serverUrl: settings.serverUrl,
-      googleAuthSettings: settings.googleAuthSettings,
+      serverUrl: settings?.serverUrl,
+      firebaseApiKey: settings?.firebaseApiKey,
+      sentryDsn: settings?.sentryDsn,
     );
   }
 
   Future<void> submit({
     required Uri serverUrl,
-    required GoogleAuthSettings? googleAuthSettings,
+    required String firebaseApiKey,
+    required String? sentryDsn,
     String? redirectTo,
   }) async {
     final appSettings = ref.read(appSettingsProvider.notifier);
-    try {
-      await appSettings.setServerUrl(serverUrl);
-
-      if (googleAuthSettings != null) {
-        await appSettings.setGoogleAuthSettings(googleAuthSettings);
-      } else {
-        await appSettings.removeGoogleAuthSettings();
-      }
-
-      state = state.copyWith(
+    await appSettings.updateSettings(
+      Settings(
         serverUrl: serverUrl,
-        googleAuthSettings: googleAuthSettings,
-      );
+        firebaseApiKey: firebaseApiKey,
+        sentryDsn: sentryDsn,
+      ),
+    );
 
-      ref.read(routerProvider).go(redirectTo ?? const RootRoute().location);
+    state = state.copyWith(
+      serverUrl: serverUrl,
+      firebaseApiKey: firebaseApiKey,
+      sentryDsn: sentryDsn,
+    );
 
-      // ignore: avoid_catches_without_on_clauses
-    } catch (e) {
-      await appSettings.removeServerUrl();
-      rethrow;
-    }
+    ref.read(routerProvider).go(redirectTo ?? const RootRoute().location);
   }
 }
