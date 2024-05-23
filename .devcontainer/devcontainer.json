@@ -16,7 +16,8 @@
 				"ryanluker.vscode-coverage-gutters",
 				"streetsidesoftware.code-spell-checker",
 				"streetsidesoftware.code-spell-checker-german",
-				"timonwong.shellcheck"
+				"timonwong.shellcheck",
+				"Google.arb-editor"
 			],
 			"settings": {
 				"terminal.integrated.defaultProfile.linux": "zsh"

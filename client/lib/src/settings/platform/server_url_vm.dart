@@ -29,7 +29,7 @@ mixin PlatformServerUrlMixin on AsyncNotifier<Uri?>
       });
 
   @override
-  FutureOr<void> clearServerUrl() => update((_) async {
+  Future<void> clearServerUrl() => update((_) async {
         final secureStorage = ref.read(secureStorageProvider);
         await secureStorage.delete(key: _serverUrlKey);
         return null;

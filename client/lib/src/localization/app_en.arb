@@ -1,10 +1,24 @@
 {
+  "@@locale": "en",
   "app_name": "Systemd Status",
   "google_auth_failed": "Authentication via Google Account failed. Try another method.",
   "setup_page_title": "Systemd Status — Setup",
   "setup_page_server_url_label": "Server-URL",
   "setup_page_save_button_text": "Save",
+  "setup_page_config_invalid": "Persisted server configuration is invalid. Please enter it again.",
   "setup_page_config_not_loaded": "Failed to load server configuration. Please enter it again.",
   "setup_page_configure_failed": "Failed to connect to Systemd Status server. Please make sure it is running and reachable for your network.",
+  "restart_app_page_message": "The client configuration was successfully updated! Please exit the application and restart it!",
+  "server_unreachable_page_message": "The server cannot be reached at the moment (Received HTTP status code: {statusCode}).\n\n{errorMessage}\n\n Try again later or navigate back to check your configuration.",
+  "@server_unreachable_page_message": {
+    "placeholders": {
+      "errorMessage": {
+        "type": "String"
+      },
+      "statusCode": {
+        "type": "int"
+      }
+    }
+  },
   "login_page_title": "Systemd Status — Login"
 }

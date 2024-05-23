@@ -25,6 +25,7 @@ FlutterSecureStorage secureStorage(SecureStorageRef ref) =>
         publicKey: String.fromEnvironment(
           'SECURE_STORAGE_PUBLIC_KEY',
           defaultValue:
+              // TODO random
               // ignore: lines_longer_than_80_chars
               'uDA870UlWCGGAotkpfzhsRuI47e40dyVPdPxfJ9t19ptpiQDOGWKkIIch+TGAlyFho8JxDlJbyOI7ddl7hHWMw==',
         ),

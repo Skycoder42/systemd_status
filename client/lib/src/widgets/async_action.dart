@@ -7,7 +7,7 @@ import 'error_snack_bar.dart';
 
 typedef ActionBuilder = Widget Function(VoidCallback? onAction);
 
-typedef ErrorConverter = String Function(Object error);
+typedef ErrorConverter = String? Function(Object error, StackTrace stackTrace);
 
 class AsyncAction extends StatefulWidget {
   final ActionBuilder builder;
@@ -19,8 +19,8 @@ class AsyncAction extends StatefulWidget {
     super.key,
     this.enabled = true,
     required this.onAction,
+    required this.onError,
     required this.builder,
-    this.onError = _AsyncActionState._errorToString,
   });
 
   @override
@@ -38,46 +38,49 @@ class AsyncAction extends StatefulWidget {
 }
 
 class _AsyncActionState extends State<AsyncAction> {
-  Future? _pendingAction;
+  bool _isRunning = false;
 
   @override
-  Widget build(BuildContext context) => FutureBuilder(
-        future: _pendingAction,
-        builder: (context, snapshot) => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (snapshot.isWaiting) ...[
-              const CircularProgressIndicator(),
-              const SizedBox(width: 8),
-            ],
-            widget.builder(
-              !widget.enabled || snapshot.isWaiting ? null : _onAction,
-            ),
+  Widget build(BuildContext context) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (_isRunning) ...[
+            const CircularProgressIndicator(),
+            const SizedBox(width: 8),
           ],
-        ),
+          widget.builder(
+            !widget.enabled || _isRunning ? null : _onAction,
+          ),
+        ],
       );
 
-  void _onAction() {
-    // ignore: discarded_futures
-    final result = widget.onAction().catchError(_onError);
+  Future<void> _onAction() async {
     setState(() {
-      _pendingAction = result;
+      _isRunning = true;
     });
+    try {
+      await widget.onAction();
+      // ignore: avoid_catches_without_on_clauses
+    } catch (error, stackTrace) {
+      _onError(error, stackTrace);
+    } finally {
+      setState(() {
+        _isRunning = false;
+      });
+    }
   }
 
   void _onError(Object error, StackTrace stackTrace) {
-    Zone.current.handleUncaughtError(error, stackTrace); // TODO handle better
+    final errorMessage = widget.onError(error, stackTrace);
+    if (errorMessage == null) {
+      return;
+    }
+
     ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       ErrorSnackBar(
         context: context,
-        content: Text(widget.onError(error)),
+        content: Text(errorMessage),
       ),
     );
   }
-
-  static String _errorToString(Object error) => error.toString();
-}
-
-extension on AsyncSnapshot {
-  bool get isWaiting => connectionState == ConnectionState.waiting;
 }

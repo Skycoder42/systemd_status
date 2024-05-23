@@ -9,6 +9,7 @@ environment:
   flutter: ">=3.22.0"
 
 dependencies:
+  ansicolor: ^2.0.2
   dio: ^5.4.3+1
   flutter:
     sdk: flutter
@@ -24,6 +25,10 @@ dependencies:
   json_annotation: ^4.9.0
   logging: ^1.2.0
   riverpod_annotation: ^2.3.5
+  sentry: ^8.2.0
+  sentry_dio: ^8.2.0
+  sentry_flutter: ^8.2.0
+  sentry_logging: ^8.2.0
   systemd_status_server:
     path: ../server
   web: ^0.5.1
@@ -42,6 +47,7 @@ dev_dependencies:
   msix: ^3.16.7
   riverpod_generator: ^2.4.0
   riverpod_lint: ^2.3.10
+  sentry_dart_plugin: ^2.0.0
 
 flutter:
   uses-material-design: true
@@ -85,4 +91,4 @@ scripts:
     splash: dart run flutter_native_splash:create
   start:
     linux: flutter run -d linux
-    web: flutter run -d web-server --web-port 8088
+    web: flutter run -d web-server --web-port 8088 --dart-define=SERVER_URL=http://localhost:8080

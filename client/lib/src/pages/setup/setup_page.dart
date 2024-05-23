@@ -3,19 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:logging/logging.dart';
 
 import '../../localization/localization.dart';
 import '../../widgets/async_action.dart';
 import '../../widgets/error_listener.dart';
+import '../../widgets/error_snack_bar.dart';
 import '../../widgets/scrollable_expanded_box.dart';
 import 'setup_controller.dart';
 
 class SetupPage extends ConsumerStatefulWidget {
   final String? redirectTo;
+  final bool hasError;
 
   const SetupPage({
     super.key,
     this.redirectTo,
+    this.hasError = false,
   });
 
   @override
@@ -24,15 +28,34 @@ class SetupPage extends ConsumerStatefulWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(StringProperty('redirectTo', redirectTo));
+    properties
+      ..add(StringProperty('redirectTo', redirectTo))
+      ..add(DiagnosticsProperty<bool>('hasError', hasError));
   }
 }
 
 class _SetupPageState extends ConsumerState<SetupPage> {
   final _formKey = GlobalKey<FormState>();
+  final _logger = Logger('SetupPage');
 
   bool _isValid = false;
   Uri? _savedUrl;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.hasError) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ScaffoldMessenger.of(context).showSnackBar(
+          ErrorSnackBar(
+            context: context,
+            content: Text(context.strings.setup_page_config_invalid),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +112,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                   AsyncAction(
                     enabled: _isValid,
                     onAction: _submit,
-                    onError: (_) => context.strings.setup_page_configure_failed,
+                    onError: _onError,
                     builder: (onAction) => FilledButton.icon(
                       icon: const Icon(Icons.save),
                       label: Text(context.strings.setup_page_save_button_text),
@@ -111,7 +134,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
   }
 
   Future<void> _submit() async {
-    _reset();
+    _savedUrl = null;
 
     final state = _formKey.currentState;
     if (state == null || !state.validate()) {
@@ -126,7 +149,8 @@ class _SetupPageState extends ConsumerState<SetupPage> {
         );
   }
 
-  void _reset() {
-    _savedUrl = null;
+  String _onError(Object e, StackTrace s) {
+    _logger.severe('Failed to submit setup data', e, s);
+    return context.strings.setup_page_configure_failed;
   }
 }

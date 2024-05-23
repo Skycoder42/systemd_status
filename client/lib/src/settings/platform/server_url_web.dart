@@ -10,11 +10,12 @@ mixin PlatformServerUrlMixin on AsyncNotifier<Uri?>
       : null;
 
   @override
-  Uri? loadServerUrl() => Uri.parse(_serverUrl ?? window.location.origin);
+  FutureOr<Uri?> loadServerUrl() =>
+      Uri.parse(_serverUrl ?? window.location.origin);
 
   @override
-  void saveServerUrl(Uri serverUrl) {}
+  FutureOr<void> saveServerUrl(Uri serverUrl) {}
 
   @override
-  void clearServerUrl() {}
+  FutureOr<void> clearServerUrl() {}
 }

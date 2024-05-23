@@ -6,7 +6,9 @@
       "cwd": "client",
       "request": "launch",
       "type": "dart",
-      "deviceId": "web-server"
+      "args": [
+        "--dart-define=SERVER_URL=http://localhost:8080",
+      ]
     },
     {
       "name": "client (profile mode)",
@@ -14,7 +16,9 @@
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile",
-      "deviceId": "web-server"
+      "args": [
+        "--dart-define=SERVER_URL=http://localhost:8080",
+      ]
     },
     {
       "name": "client (release mode)",
@@ -22,7 +26,9 @@
       "request": "launch",
       "type": "dart",
       "flutterMode": "release",
-      "deviceId": "web-server"
+      "args": [
+        "--dart-define=SERVER_URL=http://localhost:8080",
+      ]
     },
     {
       "name": "server",

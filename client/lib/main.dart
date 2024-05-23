@@ -1,20 +1,5 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
 
-import 'src/app/app.dart';
+import 'src/app/setup.dart';
 
-void main() {
-  if (!kDebugMode) {
-    FlutterNativeSplash.preserve(
-      widgetsBinding: WidgetsFlutterBinding.ensureInitialized(),
-    );
-  }
-
-  runApp(
-    const ProviderScope(
-      child: SystemdStatusApp(),
-    ),
-  );
-}
+Future<void> main() => Setup().run();
