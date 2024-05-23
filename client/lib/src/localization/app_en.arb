@@ -3,10 +3,8 @@
   "google_auth_failed": "Authentication via Google Account failed. Try another method.",
   "setup_page_title": "Systemd Status — Setup",
   "setup_page_server_url_label": "Server-URL",
-  "setup_page_firebase_api_key_label": "Firebase API-Key",
-  "setup_page_sentry_dsn_label": "Sentry DSN",
   "setup_page_save_button_text": "Save",
-  "setup_page_google_auth_validator_text": "Either all three or none of the google auth settings must be set.",
+  "setup_page_config_not_loaded": "Failed to load server configuration. Please enter it again.",
   "setup_page_configure_failed": "Failed to connect to Systemd Status server. Please make sure it is running and reachable for your network.",
   "login_page_title": "Systemd Status — Login"
 }

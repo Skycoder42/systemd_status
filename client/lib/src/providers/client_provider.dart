@@ -2,18 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_server/api.dart';
 
-import '../settings/app_settings.dart';
+import '../settings/server_url.dart';
 
 part 'client_provider.g.dart';
 
-class SessionManagerInitializationFailed implements Exception {
-  @override
-  String toString() => 'Failed to initialize session manager';
-}
-
 @Riverpod(keepAlive: true)
 Dio dioClient(DioClientRef ref) {
-  final serverUrl = ref.watch(settingsProvider.select((s) => s?.serverUrl));
+  final serverUrl = ref.watch(serverUrlProvider.select((v) => v.valueOrNull));
   if (serverUrl == null) {
     throw Exception('Unable to read server URL from settings!');
   }
@@ -22,6 +17,6 @@ Dio dioClient(DioClientRef ref) {
   return client;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 SystemdStatusApiClient systemdStatusApiClient(SystemdStatusApiClientRef ref) =>
     SystemdStatusApiClient.dio(ref.watch(dioClientProvider));

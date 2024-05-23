@@ -1,15 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../settings.dart';
 
-mixin PlatformAppSettingsMixin on AsyncNotifier<Settings?> {
+mixin PlatformServerUrlMixin on AsyncNotifier<Uri?> {
   @protected
-  FutureOr<Settings?> loadSettings() =>
+  FutureOr<Uri?> loadServerUrl() =>
       throw UnimplementedError('Stub has not been implemented for platform');
 
-  FutureOr<bool> updateSettings(Settings settings) =>
+  FutureOr<void> saveServerUrl(Uri serverUrl) =>
       throw UnimplementedError('Stub has not been implemented for platform');
 
-  FutureOr<bool> clearSettings() =>
+  FutureOr<void> clearServerUrl() =>
       throw UnimplementedError('Stub has not been implemented for platform');
 }

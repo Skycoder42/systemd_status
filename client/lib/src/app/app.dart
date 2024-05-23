@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../localization/localization.dart';
-import '../settings/app_settings.dart';
+import '../settings/server_url.dart';
 import 'router.dart';
 import 'theme.dart';
 
@@ -15,8 +15,9 @@ part 'app.g.dart';
 @riverpod
 Future<void> appInit(AppInitRef ref) async {
   try {
+    // TODO handle errors
     await Future.wait([
-      ref.watch(appSettingsProvider.future),
+      ref.watch(serverUrlProvider.future),
     ]);
   } finally {
     FlutterNativeSplash.remove();

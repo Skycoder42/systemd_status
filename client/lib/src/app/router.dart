@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../pages/login/login_page.dart';
 import '../pages/setup/setup_page.dart';
 import '../pages/units/units_page.dart';
-import '../settings/app_settings.dart';
+import '../settings/server_url.dart';
 
 part 'router.g.dart';
 
@@ -26,8 +26,10 @@ class _GlobalRedirect {
   _GlobalRedirect(this.ref);
 
   String? call(BuildContext context, GoRouterState state) {
-    final appSettings = ref.read(settingsProvider);
-    if (appSettings == null) {
+    final hasServerUrl = ref.read(
+      serverUrlProvider.select((s) => s.valueOrNull != null),
+    );
+    if (!hasServerUrl) {
       _logger.config('No serverUrl configured. Redirecting to setup page');
       return SetupRoute(redirectTo: state.matchedLocation).location;
     }
