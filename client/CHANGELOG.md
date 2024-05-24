@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2024-05-24
+### Changed
+- Rewrite with shelf and dio
+
 ## [0.1.7] - 2024-04-24
 ### Added
 - Added web release
@@ -39,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
+[0.2.0]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.1.7...v0.2.0
 [0.1.7]: https://github.com/Skycoder42/systemd_status/compare/app%2Fv0.1.6...v0.1.7
 [0.1.6]: https://github.com/Skycoder42/systemd_status/compare/app%2Fv0.1.5...v0.1.6
 [0.1.5]: https://github.com/Skycoder42/systemd_status/compare/app%2Fv0.1.4...v0.1.5

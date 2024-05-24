@@ -93,12 +93,12 @@ class Server {
 
   Handler _setupRouter(ServerConfig config) {
     final router = Router();
-    if (config.appConfig case final AppConfig appConfig) {
-      _logger.config('Mounting app from ${appConfig.appDir}');
+    if (config.appConfig.appDir case final String appDir) {
+      _logger.config('Mounting app from $appDir');
       router
         ..mount(
           '/app',
-          AppHandler(appConfig).call,
+          AppHandler(appDir).call,
         )
         ..get('/', _redirectRoot);
     }

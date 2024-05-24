@@ -1,5 +1,7 @@
 name: systemd_status_server
-version: 0.1.0
+description: Monitor the server status of a systemd based server.
+homepage: https://github.com/Skycoder42/systemd_status
+version: 0.2.0
 publish_to: none
 
 environment:
@@ -43,6 +45,26 @@ dev_dependencies:
   riverpod_generator: ^2.4.2
   riverpod_lint: ^2.3.12
   shelf_api_builder: ^1.0.1
+
+aur:
+  maintainer: Skycoder42 <Skycoder42@users.noreply.github.com>
+  license: BSD
+  depends:
+    - systemd
+  tagPrefix: server/v
+  binariesArchivePrefix: systemd-status-server
+  sourcesDir: systemd_status-server-v$pkgver
+  extraSources:
+    - name: Systemd.Status.Web-0.2.0.tar.xz
+      url: https://github.com/Skycoder42/systemd_status/releases/download/app%2Fv0.2.0/Systemd.Status.Web.tar.xz
+  files:
+    - source: tool/package-config.yaml
+      target: /etc/systemd-status-server.yaml
+    - source: ../web
+      target: /usr/share/$pkgname/web-app
+      recursive: true
+  backup:
+    - /etc/systemd-status-server.yaml
 
 dart_pre_commit:
   pull-up-dependencies:

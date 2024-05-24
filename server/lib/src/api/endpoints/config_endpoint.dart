@@ -10,9 +10,6 @@ class ConfigEndpoint extends ShelfEndpoint {
   @Get('/')
   TResponse<ClientConfig> get() {
     final appConfig = ref.read(serverConfigProvider).appConfig;
-    if (appConfig == null) {
-      return TResponse.notFound(null);
-    }
     return TResponse.ok(
       ClientConfig(
         firebaseApiKey: appConfig.firebaseApiKey,

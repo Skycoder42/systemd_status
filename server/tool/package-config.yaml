@@ -1,0 +1,6 @@
+allowedOrigins:
+unitFilters:
+appConfig:
+  appDir: /usr/share/systemd-status-server/web-app
+  firebaseApiKey:
+  sentryDsn:

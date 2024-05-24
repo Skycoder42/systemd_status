@@ -30,7 +30,7 @@ sealed class AppConfig with _$AppConfig {
     disallowUnrecognizedKeys: true,
   )
   const factory AppConfig({
-    @JsonKey(required: true) required String appDir,
+    String? appDir,
     @JsonKey(required: true) required String firebaseApiKey,
     String? sentryDsn,
   }) = _AppConfig;
@@ -48,8 +48,8 @@ sealed class ServerConfig with _$ServerConfig {
   )
   const factory ServerConfig({
     List<String>? allowedOrigins,
-    AppConfig? appConfig,
     @Default([]) List<String> unitFilters,
+    @JsonKey(required: true) required AppConfig appConfig,
   }) = _ServerConfig;
 
   factory ServerConfig.fromJson(Map<String, dynamic> json) =>

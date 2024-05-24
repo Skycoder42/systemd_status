@@ -3,18 +3,16 @@ import 'dart:async';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_static/shelf_static.dart';
 
-import '../config/server_config.dart';
-
 class AppHandler {
-  final AppConfig config;
+  final String appDir;
 
   late final Handler _handler;
 
-  AppHandler(this.config) {
+  AppHandler(this.appDir) {
     // TODO add https://pub.dev/packages/shelf_host_validation for app?
     _handler = const Pipeline().addHandler(
       createStaticHandler(
-        config.appDir,
+        appDir,
         defaultDocument: 'index.html',
         useHeaderBytesForContentType: true,
       ),

@@ -1,7 +1,7 @@
 name: systemd_status_client
 description: Monitor the server status of a systemd based server.
 homepage: https://github.com/Skycoder42/systemd_status
-version: 0.1.7
+version: 0.2.0
 publish_to: none
 
 environment:
@@ -19,7 +19,7 @@ dependencies:
   flutter_riverpod: ^2.5.1
   flutter_secure_storage: ^9.2.2
   flutter_svg: ^2.0.10+1
-  form_builder_validators: ^10.0.0
+  form_builder_validators: ^10.0.1
   freezed_annotation: ^2.4.1
   go_router: ^14.1.3
   json_annotation: ^4.9.0

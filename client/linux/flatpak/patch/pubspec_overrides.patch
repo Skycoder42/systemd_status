@@ -1,8 +1,8 @@
-diff --git a/client/pubspec_overrides.yaml b/client/pubspec_overrides.yaml
+diff --git a/pubspec_overrides.yaml b/pubspec_overrides.yaml
 new file mode 100644
 index 0000000..55ff9b5
 --- /dev/null
-+++ b/client/pubspec_overrides.yaml
++++ b/pubspec_overrides.yaml
 @@ -0,0 +1,3 @@
 +dependency_overrides:
 +  systemd_status_server:
