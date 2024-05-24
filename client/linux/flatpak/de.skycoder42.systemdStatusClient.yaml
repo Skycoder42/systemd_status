@@ -2,9 +2,9 @@
 
 ---
 id: de.skycoder42.systemdStatusClient
-runtime: org.freedesktop.Platform
-runtime-version: "23.08"
-sdk: org.freedesktop.Sdk
+runtime: org.gnome.Platform
+runtime-version: "46"
+sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm17
   - org.freedesktop.Sdk.Extension.flutter
