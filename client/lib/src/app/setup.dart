@@ -23,6 +23,7 @@ class Setup {
   final _logger = Logger('Setup');
 
   Future<void> run() async {
+    // TODO must be initialized AFTER sentry
     WidgetsFlutterBinding.ensureInitialized();
     if (!kDebugMode) {
       FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
@@ -60,6 +61,8 @@ class Setup {
   }
 
   Future<void> _runApp() async {
+    recordStackTraceAtLevel = Level.SEVERE;
+
     try {
       _logger.finer('Loading setup configuration');
       await container.read(setupLoaderProvider.future);

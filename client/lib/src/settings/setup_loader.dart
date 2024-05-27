@@ -45,10 +45,10 @@ class SetupLoader extends _$SetupLoader {
 
     try {
       _logger.finer('Loading local configuration');
-      final localConfig = await ref.watch(clientConfigLoaderProvider.future);
+      final localConfig = await ref.read(clientConfigLoaderProvider.future);
       _logger.finer('Loading server configuration');
       final remoteConfig =
-          await ref.watch(systemdStatusApiClientProvider).configGet();
+          await ref.read(systemdStatusApiClientProvider).configGet();
 
       _logger.finer('Compare local with server configuration');
       if (localConfig != remoteConfig) {
