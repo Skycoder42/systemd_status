@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -29,6 +30,9 @@ Iterable<Override> createPlatformOverrides() => [
         ),
       ),
     ];
+
+Future<void> persistServerUrl(Ref ref, Uri serverUrl) =>
+    ref.read(_localConfigProvider.notifier).updateServerUrl(serverUrl);
 
 @freezed
 sealed class _VmConfig with _$VmConfig {
@@ -90,6 +94,20 @@ class _LocalConfig extends _$LocalConfig {
       clientConfig: clientConfig,
     );
   }
+
+  Future<void> updateServerUrl(Uri serverUrl) => update((state) async {
+        if (serverUrl == state.serverUrl) {
+          return state;
+        }
+
+        final secureStorage = ref.read(secureStorageProvider);
+        await secureStorage.write(
+          key: _serverUrlKey,
+          value: serverUrl.toString(),
+        );
+
+        return state.copyWith(serverUrl: serverUrl);
+      });
 
   Future<void> updateClientConfig(ClientConfig clientConfig) =>
       update((state) async {

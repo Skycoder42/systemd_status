@@ -4,16 +4,13 @@ import 'package:sentry/sentry.dart';
 import 'package:sentry_dio/sentry_dio.dart';
 import 'package:systemd_status_server/api.dart';
 
-import '../settings/server_url.dart';
+import '../app/config/app_settings.dart';
 
 part 'client_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Dio dioClient(DioClientRef ref) {
-  final serverUrl = ref.watch(serverUrlProvider.select((v) => v.valueOrNull));
-  if (serverUrl == null) {
-    throw Exception('Unable to read server URL from settings!');
-  }
+  final serverUrl = ref.watch(settingsServerUrlProvider);
   final client = Dio(
     BaseOptions(
       baseUrl: serverUrl.toString(),

@@ -3,7 +3,8 @@ import 'package:systemd_status_server/api.dart';
 
 export 'app_settings_stub.dart'
     if (dart.library.html) 'app_settings_web.dart'
-    if (dart.library.io) 'app_settings_vm.dart' show createPlatformOverrides;
+    if (dart.library.io) 'app_settings_vm.dart'
+    show createPlatformOverrides, persistServerUrl;
 
 part 'app_settings.g.dart';
 

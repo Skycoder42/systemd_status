@@ -1,33 +1,32 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_logging/sentry_logging.dart';
 
-import '../providers/client_provider.dart';
-import '../settings/client_config.dart';
-import '../settings/server_url.dart';
-import '../settings/setup_loader.dart';
 import 'app.dart';
+import 'config/app_settings.dart';
 import 'logging/error_observer.dart';
 import 'logging/log_consumer.dart';
 
 class Setup {
   late final ProviderContainer container = ProviderContainer(
     observers: const [ErrorObserver()],
+    overrides: [
+      ...createPlatformOverrides(),
+    ],
   );
   final _logger = Logger('Setup');
 
   Future<void> run() async {
+    recordStackTraceAtLevel = Level.SEVERE;
     Logger.root.level = Level.ALL;
     unawaited(Logger.root.onRecord.pipe(LogConsumer()));
 
-    final sentryDsn = await _loadSentryDsn();
+    final sentryDsn = await _loadSettings();
     if (sentryDsn != null) {
       await _initWithSentry(sentryDsn);
       _logger.config('Initialized app with sentry');
@@ -37,22 +36,16 @@ class Setup {
     }
   }
 
-  Future<String?> _loadSentryDsn() async {
+  Future<String?> _loadSettings() async {
     try {
-      if (kIsWeb) {
-        await container.read(serverUrlProvider.future);
-        final clientConfig =
-            await container.read(systemdStatusApiClientProvider).configGet();
-        return clientConfig.sentryDsn;
-      } else {
-        WidgetsFlutterBinding.ensureInitialized();
-        final clientConfig =
-            await container.read(clientConfigLoaderProvider.future);
-        return clientConfig?.sentryDsn;
-      }
+      _logger.finer('Loading setup configuration');
+      await container.read(settingsLoaderProvider.future);
+      _logger.finer('Successfully loaded setup configuration');
+      return container
+          .read(settingsClientConfigProvider.select((c) => c.sentryDsn));
       // ignore: avoid_catches_without_on_clauses
     } catch (e, s) {
-      Zone.current.handleUncaughtError(e, s);
+      _logger.warning('Failed to load setup', e, s);
       return null;
     }
   }
@@ -74,21 +67,6 @@ class Setup {
   Future<void> _initWithoutSentry() async => await _runApp();
 
   Future<void> _runApp() async {
-    recordStackTraceAtLevel = Level.SEVERE;
-    WidgetsFlutterBinding.ensureInitialized();
-    if (!kDebugMode) {
-      FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
-    }
-
-    try {
-      _logger.finer('Loading setup configuration');
-      await container.read(setupLoaderProvider.future);
-      _logger.finer('Successfully loaded setup configuration');
-      // ignore: avoid_catches_without_on_clauses
-    } catch (e, s) {
-      _logger.warning('Failed to load setup', e, s);
-    }
-
     runApp(
       UncontrolledProviderScope(
         container: container,
@@ -99,7 +77,6 @@ class Setup {
       ),
     );
 
-    FlutterNativeSplash.remove();
     if (Sentry.isEnabled) {
       SentryFlutter.setAppStartEnd(DateTime.now());
     }

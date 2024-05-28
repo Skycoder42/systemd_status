@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
@@ -5,11 +6,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../pages/login/login_page.dart';
-import '../pages/setup/restart_app_page.dart';
 import '../pages/setup/setup_page.dart';
 import '../pages/setup/sever_unreachable_page.dart';
 import '../pages/units/units_page.dart';
-import '../settings/setup_loader.dart';
+import 'config/app_settings.dart';
 
 part 'router.g.dart';
 
@@ -36,28 +36,8 @@ class _GlobalRedirect {
       return null;
     }
 
-    _logger.finest('Checking redirection for ${state.matchedLocation}');
-    final setupState = ref.read(setupStateProvider);
-    switch (setupState) {
-      case SetupUnchangedState():
-        _logger.finest('Client configuration is working and up to date');
-      case SetupRequiredState(withError: final hasError):
-        _logger.config('No serverUrl configured. Redirecting to setup page');
-        return SetupRoute(
-          redirectTo: state.matchedLocation,
-          hasError: hasError,
-        ).location;
-      case SetupRefreshedState():
-        _logger.config(
-          'Received updated configuration from server. '
-          'Redirecting to restart page',
-        );
-        return const RestartAppRoute().location;
-      case SetupServerUnreachableState():
-        _logger.config(
-          'Server unreachable. Redirecting to server unreachable page',
-        );
-        return const ServerUnreachableRoute().location;
+    if (_checkSetupRedirect(state) case final String redirect) {
+      return redirect;
     }
 
     _logger.finer(
@@ -65,6 +45,35 @@ class _GlobalRedirect {
       'Continuing normal navigation to ${state.fullPath}',
     );
     return null;
+  }
+
+  String? _checkSetupRedirect(GoRouterState state) {
+    _logger.finest('Checking redirection for ${state.matchedLocation}');
+    final setupState = ref.read(settingsLoaderProvider);
+    switch (setupState) {
+      case AsyncData(value: true):
+        _logger.finest('Client configuration is working and up to date');
+        return null;
+      case AsyncData(value: false):
+        _logger.config('No serverUrl configured. Redirecting to setup page');
+        return SetupRoute(redirectTo: state.matchedLocation).location;
+      case AsyncError(error: DioException()):
+        _logger.config(
+          'Server unreachable. Redirecting to server unreachable page',
+        );
+        return const ServerUnreachableRoute().location;
+      case AsyncError():
+        _logger.config(
+          'Failed to load client configuration. Redirecting to setup page',
+        );
+        return SetupRoute(
+          redirectTo: state.matchedLocation,
+          hasError: true,
+        ).location;
+      default:
+        _logger.severe('Unknown setup state: $setupState');
+        return null;
+    }
   }
 }
 
@@ -90,7 +99,6 @@ class UnitsRoute extends GoRouteData {
 @TypedGoRoute<SetupRoute>(
   path: '/setup',
   routes: [
-    TypedGoRoute<RestartAppRoute>(path: 'restart'),
     TypedGoRoute<ServerUnreachableRoute>(path: 'offline'),
   ],
 )
@@ -104,15 +112,6 @@ class SetupRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       SetupPage(redirectTo: redirectTo, hasError: hasError);
-}
-
-@immutable
-class RestartAppRoute extends GoRouteData {
-  const RestartAppRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const RestartAppPage();
 }
 
 @immutable

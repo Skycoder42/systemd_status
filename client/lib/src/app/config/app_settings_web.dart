@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_server/api.dart';
 import 'package:web/web.dart';
@@ -22,6 +23,9 @@ Iterable<Override> createPlatformOverrides() => [
         (ref) => ref.watch(_settingsLoaderWebProvider.selectData((c) => c)),
       ),
     ];
+
+Future<void> persistServerUrl(Ref ref, Uri serverUrl) =>
+    throw UnimplementedError();
 
 const _serverUrl = bool.hasEnvironment('SERVER_URL')
     ? String.fromEnvironment('SERVER_URL')

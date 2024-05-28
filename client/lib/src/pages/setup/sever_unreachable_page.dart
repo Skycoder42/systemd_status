@@ -1,19 +1,24 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/config/app_settings.dart';
 import '../../localization/localization.dart';
-import '../../settings/setup_loader.dart';
 
 class ServerUnreachablePage extends ConsumerWidget {
   const ServerUnreachablePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final errorState = ref.watch(
-      setupStateProvider.select(
+    final (statusCode, error) = ref.watch(
+      settingsLoaderProvider.select(
         (s) => switch (s) {
-          final SetupServerUnreachableState state => state,
-          _ => null,
+          AsyncError(error: final DioException error) => (
+              error.response?.statusCode,
+              error
+            ),
+          AsyncError(error: final error) => (null, error),
+          _ => (null, null),
         },
       ),
     );
@@ -25,8 +30,8 @@ class ServerUnreachablePage extends ConsumerWidget {
       body: Center(
         child: Text(
           context.strings.server_unreachable_page_message(
-            errorState?.errorMessage ?? '',
-            errorState?.statusCode ?? -1,
+            error?.toString() ?? '',
+            statusCode ?? -1,
           ),
         ),
       ),
