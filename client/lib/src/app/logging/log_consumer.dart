@@ -38,6 +38,10 @@ class LogConsumer implements StreamConsumer<LogRecord> {
   }
 
   String _coloredMessage(LogRecord record, [String? message]) {
+    if (kIsWeb) {
+      return message ?? record.message;
+    }
+
     final pen = AnsiPen();
     if (record.level >= Level.SHOUT) {
       pen.magenta();

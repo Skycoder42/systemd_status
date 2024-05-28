@@ -98,7 +98,7 @@ class Server {
       router
         ..mount(
           '/app',
-          AppHandler(appDir).call,
+          AppHandler(appDir, config.appConfig.sentryDsn).call,
         )
         ..get('/', _redirectRoot);
     }

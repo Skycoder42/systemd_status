@@ -8,9 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_logging/sentry_logging.dart';
-import 'package:systemd_status_server/api.dart';
 
+import '../providers/client_provider.dart';
 import '../settings/client_config.dart';
+import '../settings/server_url.dart';
 import '../settings/setup_loader.dart';
 import 'app.dart';
 import 'logging/error_observer.dart';
@@ -23,20 +24,36 @@ class Setup {
   final _logger = Logger('Setup');
 
   Future<void> run() async {
-    // TODO must be initialized AFTER sentry
-    WidgetsFlutterBinding.ensureInitialized();
-    if (!kDebugMode) {
-      FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
-    }
+    Logger.root.level = Level.ALL;
+    unawaited(Logger.root.onRecord.pipe(LogConsumer()));
 
-    final clientConfig =
-        await container.read(clientConfigLoaderProvider.future);
-    if (clientConfig case ClientConfig(sentryDsn: final String sentryDsn)) {
+    final sentryDsn = await _loadSentryDsn();
+    if (sentryDsn != null) {
       await _initWithSentry(sentryDsn);
       _logger.config('Initialized app with sentry');
     } else {
       await _initWithoutSentry();
       _logger.config('Initialized app without sentry');
+    }
+  }
+
+  Future<String?> _loadSentryDsn() async {
+    try {
+      if (kIsWeb) {
+        await container.read(serverUrlProvider.future);
+        final clientConfig =
+            await container.read(systemdStatusApiClientProvider).configGet();
+        return clientConfig.sentryDsn;
+      } else {
+        WidgetsFlutterBinding.ensureInitialized();
+        final clientConfig =
+            await container.read(clientConfigLoaderProvider.future);
+        return clientConfig?.sentryDsn;
+      }
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e, s) {
+      Zone.current.handleUncaughtError(e, s);
+      return null;
     }
   }
 
@@ -54,14 +71,14 @@ class Setup {
         appRunner: _runApp,
       );
 
-  Future<void> _initWithoutSentry() async {
-    Logger.root.level = Level.ALL;
-    unawaited(Logger.root.onRecord.pipe(LogConsumer()));
-    await _runApp();
-  }
+  Future<void> _initWithoutSentry() async => await _runApp();
 
   Future<void> _runApp() async {
     recordStackTraceAtLevel = Level.SEVERE;
+    WidgetsFlutterBinding.ensureInitialized();
+    if (!kDebugMode) {
+      FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
+    }
 
     try {
       _logger.finer('Loading setup configuration');
