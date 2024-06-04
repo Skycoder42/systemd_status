@@ -4,9 +4,10 @@ import 'package:sentry/sentry.dart';
 import 'package:sentry_dio/sentry_dio.dart';
 import 'package:systemd_status_server/api.dart';
 
+import '../app/auth/auth_interceptor.dart';
 import '../app/config/app_settings.dart';
 
-part 'client_provider.g.dart';
+part 'api_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Dio dioClient(DioClientRef ref) {
@@ -16,7 +17,7 @@ Dio dioClient(DioClientRef ref) {
       baseUrl: serverUrl.toString(),
       connectTimeout: const Duration(seconds: 30),
     ),
-  );
+  )..interceptors.add(ref.watch(authInterceptorProvider));
   ref.onDispose(() => client.close(force: true));
 
   if (Sentry.isEnabled) {

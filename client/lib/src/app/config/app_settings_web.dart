@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_server/api.dart';
 import 'package:web/web.dart';
 
-import '../../providers/client_provider.dart';
+import '../../providers/api_provider.dart';
 import '../../providers/provider_extensions.dart';
 import 'app_settings.dart';
 

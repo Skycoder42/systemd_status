@@ -8,6 +8,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_logging/sentry_logging.dart';
 
 import 'app.dart';
+import 'auth/account_manager_provider.dart';
 import 'config/app_settings.dart';
 import 'logging/error_observer.dart';
 import 'logging/log_consumer.dart';
@@ -67,6 +68,13 @@ class Setup {
   Future<void> _initWithoutSentry() async => await _runApp();
 
   Future<void> _runApp() async {
+    try {
+      await container.read(accountManagerProvider.future);
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e, s) {
+      _logger.warning('Failed to load account', e, s);
+    }
+
     runApp(
       UncontrolledProviderScope(
         container: container,

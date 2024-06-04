@@ -31,12 +31,28 @@ sealed class AppConfig with _$AppConfig {
   )
   const factory AppConfig({
     String? appDir,
-    @JsonKey(required: true) required String firebaseApiKey,
     String? sentryDsn,
   }) = _AppConfig;
 
   factory AppConfig.fromJson(Map<String, dynamic> json) =>
       _$AppConfigFromJson(json);
+}
+
+@freezed
+sealed class FirebaseConfig with _$FirebaseConfig {
+  @JsonSerializable(
+    anyMap: true,
+    checked: true,
+    disallowUnrecognizedKeys: true,
+  )
+  const factory FirebaseConfig({
+    @JsonKey(required: true) required String projectId,
+    @JsonKey(required: true) required String apiKey,
+    List<String>? whitelistedUserIds,
+  }) = _FirebaseConfig;
+
+  factory FirebaseConfig.fromJson(Map<String, dynamic> json) =>
+      _$FirebaseConfigFromJson(json);
 }
 
 @freezed
@@ -49,7 +65,8 @@ sealed class ServerConfig with _$ServerConfig {
   const factory ServerConfig({
     List<String>? allowedOrigins,
     @Default([]) List<String> unitFilters,
-    @JsonKey(required: true) required AppConfig appConfig,
+    @JsonKey(required: true) required AppConfig app,
+    @JsonKey(required: true) required FirebaseConfig firebase,
   }) = _ServerConfig;
 
   factory ServerConfig.fromJson(Map<String, dynamic> json) =>

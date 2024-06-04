@@ -7,7 +7,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_server/api.dart';
 
-import '../../providers/client_provider.dart';
+import '../../providers/api_provider.dart';
 import '../../providers/provider_extensions.dart';
 import '../../providers/secure_storage_provider.dart';
 import 'app_settings.dart';

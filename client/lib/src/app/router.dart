@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth_rest/firebase_auth_rest.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
@@ -9,6 +10,7 @@ import '../pages/login/login_page.dart';
 import '../pages/setup/setup_page.dart';
 import '../pages/setup/sever_unreachable_page.dart';
 import '../pages/units/units_page.dart';
+import 'auth/account_manager_provider.dart';
 import 'config/app_settings.dart';
 
 part 'router.g.dart';
@@ -26,17 +28,28 @@ GoRouter router(RouterRef ref) => GoRouter(
 _GlobalRedirect _globalRedirect(_GlobalRedirectRef ref) => _GlobalRedirect(ref);
 
 class _GlobalRedirect {
+  static final _whitelistedRoutes = [
+    const SetupRoute().location,
+    const ServerUnreachableRoute().location,
+    const LoginRoute().location,
+  ];
+
   final _GlobalRedirectRef ref;
   final _logger = Logger('GlobalRedirect');
 
   _GlobalRedirect(this.ref);
 
   String? call(BuildContext context, GoRouterState state) {
-    if (state.fullPath?.startsWith(const SetupRoute().location) ?? false) {
+    if (_whitelistedRoutes
+        .any((route) => state.fullPath?.startsWith(route) ?? false)) {
       return null;
     }
 
     if (_checkSetupRedirect(state) case final String redirect) {
+      return redirect;
+    }
+
+    if (_checkLoginRedirect(state) case final String redirect) {
       return redirect;
     }
 
@@ -48,7 +61,7 @@ class _GlobalRedirect {
   }
 
   String? _checkSetupRedirect(GoRouterState state) {
-    _logger.finest('Checking redirection for ${state.matchedLocation}');
+    _logger.finest('Checking setup redirection for ${state.matchedLocation}');
     final setupState = ref.read(settingsLoaderProvider);
     switch (setupState) {
       case AsyncData(value: true):
@@ -72,6 +85,27 @@ class _GlobalRedirect {
         ).location;
       default:
         _logger.severe('Unknown setup state: $setupState');
+        return null;
+    }
+  }
+
+  String? _checkLoginRedirect(GoRouterState state) {
+    _logger.finest('Checking login for ${state.matchedLocation}');
+    final accountState = ref.read(accountManagerProvider);
+    switch (accountState) {
+      case AsyncData(value: FirebaseAccount()):
+        _logger.finest('User is logged in');
+        return null;
+      case AsyncData(value: null):
+        _logger.config('Not logged in redirecting to login page');
+        return LoginRoute(redirectTo: state.matchedLocation).location;
+      case AsyncError():
+        _logger.config(
+          'Failed to load account. Redirecting to login page',
+        );
+        return LoginRoute(redirectTo: state.matchedLocation).location;
+      default:
+        _logger.severe('Unknown account state: $accountState');
         return null;
     }
   }

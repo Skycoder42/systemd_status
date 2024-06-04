@@ -1,10 +1,11 @@
 import 'package:shelf_api/shelf_api.dart';
 
 import '../../config/server_config.dart';
+import '../../middlewares/firebase_auth.dart';
 import '../../services/systemctl_service.dart';
 import '../models/unit_info.dart';
 
-@ApiEndpoint('/units')
+@ApiEndpoint('/units', middleware: firebaseAuth)
 class UnitsEndpoint extends ShelfEndpoint {
   UnitsEndpoint(super.request);
 

@@ -1,5 +1,7 @@
 unitFilters:
   - .*
-appConfig:
+app:
   appDir: ../client/build/web
-  firebaseApiKey: PLACEHOLDER
+firebase:
+  projectId: PLACEHOLDER
+  apiKey: PLACEHOLDER
