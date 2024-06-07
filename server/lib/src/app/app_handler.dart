@@ -11,7 +11,6 @@ class AppHandler {
   late final Handler _handler;
 
   AppHandler(this._appDir, this._sentryDsn) {
-    // TODO add https://pub.dev/packages/shelf_host_validation for app?
     _handler = const Pipeline().addHandler(
       createStaticHandler(
         _appDir,

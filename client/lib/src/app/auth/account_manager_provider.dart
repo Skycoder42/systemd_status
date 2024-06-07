@@ -46,7 +46,6 @@ class AccountManager extends _$AccountManager {
             value: newAccount.refreshToken,
           );
 
-          // TODO this does not stop the refresh timer!
           await oldAccount?.dispose();
           return newAccount;
 

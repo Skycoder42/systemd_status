@@ -16,18 +16,8 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final isInitialized = _ref.read(
-      settingsLoaderProvider.select((d) => d.valueOrNull ?? false),
-    );
-    if (!isInitialized) {
-      handler.next(options);
-      return;
-    }
-
-    final account = _ref.read(
-      accountManagerProvider.select((d) => d.valueOrNull),
-    );
-    if (account == null) {
+    final idToken = _loadIdToken();
+    if (idToken == null) {
       handler.next(options);
       return;
     }
@@ -36,9 +26,23 @@ class AuthInterceptor extends Interceptor {
       options.copyWith(
         headers: {
           ...options.headers,
-          'Authorization': 'Bearer ${account.idToken}',
+          'Authorization': 'Bearer $idToken',
         },
       ),
     );
+  }
+
+  String? _loadIdToken() {
+    final isInitialized = _ref.read(
+      settingsLoaderProvider.select((d) => d.valueOrNull ?? false),
+    );
+    if (!isInitialized) {
+      return null;
+    }
+
+    final idToken = _ref.read(
+      accountManagerProvider.select((d) => d.valueOrNull?.idToken),
+    );
+    return idToken;
   }
 }

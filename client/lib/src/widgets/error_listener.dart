@@ -10,22 +10,20 @@ extension ErrorListener on WidgetRef {
     BuildContext context,
     ProviderListenable<AsyncValue<T>> provider, {
     ErrorToString onError = _defaultOnError,
-  }) {
-    // TODO global logging
-    listen(
-      provider.select((value) => value.error),
-      (_, error) {
-        if (error != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            ErrorSnackBar(
-              context: context,
-              content: Text(onError(error)),
-            ),
-          );
-        }
-      },
-    );
-  }
+  }) =>
+      listen(
+        provider.select((value) => value.error),
+        (_, error) {
+          if (error != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              ErrorSnackBar(
+                context: context,
+                content: Text(onError(error)),
+              ),
+            );
+          }
+        },
+      );
 
   static String _defaultOnError(Object error) => error.toString();
 }

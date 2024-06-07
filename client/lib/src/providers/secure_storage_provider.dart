@@ -9,8 +9,8 @@ FlutterSecureStorage secureStorage(SecureStorageRef ref) =>
       aOptions: AndroidOptions(
         encryptedSharedPreferences: true,
         resetOnError: true,
-        sharedPreferencesName: 'secure-storage',
-        preferencesKeyPrefix: 'systemd_status',
+        sharedPreferencesName: 'systemd_status_secure_storage',
+        preferencesKeyPrefix: 'systemd_status_secure_storage',
       ),
       iOptions: IOSOptions(
         accessibility: KeychainAccessibility.unlocked_this_device,
@@ -22,12 +22,6 @@ FlutterSecureStorage secureStorage(SecureStorageRef ref) =>
       ),
       webOptions: WebOptions(
         dbName: 'systemd_status_secure_storage',
-        publicKey: String.fromEnvironment(
-          'SECURE_STORAGE_PUBLIC_KEY',
-          defaultValue:
-              // TODO random
-              // ignore: lines_longer_than_80_chars
-              'uDA870UlWCGGAotkpfzhsRuI47e40dyVPdPxfJ9t19ptpiQDOGWKkIIch+TGAlyFho8JxDlJbyOI7ddl7hHWMw==',
-        ),
+        publicKey: 'systemd_status_secure_storage',
       ),
     );

@@ -19,17 +19,3 @@ FirebaseAuth firebaseAuth(FirebaseAuthRef ref) => FirebaseAuth(
       ref.watch(httpClientProvider),
       ref.watch(settingsClientConfigProvider.select((c) => c.firebaseApiKey)),
     );
-
-extension RestoreX on FirebaseAuth {
-  Future<FirebaseAccount> restoreAccount(
-    String refreshToken, {
-    bool autoRefresh = true,
-    String? locale,
-  }) async =>
-      await FirebaseAccount.apiRestore(
-        api,
-        refreshToken,
-        autoRefresh: autoRefresh,
-        locale: locale ?? this.locale,
-      );
-}
