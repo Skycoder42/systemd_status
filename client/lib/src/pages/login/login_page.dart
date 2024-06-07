@@ -60,7 +60,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     TextFormField(
                       decoration: InputDecoration(
                         label: Text(
-                          context.strings.setup_page_server_url_label,
+                          context.strings.login_page_email_label,
                         ),
                       ),
                       keyboardType: TextInputType.emailAddress,
@@ -76,7 +76,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     TextFormField(
                       decoration: InputDecoration(
                         label: Text(
-                          context.strings.setup_page_server_url_label,
+                          context.strings.login_page_password_label,
                         ),
                       ),
                       keyboardType: TextInputType.visiblePassword,
@@ -96,7 +96,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       builder: (onAction) => FilledButton.icon(
                         icon: const Icon(Icons.save),
                         label:
-                            Text(context.strings.setup_page_save_button_text),
+                            Text(context.strings.login_page_login_button_text),
                         onPressed: onAction,
                       ),
                     ),

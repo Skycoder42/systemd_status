@@ -18,7 +18,13 @@ class UnitsEndpoint extends ShelfEndpoint {
 
   Iterable<UnitInfo> _filterUnits(Iterable<UnitInfo> units) sync* {
     final unitFilters =
-        ref.read(serverConfigProvider).unitFilters.map(RegExp.new).toList();
+        ref.read(serverConfigProvider).unitFilters?.map(RegExp.new).toList();
+
+    if (unitFilters == null) {
+      yield* units;
+      return;
+    }
+
     for (final unit in units) {
       for (final filter in unitFilters) {
         if (filter.hasMatch(unit.name)) {

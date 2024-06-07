@@ -1,6 +1,9 @@
-allowedOrigins:
-unitFilters:
-appConfig:
+allowedOrigins: []
+unitFilters: []
+app:
   appDir: /usr/share/systemd-status-server/web-app
-  firebaseApiKey:
-  sentryDsn:
+  sentryDsn: null
+firebase:
+  projectId: PLACEHOLDER
+  apiKey: PLACEHOLDER
+  whitelistedUserIds: []

@@ -1,5 +1,3 @@
-unitFilters:
-  - .*
 app:
   appDir: ../client/build/web
 firebase:

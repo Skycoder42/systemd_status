@@ -1,7 +1,7 @@
 name: systemd_status_client
 description: Monitor the server status of a systemd based server.
 homepage: https://github.com/Skycoder42/systemd_status
-version: 0.2.0
+version: 0.2.1
 publish_to: none
 
 environment:

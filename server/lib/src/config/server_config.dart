@@ -64,7 +64,7 @@ sealed class ServerConfig with _$ServerConfig {
   )
   const factory ServerConfig({
     List<String>? allowedOrigins,
-    @Default([]) List<String> unitFilters,
+    List<String>? unitFilters,
     @JsonKey(required: true) required AppConfig app,
     @JsonKey(required: true) required FirebaseConfig firebase,
   }) = _ServerConfig;
