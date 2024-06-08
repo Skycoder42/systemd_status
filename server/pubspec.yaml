@@ -67,6 +67,9 @@ aur:
       recursive: true
   backup:
     - etc/systemd-status-server.yaml
+  makedeb:
+    backup:
+      - /etc/systemd-status-server.yaml
 
 dart_pre_commit:
   pull-up-dependencies:
