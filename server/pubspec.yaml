@@ -1,7 +1,7 @@
 name: systemd_status_server
 description: Monitor the server status of a systemd based server.
 homepage: https://github.com/Skycoder42/systemd_status
-version: 0.2.1
+version: 0.2.2
 publish_to: none
 
 environment:
@@ -56,8 +56,8 @@ aur:
   binariesArchivePrefix: systemd-status-server
   sourcesDir: systemd_status-server-v$pkgver
   extraSources:
-    - name: Systemd.Status.Web-0.2.1.tar.xz
-      url: https://github.com/Skycoder42/systemd_status/releases/download/app%2Fv0.2.1/Systemd.Status.Web.tar.xz
+    - name: Systemd.Status.Web-0.2.2.tar.xz
+      url: https://github.com/Skycoder42/systemd_status/releases/download/app%2Fv0.2.2/Systemd.Status.Web.tar.xz
   files:
     - source: tool/package-config.yaml
       target: /etc/systemd-status-server.yaml
