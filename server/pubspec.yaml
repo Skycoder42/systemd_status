@@ -54,14 +54,14 @@ aur:
     - systemd
   tagPrefix: server/v
   binariesArchivePrefix: systemd-status-server
-  sourcesDir: systemd_status-server-v$pkgver
+  sourcesDir: systemd_status-server-v$pkgver/server
   extraSources:
     - name: Systemd.Status.Web-0.2.2.tar.xz
       url: https://github.com/Skycoder42/systemd_status/releases/download/client%2Fv0.2.2/Systemd.Status.Web.tar.xz
   files:
     - source: tool/package-config.yaml
       target: /etc/systemd-status-server.yaml
-    - source: ../web
+    - source: ../../web
       target: /usr/share/$pkgname/web-app
       recursive: true
   backup:
