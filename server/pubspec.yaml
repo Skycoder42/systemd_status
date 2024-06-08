@@ -49,6 +49,7 @@ dev_dependencies:
 
 aur:
   maintainer: Skycoder42 <Skycoder42@users.noreply.github.com>
+  pkgname: systemd-status-server
   license: BSD
   depends:
     - systemd
@@ -66,9 +67,6 @@ aur:
       recursive: true
   backup:
     - etc/systemd-status-server.yaml
-  makedeb:
-    backup:
-      - /etc/systemd-status-server.yaml
 
 dart_pre_commit:
   pull-up-dependencies:
