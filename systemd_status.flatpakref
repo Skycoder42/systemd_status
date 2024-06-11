@@ -1,5 +1,5 @@
 [Flatpak Ref]
-Name=de.skycoder42.systemdStatusFlutter
+Name=de.skycoder42.systemdStatusClient
 Url=https://skycoder42.github.io/systemd_status/
 Branch=main
 RuntimeRepo=https://dl.flathub.org/repo/flathub.flatpakrepo
