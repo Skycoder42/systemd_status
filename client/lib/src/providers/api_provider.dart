@@ -5,13 +5,13 @@ import 'package:sentry_dio/sentry_dio.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../app/auth/auth_interceptor.dart';
-import '../app/config/app_settings.dart';
+import '../startup/startup_controller.dart';
 
 part 'api_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Dio dioClient(DioClientRef ref) {
-  final serverUrl = ref.watch(settingsServerUrlProvider);
+  final serverUrl = ref.watch(serverUrlProvider);
   final client = Dio(
     BaseOptions(
       baseUrl: serverUrl.toString(),

@@ -6,20 +6,20 @@
   "setup_page_server_url_label": "Server-URL",
   "setup_page_save_button_text": "Save",
   "setup_page_config_invalid": "Persisted server configuration is invalid. Please enter it again.",
-  "setup_page_configure_failed": "Failed to connect to Systemd Status server. Please make sure it is running and reachable for your network.",
-  "server_unreachable_page_message": "The server cannot be reached at the moment (Received HTTP status code: {statusCode}).\n\n{errorMessage}\n\n Try again later or navigate back to check your configuration.",
-  "@server_unreachable_page_message": {
+  "setup_page_configure_failed": "Failed to connect to Systemd Status server. Please make sure it is running and reachable for your network.\n\nHttp Status Code: {statusCode}\n\nError Message: {errorMessage}",
+  "@setup_page_configure_failed": {
     "placeholders": {
-      "errorMessage": {
-        "type": "String"
-      },
       "statusCode": {
         "type": "int"
+      },
+      "errorMessage": {
+        "type": "String"
       }
     }
   },
   "login_page_title": "Systemd Status — Login",
   "login_page_email_label": "E-Mail",
   "login_page_password_label": "Password",
-  "login_page_login_button_text": "Login"
+  "login_page_login_button_text": "Login",
+  "login_page_login_failed": "Login failed!"
 }

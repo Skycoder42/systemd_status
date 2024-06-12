@@ -1,5 +1,5 @@
 import 'dart:async';
 
-import 'src/app/setup.dart';
+import 'src/startup/startup_controller.dart';
 
-Future<void> main() => Setup().run();
+Future<void> main() => StartupController().run();

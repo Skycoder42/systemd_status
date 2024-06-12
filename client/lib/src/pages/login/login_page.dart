@@ -129,6 +129,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   String _onError(Object e, StackTrace s) {
     _logger.severe('Failed to sign in with error', e, s);
-    return context.strings.setup_page_configure_failed;
+    return context.strings.login_page_login_failed;
   }
 }

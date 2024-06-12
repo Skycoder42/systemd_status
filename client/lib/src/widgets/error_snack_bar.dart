@@ -7,6 +7,7 @@ class ErrorSnackBar extends SnackBar {
     super.key,
     required BuildContext context,
     required Widget content,
+    super.duration,
   }) : super(
           backgroundColor: context.theme.colorScheme.error,
           content: DefaultTextStyle(

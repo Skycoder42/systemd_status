@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:firebase_auth_rest/firebase_auth_rest.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -7,11 +6,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../pages/login/login_page.dart';
-import '../pages/setup/setup_page.dart';
-import '../pages/setup/sever_unreachable_page.dart';
 import '../pages/units/units_page.dart';
 import 'auth/account_manager_provider.dart';
-import 'config/app_settings.dart';
 
 part 'router.g.dart';
 
@@ -29,8 +25,6 @@ _GlobalRedirect _globalRedirect(_GlobalRedirectRef ref) => _GlobalRedirect(ref);
 
 class _GlobalRedirect {
   static final _whitelistedRoutes = [
-    const SetupRoute().location,
-    const ServerUnreachableRoute().location,
     const LoginRoute().location,
   ];
 
@@ -45,10 +39,6 @@ class _GlobalRedirect {
       return null;
     }
 
-    if (_checkSetupRedirect(state) case final String redirect) {
-      return redirect;
-    }
-
     if (_checkLoginRedirect(state) case final String redirect) {
       return redirect;
     }
@@ -58,35 +48,6 @@ class _GlobalRedirect {
       'Continuing normal navigation to ${state.fullPath}',
     );
     return null;
-  }
-
-  String? _checkSetupRedirect(GoRouterState state) {
-    _logger.finest('Checking setup redirection for ${state.matchedLocation}');
-    final setupState = ref.read(settingsLoaderProvider);
-    switch (setupState) {
-      case AsyncData(value: true):
-        _logger.finest('Client configuration is working and up to date');
-        return null;
-      case AsyncData(value: false):
-        _logger.config('No serverUrl configured. Redirecting to setup page');
-        return SetupRoute(redirectTo: state.matchedLocation).location;
-      case AsyncError(error: DioException()):
-        _logger.config(
-          'Server unreachable. Redirecting to server unreachable page',
-        );
-        return const ServerUnreachableRoute().location;
-      case AsyncError():
-        _logger.config(
-          'Failed to load client configuration. Redirecting to setup page',
-        );
-        return SetupRoute(
-          redirectTo: state.matchedLocation,
-          hasError: true,
-        ).location;
-      default:
-        _logger.severe('Unknown setup state: $setupState');
-        return null;
-    }
   }
 
   String? _checkLoginRedirect(GoRouterState state) {
@@ -128,33 +89,6 @@ class UnitsRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) => const UnitsPage();
-}
-
-@TypedGoRoute<SetupRoute>(
-  path: '/setup',
-  routes: [
-    TypedGoRoute<ServerUnreachableRoute>(path: 'offline'),
-  ],
-)
-@immutable
-class SetupRoute extends GoRouteData {
-  final String? redirectTo;
-  final bool hasError;
-
-  const SetupRoute({this.redirectTo, this.hasError = false});
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      SetupPage(redirectTo: redirectTo, hasError: hasError);
-}
-
-@immutable
-class ServerUnreachableRoute extends GoRouteData {
-  const ServerUnreachableRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const ServerUnreachablePage();
 }
 
 @TypedGoRoute<LoginRoute>(path: '/login')

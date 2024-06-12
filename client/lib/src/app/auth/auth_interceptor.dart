@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../config/app_settings.dart';
 import 'account_manager_provider.dart';
 
 part 'auth_interceptor.g.dart';
@@ -33,13 +32,6 @@ class AuthInterceptor extends Interceptor {
   }
 
   String? _loadIdToken() {
-    final isInitialized = _ref.read(
-      settingsLoaderProvider.select((d) => d.valueOrNull ?? false),
-    );
-    if (!isInitialized) {
-      return null;
-    }
-
     final idToken = _ref.read(
       accountManagerProvider.select((d) => d.valueOrNull?.idToken),
     );

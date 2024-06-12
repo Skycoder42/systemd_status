@@ -26,14 +26,14 @@ class LogConsumer implements StreamConsumer<LogRecord> {
         time: logRecord.time,
         zone: logRecord.zone,
       );
-    }
-
-    print(_coloredMessage(logRecord, logRecord.toString()));
-    if (logRecord.error != null) {
-      print(_coloredMessage(logRecord, logRecord.error.toString()));
-    }
-    if (logRecord.stackTrace != null) {
-      print(_coloredMessage(logRecord, logRecord.stackTrace.toString()));
+    } else {
+      print(_coloredMessage(logRecord, logRecord.toString()));
+      if (logRecord.error != null) {
+        print(_coloredMessage(logRecord, logRecord.error.toString()));
+      }
+      if (logRecord.stackTrace != null) {
+        print(_coloredMessage(logRecord, logRecord.stackTrace.toString()));
+      }
     }
   }
 

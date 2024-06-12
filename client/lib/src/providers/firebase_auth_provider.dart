@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry/sentry.dart';
 
-import '../app/config/app_settings.dart';
+import '../startup/startup_controller.dart';
 
 part 'firebase_auth_provider.g.dart';
 
@@ -17,5 +17,5 @@ http.Client httpClient(HttpClientRef ref) {
 @Riverpod(keepAlive: true)
 FirebaseAuth firebaseAuth(FirebaseAuthRef ref) => FirebaseAuth(
       ref.watch(httpClientProvider),
-      ref.watch(settingsClientConfigProvider.select((c) => c.firebaseApiKey)),
+      ref.watch(clientConfigProvider.select((c) => c.firebaseApiKey)),
     );

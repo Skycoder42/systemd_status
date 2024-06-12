@@ -14,6 +14,7 @@ class AsyncAction extends StatefulWidget {
   final bool enabled;
   final AsyncCallback onAction;
   final ErrorConverter onError;
+  final Duration? errorToastDuration;
 
   const AsyncAction({
     super.key,
@@ -21,6 +22,7 @@ class AsyncAction extends StatefulWidget {
     required this.onAction,
     required this.onError,
     required this.builder,
+    this.errorToastDuration,
   });
 
   @override
@@ -33,12 +35,20 @@ class AsyncAction extends StatefulWidget {
       ..add(ObjectFlagProperty<ActionBuilder>.has('builder', builder))
       ..add(DiagnosticsProperty<bool>('enabled', enabled))
       ..add(ObjectFlagProperty<AsyncCallback>.has('onAction', onAction))
-      ..add(ObjectFlagProperty<ErrorConverter?>.has('onError', onError));
+      ..add(ObjectFlagProperty<ErrorConverter?>.has('onError', onError))
+      ..add(
+        DiagnosticsProperty<Duration?>(
+          'errorToastDuration',
+          errorToastDuration,
+        ),
+      );
   }
 }
 
 class _AsyncActionState extends State<AsyncAction> {
   bool _isRunning = false;
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
+      _snackbarController;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -58,6 +68,9 @@ class _AsyncActionState extends State<AsyncAction> {
     setState(() {
       _isRunning = true;
     });
+
+    _snackbarController?.close();
+
     try {
       await widget.onAction();
       // ignore: avoid_catches_without_on_clauses
@@ -76,10 +89,11 @@ class _AsyncActionState extends State<AsyncAction> {
       return;
     }
 
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+    _snackbarController = ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       ErrorSnackBar(
         context: context,
         content: Text(errorMessage),
+        duration: widget.errorToastDuration ?? const Duration(seconds: 4),
       ),
     );
   }
