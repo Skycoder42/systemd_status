@@ -35,7 +35,12 @@ final class StartupController extends StartupControllerBase {
       ),
     );
 
-    return await completer.future;
+    final newServerUrl = await completer.future;
+    await secureStorage.write(
+      key: _serverUrlKey,
+      value: newServerUrl.toString(),
+    );
+    return newServerUrl;
   }
 
   @override

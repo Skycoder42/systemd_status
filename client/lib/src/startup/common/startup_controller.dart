@@ -10,6 +10,7 @@ import 'package:sentry_logging/sentry_logging.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../app/app.dart';
+import '../../app/auth/account_manager_provider.dart';
 import '../../app/logging/log_consumer.dart';
 
 part 'startup_controller.g.dart';
@@ -74,18 +75,22 @@ abstract base class StartupControllerBase {
   Future<void> _initOverrides() async {
     // load server url
     final serverUrl = await loadServerUrl();
-    container.updateOverrides([
-      serverUrlProvider.overrideWithValue(serverUrl),
-      clientConfigProvider
-          .overrideWith((ref) => throw UnsupportedError('Not ready')),
-    ]);
+    container
+      ..updateOverrides([
+        serverUrlProvider.overrideWith((_) => serverUrl),
+        clientConfigProvider
+            .overrideWith((ref) => throw UnsupportedError('Not ready')),
+      ])
+      ..invalidate(serverUrlProvider);
 
     // load client config
     final clientConfig = await loadClientConfig();
-    container.updateOverrides([
-      serverUrlProvider.overrideWithValue(serverUrl),
-      clientConfigProvider.overrideWithValue(clientConfig),
-    ]);
+    container
+      ..updateOverrides([
+        serverUrlProvider.overrideWith((_) => serverUrl),
+        clientConfigProvider.overrideWith((_) => clientConfig),
+      ])
+      ..invalidate(clientConfigProvider);
   }
 
   Future<void> _initWithSentry(String sentryDsn) async =>
@@ -105,13 +110,12 @@ abstract base class StartupControllerBase {
   Future<void> _initWithoutSentry() async => await _runApp();
 
   Future<void> _runApp() async {
-    // TODO move to router with didPush etc. (See debeka?)
-    // try {
-    //   await container.read(accountManagerProvider.future);
-    //   // ignore: avoid_catches_without_on_clauses
-    // } catch (e, s) {
-    //   _logger.warning('Failed to load account', e, s);
-    // }
+    try {
+      await container.read(accountManagerProvider.future);
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e, s) {
+      logger.warning('Failed to load account', e, s);
+    }
 
     runApp(
       UncontrolledProviderScope(

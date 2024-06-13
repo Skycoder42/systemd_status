@@ -89,12 +89,20 @@ class _AsyncActionState extends State<AsyncAction> {
       return;
     }
 
-    _snackbarController = ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+    final controller =
+        _snackbarController = ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       ErrorSnackBar(
         context: context,
         content: Text(errorMessage),
         duration: widget.errorToastDuration ?? const Duration(seconds: 4),
       ),
+    );
+    unawaited(
+      controller?.closed.whenComplete(() {
+        if (_snackbarController == controller) {
+          _snackbarController = null;
+        }
+      }),
     );
   }
 }
