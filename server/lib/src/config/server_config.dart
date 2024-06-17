@@ -39,6 +39,22 @@ sealed class AppConfig with _$AppConfig {
 }
 
 @freezed
+sealed class UserInfo with _$UserInfo {
+  @JsonSerializable(
+    anyMap: true,
+    checked: true,
+    disallowUnrecognizedKeys: true,
+  )
+  const factory UserInfo({
+    @JsonKey(required: true) required String uid,
+    List<String>? unitFilters,
+  }) = _UserInfo;
+
+  factory UserInfo.fromJson(Map<String, dynamic> json) =>
+      _$UserInfoFromJson(json);
+}
+
+@freezed
 sealed class FirebaseConfig with _$FirebaseConfig {
   @JsonSerializable(
     anyMap: true,
@@ -48,7 +64,7 @@ sealed class FirebaseConfig with _$FirebaseConfig {
   const factory FirebaseConfig({
     @JsonKey(required: true) required String projectId,
     @JsonKey(required: true) required String apiKey,
-    List<String>? whitelistedUserIds,
+    List<UserInfo>? users,
   }) = _FirebaseConfig;
 
   factory FirebaseConfig.fromJson(Map<String, dynamic> json) =>

@@ -6,4 +6,4 @@ app:
 firebase:
   projectId: PLACEHOLDER
   apiKey: PLACEHOLDER
-  whitelistedUserIds: []
+  users: []

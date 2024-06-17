@@ -3,28 +3,34 @@ import 'dart:io';
 import 'package:firebase_verify_id_tokens/firebase_verify_id_tokens.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_api/shelf_api.dart';
 
 import '../config/server_config.dart';
 import '../providers/firebase_verify_token_id_provider.dart';
 
+part 'firebase_auth.g.dart';
 part 'firebase_auth.freezed.dart';
 
 Middleware firebaseAuth() => _FirebaseAuthMiddleware().call;
 
+@Riverpod(dependencies: [shelfRequest])
+UserInfo userInfo(UserInfoRef ref) => ref.read(shelfRequestProvider).userInfo;
+
 extension FirebaseAuthX on Request {
-  String get userId => context[_FirebaseAuthMiddleware._userIdKey]! as String;
+  UserInfo get userInfo =>
+      context[_FirebaseAuthMiddleware._userInfoKey]! as UserInfo;
 }
 
 @freezed
 sealed class _AuthResult with _$AuthResult {
-  const factory _AuthResult.success(String userId) = _AuthSuccess;
+  const factory _AuthResult.success(UserInfo userInfo) = _AuthSuccess;
   const factory _AuthResult.failure(Response response) = _AuthFailure;
 }
 
 class _FirebaseAuthMiddleware {
-  static const _userIdKey = 'FirebaseAuthMiddleware.userId';
+  static const _userInfoKey = 'FirebaseAuthMiddleware.userId';
   static final _authHeaderPattern = RegExp(r'^Bearer (.*)$');
 
   final _logger = Logger('FirebaseAuthMiddleware');
@@ -32,12 +38,11 @@ class _FirebaseAuthMiddleware {
   Handler call(Handler next) => (request) async {
         final authResult = await _checkAuthorization(request);
         switch (authResult) {
-          case _AuthSuccess(userId: final userId):
+          case _AuthSuccess(userInfo: final userInfo):
             return await next(
               request.change(
                 context: {
-                  ...request.context,
-                  _userIdKey: userId,
+                  _userInfoKey: userInfo,
                 },
               ),
             );
@@ -70,9 +75,9 @@ class _FirebaseAuthMiddleware {
         return _AuthResult.failure(Response(HttpStatus.forbidden));
       }
 
-      final whitelist =
-          request.ref.read(serverConfigProvider).firebase.whitelistedUserIds;
-      if (whitelist != null && !whitelist.contains(userId)) {
+      final whitelist = request.ref.read(serverConfigProvider).firebase.users;
+      final userInfo = whitelist?.where((u) => u.uid == userId).firstOrNull;
+      if (whitelist != null && userInfo == null) {
         _logger.warning(
           'Rejecting request because user with id $userId '
           'has not been whitelisted',
@@ -80,7 +85,7 @@ class _FirebaseAuthMiddleware {
         return _AuthResult.failure(Response(HttpStatus.forbidden));
       }
 
-      return _AuthResult.success(userId);
+      return _AuthResult.success(userInfo ?? UserInfo(uid: userId));
     } on FirebaseIdTokenException catch (e, s) {
       _logger.warning(
         'Rejecting request with token validation error',
