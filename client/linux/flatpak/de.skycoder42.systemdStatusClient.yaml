@@ -42,7 +42,6 @@ modules:
         dest: .artifacts
       - type: patch
         paths:
-          - patch/pubspec_overrides.patch
           - patch/compiler_warnings.patch
         use-git: false
       - type: script

@@ -48,7 +48,6 @@ jobs:
       - server_package
     with:
       workingDirectory: client
-      removePubspecOverrides: false
       artifactDependencies: systemd_status_server
       buildRunner: true
       unitTestPaths: ""
