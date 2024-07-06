@@ -1,1 +1,3 @@
 test-config.yaml
+*.xdb
+*.pfx

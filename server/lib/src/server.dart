@@ -17,6 +17,7 @@ import 'config/options.dart';
 import 'config/server_config.dart';
 import 'middlewares/enforce_tls.dart';
 import 'middlewares/rate_limit.dart';
+import 'services/security_context_loader.dart';
 
 class Server {
   static const _maxContentLength = 1 * 1024 * 1024; // 1 MB
@@ -37,7 +38,16 @@ class Server {
   }
 
   Future<void> start() async {
-    _server = await serve(_handler, options.host, options.port);
+    final securityContext =
+        await _providerContainer.read(securityContextLoaderProvider).load();
+
+    _server = await serve(
+      _handler,
+      options.host,
+      options.port,
+      securityContext: securityContext,
+      poweredByHeader: null,
+    );
     _logger.info('Listening on port ${_server.port}');
   }
 

@@ -72,6 +72,22 @@ sealed class FirebaseConfig with _$FirebaseConfig {
 }
 
 @freezed
+sealed class TlsConfig with _$TlsConfig {
+  @JsonSerializable(
+    anyMap: true,
+    checked: true,
+    disallowUnrecognizedKeys: true,
+  )
+  const factory TlsConfig({
+    @JsonKey(required: true) required String pfxPath,
+    String? pfxPassphrase,
+  }) = _TlsConfig;
+
+  factory TlsConfig.fromJson(Map<String, dynamic> json) =>
+      _$TlsConfigFromJson(json);
+}
+
+@freezed
 sealed class ServerConfig with _$ServerConfig {
   @JsonSerializable(
     anyMap: true,
@@ -81,6 +97,7 @@ sealed class ServerConfig with _$ServerConfig {
   const factory ServerConfig({
     List<String>? allowedOrigins,
     List<String>? unitFilters,
+    TlsConfig? tls,
     @JsonKey(required: true) required AppConfig app,
     @JsonKey(required: true) required FirebaseConfig firebase,
   }) = _ServerConfig;
