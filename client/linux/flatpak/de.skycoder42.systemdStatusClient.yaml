@@ -18,6 +18,12 @@ finish-args:
   - --share=network
 writable-sdk: true
 modules:
+  - name: zenity
+    buildsystem: meson
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/zenity/4.0/zenity-4.0.2.tar.xz
+        sha256: c16dcae46e29e22c2fa0b95e80e06c96b2aec93840161369c95c85ed9f093153
   - name: systemd_status_client
     buildsystem: simple
     only-arches:
