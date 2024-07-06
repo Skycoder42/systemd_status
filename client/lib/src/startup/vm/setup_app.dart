@@ -7,13 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/theme.dart';
 import '../../localization/localization.dart';
 import 'setup_page.dart';
+import 'setup_result.dart';
 
 class SetupApp extends ConsumerWidget {
-  final Completer<Uri> serverUrlCompleter;
+  final Completer<SetupResult> setupCompleter;
 
   const SetupApp({
     super.key,
-    required this.serverUrlCompleter,
+    required this.setupCompleter,
   });
 
   @override
@@ -27,11 +28,10 @@ class SetupApp extends ConsumerWidget {
         color: SystemdStatusTheme.appColor,
         theme: ref.watch(appThemeProvider(Brightness.light)),
         darkTheme: ref.watch(appThemeProvider(Brightness.dark)),
-        themeMode: ThemeMode.light,
 
         // content
         home: FutureBuilder(
-          future: serverUrlCompleter.future,
+          future: setupCompleter.future,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return const Scaffold(
@@ -50,7 +50,7 @@ class SetupApp extends ConsumerWidget {
             }
 
             return SetupPage(
-              serverUrlCompleter: serverUrlCompleter,
+              setupCompleter: setupCompleter,
             );
           },
         ),
@@ -60,9 +60,9 @@ class SetupApp extends ConsumerWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(
-      DiagnosticsProperty<Completer<Uri>>(
-        'serverUrlCompleter',
-        serverUrlCompleter,
+      DiagnosticsProperty<Completer<SetupResult>>(
+        'setupCompleter',
+        setupCompleter,
       ),
     );
   }

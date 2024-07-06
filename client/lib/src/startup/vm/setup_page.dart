@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,15 +10,18 @@ import 'package:logging/logging.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../localization/localization.dart';
+import '../../providers/file_picker_provider.dart';
 import '../../widgets/async_action.dart';
 import '../../widgets/scrollable_expanded_box.dart';
+import 'http_client_adapter_factory.dart';
+import 'setup_result.dart';
 
 class SetupPage extends ConsumerStatefulWidget {
-  final Completer<Uri> serverUrlCompleter;
+  final Completer<SetupResult> setupCompleter;
 
   const SetupPage({
     super.key,
-    required this.serverUrlCompleter,
+    required this.setupCompleter,
   });
 
   @override
@@ -27,9 +31,9 @@ class SetupPage extends ConsumerStatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(
-      DiagnosticsProperty<Completer<Uri>>(
-        'serverUrlCompleter',
-        serverUrlCompleter,
+      DiagnosticsProperty<Completer<SetupResult>>(
+        'setupCompleter',
+        setupCompleter,
       ),
     );
   }
@@ -39,8 +43,23 @@ class _SetupPageState extends ConsumerState<SetupPage> {
   final _formKey = GlobalKey<FormState>();
   final _logger = Logger('SetupPage');
 
+  late final TextEditingController _serverCertController;
+
   bool _isValid = false;
   Uri? _savedUrl;
+  Uint8List? _savedCertBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _serverCertController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _serverCertController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -60,11 +79,6 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     TextFormField(
-                      decoration: InputDecoration(
-                        label: Text(
-                          context.strings.setup_page_server_url_label,
-                        ),
-                      ),
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.next,
                       autofocus: true,
@@ -77,11 +91,29 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                       ]),
                       onSaved: (newValue) => _savedUrl =
                           newValue != null ? Uri.parse(newValue) : null,
+                      decoration: InputDecoration(
+                        label: Text(
+                          context.strings.setup_page_server_url_label,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _serverCertController,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        label: Text(
+                          context.strings.setup_page_server_cert_label,
+                        ),
+                        suffix: IconButton(
+                          icon: const Icon(Icons.file_open),
+                          onPressed: _pickFile,
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     AsyncAction(
-                      enabled:
-                          _isValid && !widget.serverUrlCompleter.isCompleted,
+                      enabled: _isValid && !widget.setupCompleter.isCompleted,
                       onAction: _submit,
                       onError: _onError,
                       errorToastDuration: const Duration(seconds: 10),
@@ -107,6 +139,25 @@ class _SetupPageState extends ConsumerState<SetupPage> {
     });
   }
 
+  Future<void> _pickFile() async {
+    final filePicker = ref.read(filePickerProvider);
+    final result = await filePicker.pickFiles(
+      dialogTitle: context.strings.setup_page_server_cert_pick_title,
+      type: FileType.custom,
+      allowedExtensions: const ['crt', 'pem', 'pfx'],
+      withData: true,
+      lockParentWindow: true,
+    );
+
+    final selectedFile = result?.files.singleOrNull;
+    if (selectedFile == null) {
+      return;
+    }
+
+    _serverCertController.text = selectedFile.name;
+    _savedCertBytes = selectedFile.bytes;
+  }
+
   Future<void> _submit() async {
     // submit form
     _savedUrl = null;
@@ -117,16 +168,26 @@ class _SetupPageState extends ConsumerState<SetupPage> {
     state.save();
 
     // validate URL works
-    final client = SystemdStatusApiClient(_savedUrl!);
+    final dio = Dio(BaseOptions(baseUrl: _savedUrl!.toString()));
     try {
+      if (_savedCertBytes case final Uint8List certBytes) {
+        dio.httpClientAdapter =
+            const HttpClientAdapterFactory().create(certBytes);
+      }
+      final client = SystemdStatusApiClient.dio(dio);
       await client.configGet();
     } finally {
-      client.close(force: true);
+      dio.close(force: true);
     }
 
     // complete with URL
-    if (!widget.serverUrlCompleter.isCompleted) {
-      widget.serverUrlCompleter.complete(_savedUrl!);
+    if (!widget.setupCompleter.isCompleted) {
+      widget.setupCompleter.complete(
+        SetupResult(
+          serverUrl: _savedUrl!,
+          serverCertBytes: _savedCertBytes,
+        ),
+      );
       // rebuild to ensure button stays disabled
       setState(() {});
     } else {

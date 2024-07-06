@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,10 @@ part 'startup_controller.g.dart';
 
 @Riverpod(keepAlive: true)
 Uri serverUrl(ServerUrlRef ref) => throw UnimplementedError();
+
+@Riverpod(keepAlive: true)
+HttpClientAdapter? httpClientAdapter(HttpClientAdapterRef ref) =>
+    throw UnimplementedError();
 
 @Riverpod(keepAlive: true)
 ClientConfig clientConfig(ClientConfigRef ref) => throw UnimplementedError();
@@ -39,6 +44,8 @@ abstract base class StartupControllerBase {
   final ProviderContainer container = ProviderContainer(
     overrides: [
       serverUrlProvider
+          .overrideWith((ref) => throw UnsupportedError('Not ready')),
+      httpClientAdapterProvider
           .overrideWith((ref) => throw UnsupportedError('Not ready')),
       clientConfigProvider
           .overrideWith((ref) => throw UnsupportedError('Not ready')),
@@ -64,6 +71,9 @@ abstract base class StartupControllerBase {
   FutureOr<Uri> loadServerUrl();
 
   @protected
+  FutureOr<HttpClientAdapter?> loadHttpClientAdapter();
+
+  @protected
   FutureOr<ClientConfig> loadClientConfig();
 
   void _setupLogger() {
@@ -75,9 +85,11 @@ abstract base class StartupControllerBase {
   Future<void> _initOverrides() async {
     // load server url
     final serverUrl = await loadServerUrl();
+    final serverCertificate = await loadHttpClientAdapter();
     container
       ..updateOverrides([
         serverUrlProvider.overrideWith((_) => serverUrl),
+        httpClientAdapterProvider.overrideWith((_) => serverCertificate),
         clientConfigProvider
             .overrideWith((ref) => throw UnsupportedError('Not ready')),
       ])
@@ -88,6 +100,7 @@ abstract base class StartupControllerBase {
     container
       ..updateOverrides([
         serverUrlProvider.overrideWith((_) => serverUrl),
+        httpClientAdapterProvider.overrideWith((_) => serverCertificate),
         clientConfigProvider.overrideWith((_) => clientConfig),
       ])
       ..invalidate(clientConfigProvider);
@@ -135,8 +148,12 @@ abstract base class StartupControllerBase {
 
 final class StartupController extends StartupControllerBase {
   @override
-  FutureOr<ClientConfig> loadClientConfig() => throw UnimplementedError();
+  FutureOr<Uri> loadServerUrl() => throw UnimplementedError();
 
   @override
-  FutureOr<Uri> loadServerUrl() => throw UnimplementedError();
+  FutureOr<HttpClientAdapter?> loadHttpClientAdapter() =>
+      throw UnimplementedError();
+
+  @override
+  FutureOr<ClientConfig> loadClientConfig() => throw UnimplementedError();
 }

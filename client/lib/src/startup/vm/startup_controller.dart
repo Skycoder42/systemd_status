@@ -6,13 +6,17 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:systemd_status_server/api.dart';
 
+import '../../extensions/flutter_secure_storage_x.dart';
 import '../../providers/api_provider.dart';
 import '../../providers/secure_storage_provider.dart';
 import '../common/startup_controller.dart';
+import 'http_client_adapter_factory.dart';
 import 'setup_app.dart';
+import 'setup_result.dart';
 
 final class StartupController extends StartupControllerBase {
   static const _serverUrlKey = 'serverUrl';
+  static const _serverCertKey = 'serverCert';
   static const _clientConfigKey = 'clientConfig';
 
   @override
@@ -25,22 +29,47 @@ final class StartupController extends StartupControllerBase {
       return Uri.parse(serverUrl);
     }
 
-    final completer = Completer<Uri>();
+    final completer = Completer<SetupResult>();
     runApp(
       UncontrolledProviderScope(
         container: container,
         child: SetupApp(
-          serverUrlCompleter: completer,
+          setupCompleter: completer,
         ),
       ),
     );
 
-    final newServerUrl = await completer.future;
+    final SetupResult(
+      serverUrl: newServerUrl,
+      serverCertBytes: serverCertBytes,
+    ) = await completer.future;
+
     await secureStorage.write(
       key: _serverUrlKey,
       value: newServerUrl.toString(),
     );
+
+    if (serverCertBytes != null) {
+      await secureStorage.writeBytes(
+        key: _serverCertKey,
+        value: serverCertBytes,
+      );
+    } else {
+      await secureStorage.delete(key: _serverCertKey);
+    }
+
     return newServerUrl;
+  }
+
+  @override
+  FutureOr<HttpClientAdapter?> loadHttpClientAdapter() async {
+    final secureStorage = container.read(secureStorageProvider);
+    final certBytes = await secureStorage.readBytes(key: _serverCertKey);
+    if (certBytes == null) {
+      return null;
+    }
+
+    return const HttpClientAdapterFactory().create(certBytes);
   }
 
   @override

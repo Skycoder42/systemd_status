@@ -5,7 +5,7 @@ import 'package:sentry_dio/sentry_dio.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../app/auth/auth_interceptor.dart';
-import '../startup/startup_controller.dart';
+import '../startup/common/startup_controller.dart';
 
 part 'api_provider.g.dart';
 
@@ -18,12 +18,17 @@ Dio dioClient(DioClientRef ref) {
       connectTimeout: const Duration(seconds: 30),
     ),
   )..interceptors.add(ref.watch(authInterceptorProvider));
-  ref.onDispose(() => client.close(force: true));
+
+  final httpClientAdapter = ref.watch(httpClientAdapterProvider);
+  if (httpClientAdapter != null) {
+    client.httpClientAdapter = httpClientAdapter;
+  }
 
   if (Sentry.isEnabled) {
     client.addSentry();
   }
 
+  ref.onDispose(() => client.close(force: true));
   return client;
 }
 

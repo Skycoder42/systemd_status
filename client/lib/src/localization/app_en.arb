@@ -4,6 +4,8 @@
   "google_auth_failed": "Authentication via Google Account failed. Try another method.",
   "setup_page_title": "Systemd Status — Setup",
   "setup_page_server_url_label": "Server-URL",
+  "setup_page_server_cert_label": "Server-Certificate",
+  "setup_page_server_cert_pick_title": "Choose a server certificate",
   "setup_page_save_button_text": "Save",
   "setup_page_config_invalid": "Persisted server configuration is invalid. Please enter it again.",
   "setup_page_configure_failed": "Failed to connect to Systemd Status server. Please make sure it is running and reachable for your network.\n\nHttp Status Code: {statusCode}\n\nError Message: {errorMessage}",

@@ -1,3 +1,5 @@
 test-config.yaml
 *.xdb
+*.crt
+*.pem
 *.pfx

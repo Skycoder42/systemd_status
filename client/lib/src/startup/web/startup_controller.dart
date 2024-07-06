@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
 import 'package:systemd_status_server/api.dart';
 import 'package:web/web.dart';
 
@@ -11,6 +14,9 @@ final class StartupController extends StartupControllerBase {
 
   @override
   Uri loadServerUrl() => Uri.parse(_serverUrl ?? window.location.origin);
+
+  @override
+  HttpClientAdapter? loadHttpClientAdapter() => null;
 
   @override
   Future<ClientConfig> loadClientConfig() async =>
