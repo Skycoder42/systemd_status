@@ -29,19 +29,19 @@ modules:
       - /share/man
       - share/man
 
-      - /app/share/man/
-      - /share/man/
-      - share/man/
+      # - /app/share/man/
+      # - /share/man/
+      # - share/man/
 
-      - /app/share/man/*
-      - /share/man/*
-      - share/man/*
+      # - /app/share/man/*
+      # - /share/man/*
+      # - share/man/*
 
-      - /app/share/man/**
-      - /share/man/**
-      - share/man/**
+      # - /app/share/man/**
+      # - /share/man/**
+      # - share/man/**
 
-      - /share/help/
+      - share/help
   - name: systemd_status_client
     buildsystem: simple
     only-arches:
