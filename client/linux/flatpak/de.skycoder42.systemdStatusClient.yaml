@@ -26,22 +26,7 @@ modules:
         sha256: c16dcae46e29e22c2fa0b95e80e06c96b2aec93840161369c95c85ed9f093153
     cleanup:
       - /app/share/man
-      - /share/man
-      - share/man
-
-      # - /app/share/man/
-      # - /share/man/
-      # - share/man/
-
-      # - /app/share/man/*
-      # - /share/man/*
-      # - share/man/*
-
-      # - /app/share/man/**
-      # - /share/man/**
-      # - share/man/**
-
-      - share/help
+      - /share/help
   - name: systemd_status_client
     buildsystem: simple
     only-arches:
