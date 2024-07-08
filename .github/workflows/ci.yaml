@@ -52,6 +52,20 @@ jobs:
       buildRunner: true
       unitTestPaths: ""
 
+  client_build_android:
+    name: Client - Build android bundle
+    needs:
+      - server_package
+      - client_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/build-android.yml@main
+    with:
+      workingDirectory: client
+      artifactDependencies: systemd_status_server
+      buildRunner: true
+    secrets:
+      keystore: ${{ secrets.KEYSTORE }}
+      keystorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+
   client_build_linux:
     name: Client - Build flatpak bundles
     needs:
@@ -108,6 +122,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
     needs:
       - client_ci
+      - client_build_android
       - client_build_linux
       - client_build_windows
       - client_build_macos
@@ -123,6 +138,7 @@ jobs:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
       targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
+      googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
 
   server_deploy:
     name: Server - Deploy
