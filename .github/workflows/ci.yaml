@@ -133,11 +133,18 @@ jobs:
       enabledPlatforms: ${{ needs.client_ci.outputs.enabledPlatforms }}
       workingDirectory: client
       tagPrefix: client/v
+      # homebrew
       targetRepo: Skycoder42/homebrew-systemd_status
+      # google play
+      googlePlayTrack: internal
+      googlePlayReleaseStatus: draft
     secrets:
+      # flatpak
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
+      # homebrew
       targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
+      # google play
       googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
 
   server_deploy:
