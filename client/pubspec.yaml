@@ -84,6 +84,7 @@ msix_config:
   publisher: CN=E6ED0CED-8505-45BA-AA8A-1C0D6BCB2B76
   publisher_display_name: Skycoder42
   identity_name: Skycoder42.SystemdStatus
+  msstore_appId: 9ND8GH0W45WT
   display_name: Systemd Status
   logo_path: windows/runner/resources/app_icon.ico
   capabilities: internetClient
