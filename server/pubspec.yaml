@@ -57,8 +57,8 @@ aur:
   binariesArchivePrefix: systemd-status-server
   sourcesDir: systemd_status-server-v$pkgver/server
   extraSources:
-    - name: Systemd.Status.Web-0.2.6.tar.xz
-      url: https://github.com/Skycoder42/systemd_status/releases/download/client%2Fv0.2.6/Systemd.Status.Web.tar.xz
+    - name: Systemd.Status.Web-0.2.7.tar.xz
+      url: https://github.com/Skycoder42/systemd_status/releases/download/client%2Fv0.2.7/Systemd.Status.Web.tar.xz
   files:
     - source: tool/package-config.yaml
       target: /etc/systemd-status-server.yaml
