@@ -138,6 +138,9 @@ jobs:
       # google play
       googlePlayTrack: internal
       googlePlayReleaseStatus: draft
+      # msstore
+      isDraft: true
+      flightId: '1152921505698063777'
     secrets:
       # flatpak
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
@@ -146,6 +149,11 @@ jobs:
       targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
       # google play
       googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
+      # msstore
+      tenantId: ${{ secrets.TENANT_ID }}
+      sellerId: ${{ secrets.SELLER_ID }}
+      clientId: ${{ secrets.CLIENT_ID }}
+      clientSecret: ${{ secrets.CLIENT_SECRET }}
 
   server_deploy:
     name: Server - Deploy
