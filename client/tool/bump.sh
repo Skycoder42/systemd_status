@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
-# cider bump "$@"
-# cider release
+cider bump "$@"
+cider release
 
 version=$(yq '.version' pubspec.yaml)
 
