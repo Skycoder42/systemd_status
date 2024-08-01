@@ -136,8 +136,7 @@ jobs:
       # homebrew
       targetRepo: Skycoder42/homebrew-systemd_status
       # google play
-      googlePlayTrack: internal
-      googlePlayReleaseStatus: draft
+      googlePlayTrack: alpha
       # msstore
       isDraft: true
       flightId: '1152921505698063777'
