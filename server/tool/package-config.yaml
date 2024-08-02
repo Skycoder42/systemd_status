@@ -7,3 +7,6 @@ firebase:
   projectId: PLACEHOLDER
   apiKey: PLACEHOLDER
   users: []
+tls:
+  pfxPath: PLACEHOLDER
+  pfxPassphrase: null

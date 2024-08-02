@@ -138,8 +138,7 @@ jobs:
       # google play
       googlePlayTrack: alpha
       # msstore
-      isDraft: true
-      flightId: '1152921505698063777'
+      flightId: 6783f678-f43f-4a6f-ba0c-2fc273a37d5a
     secrets:
       # flatpak
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.9] - 2024-08-02
+### Changed
+- Fix windows deployment
+
 ## [0.2.8] - 2024-08-01
 ### Changed
 - Updated dependencies
@@ -68,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
+[0.2.9]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.2.8...v0.2.9
 [0.2.8]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.2.7...v0.2.8
 [0.2.7]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.2.6...v0.2.7
 [0.2.6]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.2.5...v0.2.6
