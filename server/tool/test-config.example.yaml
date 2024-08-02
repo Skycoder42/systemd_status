@@ -3,3 +3,5 @@ app:
 firebase:
   projectId: PLACEHOLDER
   apiKey: PLACEHOLDER
+tls:
+  pfxPath: PLACEHOLDER

@@ -26,7 +26,7 @@ class AsyncAction extends StatefulWidget {
   });
 
   @override
-  State<AsyncAction> createState() => _AsyncActionState();
+  State<AsyncAction> createState() => AsyncActionState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -45,10 +45,19 @@ class AsyncAction extends StatefulWidget {
   }
 }
 
-class _AsyncActionState extends State<AsyncAction> {
+class AsyncActionState extends State<AsyncAction> {
   bool _isRunning = false;
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
       _snackbarController;
+
+  bool triggerAction() {
+    if (!widget.enabled || _isRunning) {
+      return false;
+    }
+
+    unawaited(_onAction());
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) => Row(

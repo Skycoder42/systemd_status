@@ -30,8 +30,10 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final _submitKey = GlobalKey<AsyncActionState>();
   final _logger = Logger('LoginPage');
 
+  bool _isValid = false;
   String? _savedEmail;
   String? _savedPassword;
 
@@ -47,7 +49,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ),
         body: Form(
           key: _formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          onChanged: _updateValidState,
           child: ScrollableExpandedBox(
             child: SafeArea(
               top: false,
@@ -88,13 +90,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       autofocus: true,
                       validator: FormBuilderValidators.required(),
                       onSaved: (newValue) => _savedPassword = newValue,
+                      onFieldSubmitted: (_) =>
+                          _submitKey.currentState?.triggerAction(),
                     ),
                     const SizedBox(height: 16),
                     AsyncAction(
+                      key: _submitKey,
+                      enabled: _isValid,
                       onAction: _submit,
                       onError: _onError,
                       builder: (onAction) => FilledButton.icon(
-                        icon: const Icon(Icons.save),
+                        icon: const Icon(Icons.login),
                         label:
                             Text(context.strings.login_page_login_button_text),
                         onPressed: onAction,
@@ -107,6 +113,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
         ),
       );
+
+  void _updateValidState() {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    setState(() {
+      _isValid = isValid;
+    });
+  }
 
   Future<void> _submit() async {
     _savedEmail = null;
