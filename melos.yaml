@@ -10,8 +10,8 @@ scripts:
     dart pub global run melos exec --flutter -- flutter pub get
 
   upgrade: >-
-    dart pub global run melos exec --no-flutter -- dart pub upgrade --major-versions &&
-    dart pub global run melos exec --flutter -- flutter pub upgrade --major-versions
+    dart pub global run melos exec --no-flutter -- dart pub upgrade --major-versions --tighten &&
+    dart pub global run melos exec --flutter -- flutter pub upgrade --major-versions --tighten
 
   build:
     run: dart run build_runner build
