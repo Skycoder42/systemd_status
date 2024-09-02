@@ -10,6 +10,7 @@ class _EnforceTlsMiddleware {
   final bool enabled;
   final _logger = Logger('EnforceTlsMiddleware');
 
+  // ignore: avoid_positional_boolean_parameters
   _EnforceTlsMiddleware(this.enabled);
 
   Handler call(Handler next) => (request) {

@@ -1,7 +1,7 @@
 name: systemd_status_melos
 
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.5.0
 
 dependencies:
   melos:
