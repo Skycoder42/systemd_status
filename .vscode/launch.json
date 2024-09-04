@@ -44,6 +44,18 @@
         "${workspaceFolder}/server/tool/systemd-docker/systemctl-docker.sh"
       ],
       "preLaunchTask": "Start systemd container"
+    },
+    {
+      "name": "server (local systemd)",
+      "cwd": "server",
+      "request": "launch",
+      "type": "dart",
+      "program": "bin/server.dart",
+      "args": [
+        "-Lall",
+        "--config",
+        "${workspaceFolder}/server/tool/test-config.yaml",
+      ]
     }
   ]
 }
