@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_server/api.dart';
 
+import '../../models/state_group.dart';
 import '../../providers/api_provider.dart';
 import 'widgets/unit_card.dart';
 
@@ -10,7 +11,9 @@ part 'units_page.g.dart';
 
 @riverpod
 Future<List<UnitInfo>> units(UnitsRef ref) async {
-  final units = await ref.watch(systemdStatusApiClientProvider).unitsList();
+  final units =
+      await ref.watch(systemdStatusApiClientProvider).unitsList(all: true);
+  units.sort((lhs, rhs) => lhs.compareTo(rhs) * -1);
   ref.keepAlive();
   return units;
 }

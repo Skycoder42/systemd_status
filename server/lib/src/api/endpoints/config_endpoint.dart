@@ -8,13 +8,11 @@ class ConfigEndpoint extends ShelfEndpoint {
   ConfigEndpoint(super.request);
 
   @Get('/')
-  TResponse<ClientConfig> get() {
+  ClientConfig get() {
     final config = ref.read(serverConfigProvider);
-    return TResponse.ok(
-      ClientConfig(
-        firebaseApiKey: config.firebase.apiKey,
-        sentryDsn: config.app.sentryDsn,
-      ),
+    return ClientConfig(
+      firebaseApiKey: config.firebase.apiKey,
+      sentryDsn: config.app.sentryDsn,
     );
   }
 }

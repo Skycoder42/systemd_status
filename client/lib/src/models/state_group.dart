@@ -4,9 +4,9 @@ import 'package:systemd_status_server/api.dart';
 import '../app/theme.dart';
 
 enum StateGroup implements Comparable<StateGroup> {
+  inactive,
   success,
   special,
-  inactive,
   failure,
   transition;
 
@@ -24,7 +24,7 @@ enum StateGroup implements Comparable<StateGroup> {
 
 extension LoadStateGroupX on LoadState {
   StateGroup get group => switch (this) {
-        StubLoadState() => StateGroup.special,
+        StubLoadState() => StateGroup.success,
         LoadedLoadState() => StateGroup.success,
         NotFoundLoadState() => StateGroup.failure,
         BadSettingLoadState() => StateGroup.failure,
@@ -49,5 +49,25 @@ extension ActiveStateGroupX on ActiveState {
 }
 
 extension UnitInfoStateGroupX on UnitInfo {
-  StateGroup get group => ([loadState.group, activeState.group]..sort()).last;
+  StateGroup get group => loadState.group != StateGroup.success
+      ? loadState.group
+      : activeState.group;
+
+  int compareTo(UnitInfo other) {
+    if (group.compareTo(other.group) case final result when result != 0) {
+      return result;
+    }
+
+    if (loadState.group.compareTo(other.loadState.group) case final result
+        when result != 0) {
+      return result;
+    }
+
+    if (activeState.group.compareTo(other.activeState.group) case final result
+        when result != 0) {
+      return result;
+    }
+
+    return name.compareTo(other.name);
+  }
 }
