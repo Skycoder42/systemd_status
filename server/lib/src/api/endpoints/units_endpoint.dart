@@ -23,11 +23,11 @@ class UnitsEndpoint extends ShelfEndpoint {
   @Get('/<unit>/logs')
   Future<List<JournalEntry>> log(
     String unit, {
+    int count = 50,
     String? offset,
-    int? count,
   }) async {
-    if (count != null && (count < 1 || count > 500)) {
-      throw const FormatException('count must be in range [1, 500]');
+    if (count < 1 || count > 100) {
+      throw const FormatException('count must be in range [1, 100]');
     }
 
     final journalctlService = ref.read(journalctlServiceProvider);

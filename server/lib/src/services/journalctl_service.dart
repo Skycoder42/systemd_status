@@ -22,14 +22,14 @@ class JournalctlService {
 
   Stream<JournalEntry> streamJournal(
     String unit, {
+    required int count,
     String? offset,
-    int? count,
   }) =>
       _journalctlJson(
         [
           '--unit=$unit',
           '--reverse',
-          '--lines=${count ?? 100}',
+          '--lines=$count',
           '--no-pager',
           '--boot=all',
           // ignore: lines_longer_than_80_chars
