@@ -1,15 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_server/api.dart';
 
-import '../../extensions/flutter_x.dart';
-import '../../localization/localization.dart';
 import '../../models/state_group.dart';
 import '../../providers/api_provider.dart';
-import 'widgets/filter_button.dart';
 import 'widgets/unit_card.dart';
+import 'widgets/units_app_bar.dart';
 
 part 'units_page.g.dart';
 
@@ -38,38 +35,15 @@ class _UnitsPageState extends ConsumerState<UnitsPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(context.strings.units_page_title),
-          actions: [
-            FilterButton(
-              onFilterUpdated: (value) => setState(() => _filter = value),
-              suggestionsBuilder: (context) async {
-                final units = await ref.read(unitsProvider(_showAll).future);
-                return units.map((u) => u.name);
-              },
-            ),
-            PopupMenuButton(
-              itemBuilder: (context) => <PopupMenuEntry>[
-                CheckedPopupMenuItem(
-                  checked: _showAll,
-                  onTap: () => setState(() => _showAll = !_showAll),
-                  child: Text(
-                    context.strings.units_page_display_all_action,
-                  ),
-                ),
-                if (defaultTargetPlatform.isDesktop) ...[
-                  const PopupMenuDivider(),
-                  PopupMenuItem(
-                    child: Text(
-                      context.strings.units_page_reload_action,
-                    ),
-                    onTap: () async =>
-                        _refreshIndicatorKey.currentState?.show(),
-                  ),
-                ],
-              ],
-            ),
-          ],
+        appBar: UnitsAppBar(
+          showAll: _showAll,
+          onToggleShowAll: () => setState(() => _showAll = !_showAll),
+          onRefresh: () async => _refreshIndicatorKey.currentState?.show(),
+          onFilterUpdated: (value) => setState(() => _filter = value),
+          suggestionsBuilder: (context) async {
+            final units = await ref.read(unitsProvider(_showAll).future);
+            return units.map((u) => u.name);
+          },
         ),
         body: RefreshIndicator(
           key: _refreshIndicatorKey,

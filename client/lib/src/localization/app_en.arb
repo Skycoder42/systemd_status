@@ -2,6 +2,9 @@
   "@@locale": "en",
   "app_name": "Systemd Status",
   "google_auth_failed": "Authentication via Google Account failed. Try another method.",
+  "cancel": "Cancel",
+  "logout": "Logout",
+  "reset": "Reset",
   "setup_page_title": "Systemd Status — Setup",
   "setup_page_server_url_label": "Server-URL",
   "setup_page_server_cert_label": "Server-Certificate",
@@ -24,6 +27,8 @@
   "login_page_password_label": "Password",
   "login_page_login_button_text": "Login",
   "login_page_login_failed": "Login failed!",
+  "logout_dialog_logout_hint": "Do you want to log out of your account?",
+  "logout_dialog_reset_hint": "You can also reset the app if you want to change the connected server or certificate.\nThis will exit the app after successfully resetting it!",
   "units_page_title": "Units",
   "units_page_display_all_action": "Display all units",
   "units_page_reload_action": "Reload"

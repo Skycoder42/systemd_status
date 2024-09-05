@@ -6,8 +6,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../pages/login/login_page.dart';
+import '../pages/login/logout_dialog.dart';
 import '../pages/units/units_page.dart';
 import 'auth/account_manager_provider.dart';
+import 'pages/dialog_page.dart';
 
 part 'router.g.dart';
 
@@ -101,4 +103,17 @@ class LoginRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       LoginPage(redirectTo: redirectTo);
+}
+
+@TypedGoRoute<LogoutRoute>(path: '/logout')
+@immutable
+class LogoutRoute extends GoRouteData {
+  const LogoutRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) => DialogPage(
+        state: state,
+        barrierDismissible: false,
+        builder: (context) => const LogoutDialog(),
+      );
 }
