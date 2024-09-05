@@ -5,6 +5,16 @@
   "cancel": "Cancel",
   "logout": "Logout",
   "reset": "Reset",
+  "short_date_time": "{dateTime}",
+  "@short_date_time": {
+    "placeholders": {
+      "dateTime": {
+        "type": "DateTime",
+        "isCustomDateFormat": "true",
+        "format": "dd.MM.yyyy HH:mm"
+      }
+    }
+  },
   "setup_page_title": "Systemd Status — Setup",
   "setup_page_server_url_label": "Server-URL",
   "setup_page_server_cert_label": "Server-Certificate",
@@ -31,5 +41,13 @@
   "logout_dialog_reset_hint": "You can also reset the app if you want to change the connected server or certificate.\nThis will exit the app after successfully resetting it!",
   "units_page_title": "Units",
   "units_page_display_all_action": "Display all units",
-  "units_page_reload_action": "Reload"
+  "units_page_reload_action": "Reload",
+  "logs_page_title": "Logs for {unitName}",
+  "@logs_page_title": {
+    "placeholders": {
+      "unitName": {
+        "type": "String"
+      }
+    }
+  }
 }

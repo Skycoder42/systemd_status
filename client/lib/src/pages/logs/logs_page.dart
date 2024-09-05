@@ -1,13 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:logging/logging.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../extensions/flutter_x.dart';
+import '../../localization/localization.dart';
 import '../../providers/api_provider.dart';
 import 'widgets/log_priority_extensions.dart';
+import 'widgets/timestamp_text.dart';
 
 class LogsPage extends ConsumerStatefulWidget {
   final String unitName;
@@ -28,7 +31,7 @@ class LogsPage extends ConsumerStatefulWidget {
 }
 
 class _LogsPageState extends ConsumerState<LogsPage> {
-  static const _pageSize = 100; // TODO make dynamic?
+  static const _pageSize = 100;
 
   final _logger = Logger('LogsPage');
 
@@ -76,7 +79,7 @@ class _LogsPageState extends ConsumerState<LogsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Logs for ${widget.unitName}'),
+          title: Text(context.strings.logs_page_title(widget.unitName)),
         ),
         body: RefreshIndicator(
           onRefresh: () async => _pagingController.refresh(),
@@ -90,15 +93,16 @@ class _LogsPageState extends ConsumerState<LogsPage> {
                   item.message,
                   style: TextStyle(
                     color: item.priority.color,
+                    fontWeight: item.priority.fontWeight,
                   ),
                 ),
                 subtitle: defaultTargetPlatform.isMobile
-                    ? Text(item.timeStamp.toString())
+                    ? TimestampText(item.timeStamp)
                     : null,
                 trailing: defaultTargetPlatform.isDesktop
-                    ? Text(item.timeStamp.toString())
+                    ? TimestampText(item.timeStamp)
                     : null,
-                onTap: () {},
+                onTap: () async => _onTap(item),
                 dense: true,
               ),
             ),
@@ -120,4 +124,21 @@ class _LogsPageState extends ConsumerState<LogsPage> {
           ),
         ),
       );
+
+  Future<void> _onTap(JournalEntry entry) async {
+    final messenger = ScaffoldMessenger.of(context);
+
+    await Clipboard.setData(ClipboardData(text: entry.message));
+
+    if (messenger.mounted) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text('Copied to clipboard!'),
+          ),
+        );
+    }
+  }
 }
