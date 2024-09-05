@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:systemd_status_server/api.dart';
 
+import '../../../app/router.dart';
 import '../../../app/theme.dart';
 import '../../../models/state_group.dart';
 import 'state_icon.dart';
@@ -15,61 +16,64 @@ class UnitCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Card(
-        surfaceTintColor: unit.group.color(context) ?? Colors.transparent,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  StateIcon(unit: unit),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      unit.name,
-                      style: context.theme.textTheme.titleLarge,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () => LogsRoute(unit.name).go(context),
+        child: Card(
+          surfaceTintColor: unit.group.color(context) ?? Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    StateIcon(unit: unit),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        unit.name,
+                        style: context.theme.textTheme.titleLarge,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                if (unit.description case final String description) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    description,
+                    style: context.theme.textTheme.bodySmall!.copyWith(
+                      fontStyle: FontStyle.italic,
                     ),
                   ),
                 ],
-              ),
-              if (unit.description case final String description) ...[
                 const SizedBox(height: 8),
-                Text(
-                  description,
-                  style: context.theme.textTheme.bodySmall!.copyWith(
-                    fontStyle: FontStyle.italic,
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      unit.loadState.name,
+                      style: TextStyle(
+                        color: unit.loadState.group.color(context),
+                      ),
+                    ),
+                    const VerticalDivider(thickness: 2),
+                    Text(
+                      unit.activeState.name,
+                      style: TextStyle(
+                        color: unit.activeState.group.color(context),
+                      ),
+                    ),
+                    const VerticalDivider(thickness: 2),
+                    Text(unit.subState),
+                  ],
                 ),
               ],
-              const SizedBox(height: 8),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    unit.loadState.name,
-                    style: TextStyle(
-                      color: unit.loadState.group.color(context),
-                    ),
-                  ),
-                  const VerticalDivider(thickness: 2),
-                  Text(
-                    unit.activeState.name,
-                    style: TextStyle(
-                      color: unit.activeState.group.color(context),
-                    ),
-                  ),
-                  const VerticalDivider(thickness: 2),
-                  Text(unit.subState),
-                ],
-              ),
-            ],
+            ),
           ),
         ),
       );

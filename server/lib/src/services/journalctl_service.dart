@@ -1,0 +1,68 @@
+import 'package:posix/posix.dart' as posix;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../api/models/journal_entry.dart';
+import '../config/options.dart';
+import 'process_runner.dart';
+
+part 'journalctl_service.g.dart';
+
+@riverpod
+JournalctlService journalctlService(JournalctlServiceRef ref) =>
+    JournalctlService(
+      ref.watch(optionsProvider),
+      ref.watch(processRunnerProvider),
+    );
+
+class JournalctlService {
+  final Options _options;
+  final ProcessRunner _processRunner;
+
+  JournalctlService(this._options, this._processRunner);
+
+  Stream<JournalEntry> streamJournal(
+    String unit, {
+    String? offset,
+    int? count,
+  }) =>
+      _journalctlJson(
+        [
+          '--unit=$unit',
+          '--reverse',
+          '--lines=${count ?? 100}',
+          '--no-pager',
+          '--boot=all',
+          // ignore: lines_longer_than_80_chars
+          '--output-fields=PRIORITY,MESSAGE,_SOURCE_REALTIME_TIMESTAMP,__REALTIME_TIMESTAMP,__CURSOR,_BOOT_ID',
+          if (offset case final String curser) '--after-cursor=$curser',
+        ],
+        fromJson: JournalEntry.fromJson,
+      );
+
+  Stream<TData> _journalctlJson<TJson, TData>(
+    List<String> args, {
+    required TData Function(TJson) fromJson,
+    int? expectedExitCode = 0,
+  }) =>
+      _processRunner.streamJson(
+        _journalctlBinary,
+        [
+          if (_runAsUser) '--user',
+          ...args,
+          '--output=json',
+        ],
+        fromJson: fromJson,
+        expectedExitCode: expectedExitCode,
+      );
+
+  String get _journalctlBinary =>
+      _options.debugOverwriteJournalctl ?? 'journalctl';
+
+  bool get _runAsUser {
+    if (_options.debugOverwriteSystemctl != null) {
+      return false;
+    }
+
+    return posix.geteuid() != 0;
+  }
+}

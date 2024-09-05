@@ -71,6 +71,12 @@ class Options {
   final String? debugOverwriteSystemctl;
 
   @CliOption(
+    name: 'debug-overwrite-journalctl',
+    hide: true,
+  )
+  final String? debugOverwriteJournalctl;
+
+  @CliOption(
     abbr: 'h',
     negatable: false,
     defaultsTo: false,
@@ -84,6 +90,7 @@ class Options {
     required this.config,
     required this.logLevel,
     this.debugOverwriteSystemctl,
+    this.debugOverwriteJournalctl,
     this.help = false,
   });
 

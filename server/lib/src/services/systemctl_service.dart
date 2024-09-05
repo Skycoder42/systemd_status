@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:logging/logging.dart';
 import 'package:posix/posix.dart' as posix;
@@ -8,36 +6,23 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/models/unit_info.dart';
 import '../config/options.dart';
+import 'process_runner.dart';
 
 part 'systemctl_service.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 SystemctlService systemctlService(SystemctlServiceRef ref) => SystemctlService(
       ref.watch(optionsProvider),
+      ref.watch(processRunnerProvider),
     );
-
-class InvalidExitCode implements Exception {
-  final List<String> arguments;
-  final int expectedExitCode;
-  final int actualExitCode;
-
-  InvalidExitCode({
-    required this.arguments,
-    required this.expectedExitCode,
-    required this.actualExitCode,
-  });
-
-  @override
-  String toString() => 'Command "systemctl ${arguments.join(' ')}" failed '
-      'with exit code $actualExitCode. (Expected $expectedExitCode)';
-}
 
 class SystemctlService {
   final Options _options;
+  final ProcessRunner _processRunner;
 
   final _logger = Logger('SystemctlService');
 
-  SystemctlService(this._options);
+  SystemctlService(this._options, this._processRunner);
 
   Future<List<UnitInfo>> listUnits({bool all = false}) async {
     _logger.fine('Calling listUnits');
@@ -57,49 +42,19 @@ class SystemctlService {
     List<String> args, {
     required TData Function(TJson) fromJson,
     int? expectedExitCode = 0,
-  }) =>
-      _systemctlLines([...args, '-ojson'], expectedExitCode: expectedExitCode)
-          .transform(json.decoder)
-          .cast<TJson>()
-          .map(fromJson)
+  }) async =>
+      await _processRunner
+          .streamJson(
+            _systemctlBinary,
+            [
+              if (_runAsUser) '--user',
+              ...args,
+              '--output=json',
+            ],
+            fromJson: fromJson,
+            expectedExitCode: expectedExitCode,
+          )
           .single;
-
-  Stream<String> _systemctlLines(
-    List<String> args, {
-    int? expectedExitCode = 0,
-  }) async* {
-    _logger.fine('Invoking systemctl ${args.join(' ')}');
-    final process = await Process.start(
-      _systemctlBinary,
-      [
-        if (_runAsUser) '--user',
-        ...args,
-      ],
-    );
-
-    final stderrSub = process.stderr
-        .transform(systemEncoding.decoder)
-        .transform(const LineSplitter())
-        .listen(stderr.writeln);
-
-    try {
-      yield* process.stdout
-          .transform(systemEncoding.decoder)
-          .transform(const LineSplitter());
-
-      final exitCode = await process.exitCode;
-      _logger.fine('Finished with exit code $exitCode');
-      if (expectedExitCode != null && exitCode != expectedExitCode) {
-        throw InvalidExitCode(
-          arguments: args,
-          expectedExitCode: expectedExitCode,
-          actualExitCode: exitCode,
-        );
-      }
-    } finally {
-      await stderrSub.cancel();
-    }
-  }
 
   String get _systemctlBinary =>
       _options.debugOverwriteSystemctl ?? 'systemctl';
