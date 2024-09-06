@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:systemd_status_server/api.dart';
 
 extension LogPriorityX on LogPriority {
-  FontWeight? get fontWeight => switch (this) {
+  TextStyle get style => TextStyle(
+        color: _color,
+        fontWeight: _fontWeight,
+      );
+
+  FontWeight? get _fontWeight => switch (this) {
         LogPriority.emergency => FontWeight.w900,
         LogPriority.alert => FontWeight.w800,
         LogPriority.critical => FontWeight.bold,
@@ -12,7 +17,7 @@ extension LogPriorityX on LogPriority {
         _ => null,
       };
 
-  Color? get color => switch (this) {
+  Color? get _color => switch (this) {
         LogPriority.emergency => Colors.red.shade900,
         LogPriority.alert => Colors.red.shade800,
         LogPriority.critical => Colors.red.shade700,

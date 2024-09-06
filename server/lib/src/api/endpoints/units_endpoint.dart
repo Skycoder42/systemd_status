@@ -5,6 +5,7 @@ import '../../services/journalctl_service.dart';
 import '../../services/systemctl_service.dart';
 import '../../services/unit_filter.dart';
 import '../models/journal_entry.dart';
+import '../models/log_priority.dart';
 import '../models/unit_info.dart';
 
 @ApiEndpoint('/units', middleware: firebaseAuth)
@@ -23,6 +24,8 @@ class UnitsEndpoint extends ShelfEndpoint {
   @Get('/<unit>/logs')
   Future<List<JournalEntry>> log(
     String unit, {
+    @QueryParam(parse: LogPriority.parse, stringify: LogPriority.stringify)
+    LogPriority? priority,
     int count = 50,
     String? offset,
   }) async {
@@ -34,6 +37,7 @@ class UnitsEndpoint extends ShelfEndpoint {
     final logs = await journalctlService
         .streamJournal(
           unit,
+          priority: priority,
           offset: offset,
           count: count,
         )

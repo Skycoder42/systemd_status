@@ -2,14 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide SuggestionsBuilder;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app/router.dart';
-import '../../../extensions/flutter_x.dart';
 import '../../../localization/localization.dart';
+import '../../../widgets/content_app_bar.dart';
 import 'filter_button.dart';
 
 class UnitsAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final bool showAll;
-  final VoidCallback onToggleShowAll;
+  final ValueChanged<bool?> onToggleShowAll;
   final VoidCallback onRefresh;
   final ValueSetter<String> onFilterUpdated;
   final SuggestionsBuilder suggestionsBuilder;
@@ -24,40 +23,23 @@ class UnitsAppBar extends ConsumerWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => ContentAppBar.defaultSize;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => AppBar(
-        title: Text(context.strings.units_page_title),
+  Widget build(BuildContext context, WidgetRef ref) => ContentAppBar(
+        title: context.strings.units_page_title,
+        onRefresh: onRefresh,
         actions: [
           FilterButton(
             onFilterUpdated: onFilterUpdated,
             suggestionsBuilder: suggestionsBuilder,
           ),
-          PopupMenuButton(
-            itemBuilder: (context) => <PopupMenuEntry>[
-              CheckedPopupMenuItem(
-                checked: showAll,
-                onTap: onToggleShowAll,
-                child: Text(
-                  context.strings.units_page_display_all_action,
-                ),
-              ),
-              if (defaultTargetPlatform.isDesktop)
-                PopupMenuItem(
-                  onTap: onRefresh,
-                  child: Text(
-                    context.strings.units_page_reload_action,
-                  ),
-                ),
-              const PopupMenuDivider(),
-              PopupMenuItem(
-                onTap: () async => const LogoutRoute().push(context),
-                child: Text(
-                  context.strings.logout,
-                ),
-              ),
-            ],
+        ],
+        menuItems: [
+          CheckboxMenuButton(
+            value: showAll,
+            onChanged: onToggleShowAll,
+            child: Text(context.strings.units_page_display_all_action),
           ),
         ],
       );
@@ -68,7 +50,7 @@ class UnitsAppBar extends ConsumerWidget implements PreferredSizeWidget {
     properties
       ..add(DiagnosticsProperty<bool>('showAll', showAll))
       ..add(
-        ObjectFlagProperty<VoidCallback>.has(
+        ObjectFlagProperty<ValueChanged<bool?>>.has(
           'onToggleShowAll',
           onToggleShowAll,
         ),

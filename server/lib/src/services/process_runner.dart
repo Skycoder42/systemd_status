@@ -46,7 +46,7 @@ class ProcessRunner {
     List<String> args, {
     int? expectedExitCode = 0,
   }) async* {
-    _logger.fine('Invoking systemctl ${args.join(' ')}');
+    _logger.fine('Invoking $binary ${args.join(' ')}');
     final process = await Process.start(binary, args);
 
     final stderrSub = process.stderr

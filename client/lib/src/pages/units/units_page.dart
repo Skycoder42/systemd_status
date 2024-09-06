@@ -37,7 +37,7 @@ class _UnitsPageState extends ConsumerState<UnitsPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: UnitsAppBar(
           showAll: _showAll,
-          onToggleShowAll: () => setState(() => _showAll = !_showAll),
+          onToggleShowAll: (value) => setState(() => _showAll = value ?? false),
           onRefresh: () async => _refreshIndicatorKey.currentState?.show(),
           onFilterUpdated: (value) => setState(() => _filter = value),
           suggestionsBuilder: (context) async {

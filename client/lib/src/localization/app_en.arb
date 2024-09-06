@@ -15,6 +15,14 @@
       }
     }
   },
+  "log_priority": "{priority, select, emergency{Emergency} alert{Alert} critical{Critical} error{Error} warning{Warning} notice{Notice} informational{Informational} debug{Debug} other{{priority}}}",
+  "@log_priority": {
+    "placeholders": {
+      "priority": {
+        "type": "String"
+      }
+    }
+  },
   "setup_page_title": "Systemd Status — Setup",
   "setup_page_server_url_label": "Server-URL",
   "setup_page_server_cert_label": "Server-Certificate",
@@ -49,5 +57,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "logs_page_priority_button": "Priority",
+  "logs_page_copied_to_clipboard": "Copied line!"
 }

@@ -1,16 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:logging/logging.dart';
 import 'package:systemd_status_server/api.dart';
 
-import '../../extensions/flutter_x.dart';
-import '../../localization/localization.dart';
-import '../../providers/api_provider.dart';
-import 'widgets/log_priority_extensions.dart';
-import 'widgets/timestamp_text.dart';
+import 'controllers/logs_controller.dart';
+import 'widgets/log_item.dart';
+import 'widgets/logs_app_bar.dart';
 
 class LogsPage extends ConsumerStatefulWidget {
   final String unitName;
@@ -31,114 +29,87 @@ class LogsPage extends ConsumerStatefulWidget {
 }
 
 class _LogsPageState extends ConsumerState<LogsPage> {
-  static const _pageSize = 100;
-
-  final _logger = Logger('LogsPage');
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   late final PagingController<String?, JournalEntry> _pagingController;
+  late ProviderSubscription<PagingState<String?, JournalEntry>> _sub;
+
+  LogPriority? _logPriority;
+
+  LogsQuery get _query =>
+      (unitName: widget.unitName, logPriority: _logPriority);
 
   @override
   void initState() {
     super.initState();
+
     _pagingController = PagingController(firstPageKey: null)
       ..addPageRequestListener(_loadPage);
+
+    _sub = ref.listenManual(
+      logsControllerProvider(_query),
+      (_, next) => _pagingController.value = next,
+      fireImmediately: true,
+    );
   }
 
   @override
   void dispose() {
+    _sub.close();
     _pagingController.dispose();
     super.dispose();
   }
 
-  Future<void> _loadPage(String? offset) async {
-    try {
-      final api = ref.read(systemdStatusApiClientProvider);
-      final newItems = await api.unitsLog(
-        widget.unitName,
-        offset: offset,
-        count: _pageSize,
-      );
-
-      final isLastPage = newItems.length < _pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        final nextPageKey = newItems.last.cursor;
-        _pagingController.appendPage(newItems, nextPageKey);
-      }
-    } on Exception catch (e, s) {
-      _logger.severe(
-        'Failed to load logs for ${widget.unitName} with offset: $offset',
-        e,
-        s,
-      );
-      _pagingController.error = e;
-    }
-  }
-
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(context.strings.logs_page_title(widget.unitName)),
+        appBar: LogsAppBar(
+          unitName: widget.unitName,
+          onRefresh: () async => _refreshIndicatorKey.currentState?.show(),
+          logPriority: _logPriority,
+          onLogPriorityChanged: (value) => _updatePriority(
+            _logPriority = value == _logPriority ? null : value,
+          ),
         ),
         body: RefreshIndicator(
-          onRefresh: () async => _pagingController.refresh(),
+          key: _refreshIndicatorKey,
+          onRefresh: () async => ref.invalidate(logsControllerProvider(_query)),
           child: PagedListView<String?, JournalEntry>.separated(
             pagingController: _pagingController,
             primary: true,
             reverse: true,
             builderDelegate: PagedChildBuilderDelegate<JournalEntry>(
-              itemBuilder: (context, item, index) => ListTile(
-                title: Text(
-                  item.message,
-                  style: TextStyle(
-                    color: item.priority.color,
-                    fontWeight: item.priority.fontWeight,
-                  ),
-                ),
-                subtitle: defaultTargetPlatform.isMobile
-                    ? TimestampText(item.timeStamp)
-                    : null,
-                trailing: defaultTargetPlatform.isDesktop
-                    ? TimestampText(item.timeStamp)
-                    : null,
-                onTap: () async => _onTap(item),
-                dense: true,
-              ),
+              itemBuilder: (context, item, index) => LogItem(item: item),
             ),
-            separatorBuilder: (context, index) {
-              final items = _pagingController.itemList ?? const [];
-              final itemCount = items.length;
-              if (index + 1 >= itemCount) {
-                return const SizedBox.shrink();
-              }
-
-              final currentItem = items[index];
-              final nextItem = items[index + 1];
-              if (nextItem.bootId == currentItem.bootId) {
-                return const SizedBox.shrink();
-              }
-
-              return const Divider();
-            },
+            separatorBuilder: (context, index) =>
+                _isBoot(index) ? const Divider() : const SizedBox.shrink(),
           ),
         ),
       );
 
-  Future<void> _onTap(JournalEntry entry) async {
-    final messenger = ScaffoldMessenger.of(context);
+  Future<void> _loadPage(String? offset) async => await ref
+      .read(logsControllerProvider(_query).notifier)
+      .loadNextPage(offset);
 
-    await Clipboard.setData(ClipboardData(text: entry.message));
+  void _updatePriority(LogPriority? priority) {
+    setState(() => _logPriority = priority);
 
-    if (messenger.mounted) {
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 1),
-            content: Text('Copied to clipboard!'),
-          ),
-        );
+    _sub.close();
+    _sub = ref.listenManual(
+      logsControllerProvider(_query),
+      (_, next) => _pagingController.value = next,
+      fireImmediately: true,
+    );
+  }
+
+  bool _isBoot(int index) {
+    final items = _pagingController.itemList ?? const [];
+    final itemCount = items.length;
+    if (index + 1 >= itemCount) {
+      return false;
     }
+
+    final currentItem = items[index];
+    final nextItem = items[index + 1];
+    return nextItem.bootId != currentItem.bootId;
   }
 }
