@@ -32,7 +32,6 @@ class _LogsPageState extends ConsumerState<LogsPage> {
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   late final PagingController<String?, JournalEntry> _pagingController;
-  late ProviderSubscription<PagingState<String?, JournalEntry>> _sub;
 
   LogPriority? _logPriority;
 
@@ -45,46 +44,46 @@ class _LogsPageState extends ConsumerState<LogsPage> {
 
     _pagingController = PagingController(firstPageKey: null)
       ..addPageRequestListener(_loadPage);
-
-    _sub = ref.listenManual(
-      logsControllerProvider(_query),
-      (_, next) => _pagingController.value = next,
-      fireImmediately: true,
-    );
   }
 
   @override
   void dispose() {
-    _sub.close();
     _pagingController.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: LogsAppBar(
-          unitName: widget.unitName,
-          onRefresh: () async => _refreshIndicatorKey.currentState?.show(),
-          logPriority: _logPriority,
-          onLogPriorityChanged: (value) => _updatePriority(
-            _logPriority = value == _logPriority ? null : value,
-          ),
+  Widget build(BuildContext context) {
+    _pagingController.value = ref.read(logsControllerProvider(_query));
+    ref.listen(
+      logsControllerProvider(_query),
+      (_, next) => _pagingController.value = next,
+    );
+    return Scaffold(
+      appBar: LogsAppBar(
+        unitName: widget.unitName,
+        onRefresh: () async => _refreshIndicatorKey.currentState?.show(),
+        logPriority: _logPriority,
+        onLogPriorityChanged: (value) => _updatePriority(
+          _logPriority = value == _logPriority ? null : value,
         ),
-        body: RefreshIndicator(
-          key: _refreshIndicatorKey,
-          onRefresh: () async => ref.invalidate(logsControllerProvider(_query)),
-          child: PagedListView<String?, JournalEntry>.separated(
-            pagingController: _pagingController,
-            primary: true,
-            reverse: true,
-            builderDelegate: PagedChildBuilderDelegate<JournalEntry>(
-              itemBuilder: (context, item, index) => LogItem(item: item),
-            ),
-            separatorBuilder: (context, index) =>
-                _isBoot(index) ? const Divider() : const SizedBox.shrink(),
+      ),
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () async => ref.invalidate(logsControllerProvider(_query)),
+        child: PagedListView<String?, JournalEntry>.separated(
+          pagingController: _pagingController,
+          primary: true,
+          reverse: true,
+          builderDelegate: PagedChildBuilderDelegate<JournalEntry>(
+            itemBuilder: (context, item, index) => LogItem(item: item),
           ),
+          separatorBuilder: (context, index) =>
+              _isBoot(index) ? const Divider() : const SizedBox.shrink(),
         ),
-      );
+      ),
+    );
+  }
 
   Future<void> _loadPage(String? offset) async => await ref
       .read(logsControllerProvider(_query).notifier)
@@ -92,13 +91,6 @@ class _LogsPageState extends ConsumerState<LogsPage> {
 
   void _updatePriority(LogPriority? priority) {
     setState(() => _logPriority = priority);
-
-    _sub.close();
-    _sub = ref.listenManual(
-      logsControllerProvider(_query),
-      (_, next) => _pagingController.value = next,
-      fireImmediately: true,
-    );
   }
 
   bool _isBoot(int index) {

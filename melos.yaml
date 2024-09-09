@@ -5,9 +5,20 @@ packages:
   - client
 
 scripts:
-  get: >-
-    dart pub global run melos exec --no-flutter -- dart pub get &&
-    dart pub global run melos exec --flutter -- flutter pub get
+  get:
+    steps:
+      - get:dart
+      - get:flutter
+
+  get:dart:
+    packageFilters:
+      flutter: false
+    exec: dart pub get
+
+  get:flutter:
+    packageFilters:
+      flutter: true
+    exec: flutter pub get
 
   upgrade:
     steps:
@@ -26,7 +37,7 @@ scripts:
   upgrade:flutter:
     packageFilters:
       flutter: true
-    exec: flutter pub upgrade --major-versions
+    exec: flutter pub upgrade --major-versions --tighten
 
   build:
     run: dart run build_runner build
@@ -40,6 +51,5 @@ scripts:
 
   pre-commit:remove: rm -f .git/hooks/pre-commit
 
-  pre-commit:run: >-
-    dart pub global run melos exec --depends-on=dart_pre_commit --
-    dart run dart_pre_commit
+  pre-commit:run:
+    exec: dart run dart_pre_commit
