@@ -9,9 +9,24 @@ scripts:
     dart pub global run melos exec --no-flutter -- dart pub get &&
     dart pub global run melos exec --flutter -- flutter pub get
 
-  upgrade: >-
-    dart pub global run melos exec --no-flutter -- dart pub upgrade --major-versions --tighten &&
-    dart pub global run melos exec --flutter -- flutter pub upgrade --major-versions --tighten
+  upgrade:
+    steps:
+      - upgrade:dart
+      - upgrade:flutter
+
+  upgrade:dart:
+    packageFilters:
+      flutter: false
+    exec: >-
+      dart pub add 'dev:flutter:{"sdk":"flutter"}' &&
+      dart pub upgrade --major-versions --tighten &&
+      dart pub remove flutter &&
+      dart pub upgrade
+
+  upgrade:flutter:
+    packageFilters:
+      flutter: true
+    exec: flutter pub upgrade --major-versions
 
   build:
     run: dart run build_runner build
