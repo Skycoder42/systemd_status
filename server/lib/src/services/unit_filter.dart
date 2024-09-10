@@ -23,27 +23,28 @@ class UnitFilter {
   })  : globalFilters = globalFilters?.map(RegExp.new).toList(),
         userFilters = userFilters?.map(RegExp.new).toList();
 
-  Iterable<UnitInfo> call(Iterable<UnitInfo> units) sync* {
-    for (final unit in units) {
-      if (!_isAllowed(globalFilters, unit)) {
-        continue;
-      }
+  Iterable<UnitInfo> call(Iterable<UnitInfo> units) =>
+      units.where((unit) => isAllowed(unit.name));
 
-      if (!_isAllowed(userFilters, unit)) {
-        continue;
-      }
-
-      yield unit;
+  bool isAllowed(String unitName) {
+    if (!_isAllowedFor(globalFilters, unitName)) {
+      return false;
     }
+
+    if (!_isAllowedFor(userFilters, unitName)) {
+      return false;
+    }
+
+    return true;
   }
 
-  bool _isAllowed(Iterable<RegExp>? filters, UnitInfo unit) {
+  bool _isAllowedFor(Iterable<RegExp>? filters, String unitName) {
     if (filters == null) {
       return true;
     }
 
     for (final filter in filters) {
-      if (filter.hasMatch(unit.name)) {
+      if (filter.hasMatch(unitName)) {
         return true;
       }
     }

@@ -14,8 +14,4 @@ enum LogPriority {
   final String level;
 
   const LogPriority(this.level);
-
-  static String stringify(LogPriority p) => p.name;
-
-  static LogPriority parse(String p) => LogPriority.values.byName(p);
 }

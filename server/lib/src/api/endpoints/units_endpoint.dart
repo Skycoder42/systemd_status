@@ -22,15 +22,20 @@ class UnitsEndpoint extends ShelfEndpoint {
   }
 
   @Get('/<unit>/logs')
-  Future<List<JournalEntry>> log(
+  Future<TResponse<List<JournalEntry>>> log(
     String unit, {
-    @QueryParam(parse: LogPriority.parse, stringify: LogPriority.stringify)
     LogPriority? priority,
     int count = 50,
     String? offset,
   }) async {
     if (count < 1 || count > 100) {
       throw const FormatException('count must be in range [1, 100]');
+    }
+
+    if (!ref.read(unitFilterProvider).isAllowed(unit)) {
+      return TResponse.forbidden(
+        'User is not allowed to access logs for $unit',
+      );
     }
 
     final journalctlService = ref.read(journalctlServiceProvider);
@@ -42,6 +47,6 @@ class UnitsEndpoint extends ShelfEndpoint {
           count: count,
         )
         .toList();
-    return logs;
+    return TResponse.ok(logs);
   }
 }
