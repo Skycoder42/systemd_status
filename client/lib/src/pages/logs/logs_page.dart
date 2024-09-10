@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:systemd_status_server/api.dart';
 
+import '../../extensions/flutter_x.dart';
 import 'controllers/logs_controller.dart';
 import 'widgets/log_item.dart';
 import 'widgets/logs_app_bar.dart';
@@ -29,10 +30,9 @@ class LogsPage extends ConsumerStatefulWidget {
 }
 
 class _LogsPageState extends ConsumerState<LogsPage> {
-  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
-
   late final PagingController<String?, JournalEntry> _pagingController;
 
+  var _refreshVisible = true;
   LogPriority? _logPriority;
 
   LogsQuery get _query =>
@@ -62,15 +62,26 @@ class _LogsPageState extends ConsumerState<LogsPage> {
     return Scaffold(
       appBar: LogsAppBar(
         unitName: widget.unitName,
-        onRefresh: () async => _refreshIndicatorKey.currentState?.show(),
+        onRefresh: () => ref.invalidate(logsControllerProvider(_query)),
         logPriority: _logPriority,
         onLogPriorityChanged: (value) => _updatePriority(
           _logPriority = value == _logPriority ? null : value,
         ),
       ),
-      body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: () async => ref.invalidate(logsControllerProvider(_query)),
+      floatingActionButton: defaultTargetPlatform.isMobile && _refreshVisible
+          ? FloatingActionButton(
+              child: const Icon(Icons.refresh),
+              onPressed: () => ref.invalidate(logsControllerProvider(_query)),
+            )
+          : null,
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          final visible = notification.metrics.pixels == 0;
+          if (visible != _refreshVisible) {
+            setState(() => _refreshVisible = visible);
+          }
+          return false;
+        },
         child: PagedListView<String?, JournalEntry>.separated(
           pagingController: _pagingController,
           primary: true,

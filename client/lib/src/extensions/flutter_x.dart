@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 extension TargetPlatformX on TargetPlatform {
   bool get isDesktop => switch (this) {

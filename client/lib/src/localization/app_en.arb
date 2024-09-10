@@ -50,7 +50,7 @@
   "units_page_title": "Units",
   "units_page_display_all_action": "Display all units",
   "units_page_reload_action": "Reload",
-  "logs_page_title": "Logs for {unitName}",
+  "logs_page_title": "{unitName}",
   "@logs_page_title": {
     "placeholders": {
       "unitName": {

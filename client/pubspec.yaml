@@ -29,10 +29,10 @@ dependencies:
   json_annotation: ^4.9.0
   logging: ^1.2.0
   riverpod_annotation: ^2.3.5
-  sentry: ^8.8.0
-  sentry_dio: ^8.8.0
-  sentry_flutter: ^8.8.0
-  sentry_logging: ^8.8.0
+  sentry: ^8.9.0
+  sentry_dio: ^8.9.0
+  sentry_flutter: ^8.9.0
+  sentry_logging: ^8.9.0
   systemd_status_server:
     path: ../server
   web: ^1.0.0
