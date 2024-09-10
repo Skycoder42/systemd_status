@@ -27,12 +27,6 @@ class LogsAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) => ContentAppBar(
         title: context.strings.logs_page_title(unitName),
         onRefresh: onRefresh,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.restart_alt),
-          ),
-        ],
         menuItems: [
           SubmenuButton(
             menuChildren: [
