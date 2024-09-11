@@ -19,7 +19,7 @@ jobs:
       unitTestPaths: ""
 
   server_package:
-    name: Server - package
+    name: Server - CI
     uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
     needs:
       - server_ci
@@ -28,7 +28,7 @@ jobs:
       buildRunner: true
 
   server_cd:
-    name: Server - Compile and Release
+    name: Server - Build
     uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
     needs:
       - server_ci
@@ -53,7 +53,7 @@ jobs:
       unitTestPaths: ""
 
   client_build_android:
-    name: Client - Build android bundle
+    name: Client - Build
     needs:
       - server_package
       - client_ci
@@ -67,7 +67,7 @@ jobs:
       keystorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
 
   client_build_linux:
-    name: Client - Build flatpak bundles
+    name: Client - Build
     needs:
       - server_package
       - client_ci
@@ -83,7 +83,7 @@ jobs:
       gpgKey: ${{ secrets.GPG_KEY }}
 
   client_build_windows:
-    name: Client - Build msix installer
+    name: Client - Build
     needs:
       - server_package
       - client_ci
@@ -94,7 +94,7 @@ jobs:
       buildRunner: true
 
   client_build_macos:
-    name: Client - Build DMG image
+    name: Client - Build
     needs:
       - server_package
       - client_ci
@@ -106,7 +106,7 @@ jobs:
       dmgConfigPath: macos/dmg-config.json
 
   client_build_web:
-    name: Client - Build web archive
+    name: Client - Build
     needs:
       - server_package
       - client_ci
