@@ -41,8 +41,6 @@ dev_dependencies:
   custom_lint: ^0.6.8
   dart_pre_commit: ^5.4.0
   dart_test_tools: ^6.0.0
-  flutter_localizations:
-    sdk: flutter
   freezed: ^2.5.7
   json_serializable: ^6.8.0
   riverpod_generator: ^2.6.1

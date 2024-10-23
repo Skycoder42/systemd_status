@@ -31,7 +31,7 @@ scripts:
     exec: >-
       dart pub add 'dev:flutter_localizations:{"sdk":"flutter"}' &&
       dart pub upgrade --major-versions --tighten &&
-      dart pub remove flutter &&
+      dart pub remove flutter_localizations &&
       dart pub upgrade
 
   upgrade:flutter:
