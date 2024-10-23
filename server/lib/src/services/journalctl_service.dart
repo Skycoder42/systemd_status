@@ -1,4 +1,5 @@
 import 'package:posix/posix.dart' as posix;
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/models/journal_entry.dart';
@@ -9,8 +10,7 @@ import 'process_runner.dart';
 part 'journalctl_service.g.dart';
 
 @riverpod
-JournalctlService journalctlService(JournalctlServiceRef ref) =>
-    JournalctlService(
+JournalctlService journalctlService(Ref ref) => JournalctlService(
       ref.watch(optionsProvider),
       ref.watch(processRunnerProvider),
     );

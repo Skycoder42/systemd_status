@@ -17,14 +17,13 @@ import '../../app/logging/log_consumer.dart';
 part 'startup_controller.g.dart';
 
 @Riverpod(keepAlive: true)
-Uri serverUrl(ServerUrlRef ref) => throw UnimplementedError();
+Uri serverUrl(Ref ref) => throw UnimplementedError();
 
 @Riverpod(keepAlive: true)
-HttpClientAdapter? httpClientAdapter(HttpClientAdapterRef ref) =>
-    throw UnimplementedError();
+HttpClientAdapter? httpClientAdapter(Ref ref) => throw UnimplementedError();
 
 @Riverpod(keepAlive: true)
-ClientConfig clientConfig(ClientConfigRef ref) => throw UnimplementedError();
+ClientConfig clientConfig(Ref ref) => throw UnimplementedError();
 
 /// case 1: server URL exists
 /// 1. Restore server URL

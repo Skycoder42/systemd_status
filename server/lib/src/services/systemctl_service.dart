@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 import 'package:posix/posix.dart' as posix;
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/models/unit_info.dart';
@@ -11,7 +12,7 @@ import 'process_runner.dart';
 part 'systemctl_service.g.dart';
 
 @riverpod
-SystemctlService systemctlService(SystemctlServiceRef ref) => SystemctlService(
+SystemctlService systemctlService(Ref ref) => SystemctlService(
       ref.watch(optionsProvider),
       ref.watch(processRunnerProvider),
     );
@@ -26,7 +27,7 @@ class SystemctlService {
 
   Future<List<UnitInfo>> listUnits({bool all = false}) async {
     _logger.fine('Calling listUnits');
-    final units = await _systemctlJson<List, List<UnitInfo>>(
+    final units = await _systemctlJson<List<dynamic>, List<UnitInfo>>(
       [
         'list-units',
         if (all) '--all',

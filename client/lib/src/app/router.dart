@@ -1,5 +1,6 @@
 import 'package:firebase_auth_rest/firebase_auth_rest.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,7 +16,7 @@ import 'pages/dialog_page.dart';
 part 'router.g.dart';
 
 @riverpod
-GoRouter router(RouterRef ref) => GoRouter(
+GoRouter router(Ref ref) => GoRouter(
       routes: $appRoutes,
       redirect: ref.watch(_globalRedirectProvider).call,
       observers: [
@@ -24,14 +25,14 @@ GoRouter router(RouterRef ref) => GoRouter(
     );
 
 @riverpod
-_GlobalRedirect _globalRedirect(_GlobalRedirectRef ref) => _GlobalRedirect(ref);
+_GlobalRedirect _globalRedirect(Ref ref) => _GlobalRedirect(ref);
 
 class _GlobalRedirect {
   static final _whitelistedRoutes = [
     const LoginRoute().location,
   ];
 
-  final _GlobalRedirectRef ref;
+  final Ref ref;
   final _logger = Logger('GlobalRedirect');
 
   _GlobalRedirect(this.ref);

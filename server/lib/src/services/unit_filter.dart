@@ -1,3 +1,4 @@
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/models/unit_info.dart';
@@ -7,7 +8,7 @@ import '../middlewares/firebase_auth.dart';
 part 'unit_filter.g.dart';
 
 @Riverpod(dependencies: [userInfo])
-UnitFilter unitFilter(UnitFilterRef ref) => UnitFilter(
+UnitFilter unitFilter(Ref ref) => UnitFilter(
       globalFilters:
           ref.watch(serverConfigProvider.select((c) => c.unitFilters)),
       userFilters: ref.watch(userInfoProvider.select((u) => u.unitFilters)),

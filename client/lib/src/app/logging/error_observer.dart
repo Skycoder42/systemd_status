@@ -15,7 +15,7 @@ class ErrorObserver extends ProviderObserver {
 
   @override
   void didAddProvider(
-    ProviderBase provider,
+    ProviderBase<dynamic> provider,
     Object? value,
     ProviderContainer container,
   ) {
@@ -24,7 +24,7 @@ class ErrorObserver extends ProviderObserver {
 
   @override
   void didUpdateProvider(
-    ProviderBase provider,
+    ProviderBase<dynamic> provider,
     Object? previousValue,
     Object? newValue,
     ProviderContainer container,
@@ -42,7 +42,10 @@ class ErrorObserver extends ProviderObserver {
     reportException(provider, error, stackTrace);
   }
 
-  void _maybeReportStateException(ProviderBase provider, Object? value) {
+  void _maybeReportStateException(
+    ProviderBase<dynamic> provider,
+    Object? value,
+  ) {
     switch (value) {
       case ErrorState(error: final error, stackTrace: final stackTrace):
         reportException(provider, error, stackTrace);
@@ -51,7 +54,7 @@ class ErrorObserver extends ProviderObserver {
 
   @visibleForOverriding
   void reportException(
-    ProviderBase provider,
+    ProviderBase<dynamic> provider,
     Object error,
     StackTrace stackTrace,
   ) {
@@ -84,7 +87,7 @@ class ErrorObserver extends ProviderObserver {
   }
 
   List<String>? _familyTree(ProviderOrFamily provider) {
-    if (provider.from case final Family from) {
+    if (provider.from case final Family<dynamic> from) {
       return [...?_familyTree(from), from.name ?? '<unnamed>'];
     }
     return null;

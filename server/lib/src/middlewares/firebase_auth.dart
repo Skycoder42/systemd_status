@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_verify_id_tokens/firebase_verify_id_tokens.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_api/shelf_api.dart';
@@ -16,7 +17,7 @@ part 'firebase_auth.freezed.dart';
 Middleware firebaseAuth() => _FirebaseAuthMiddleware().call;
 
 @Riverpod(dependencies: [shelfRequest])
-UserInfo userInfo(UserInfoRef ref) => ref.read(shelfRequestProvider).userInfo;
+UserInfo userInfo(Ref ref) => ref.read(shelfRequestProvider).userInfo;
 
 extension FirebaseAuthX on Request {
   UserInfo get userInfo =>

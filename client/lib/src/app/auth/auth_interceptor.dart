@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'account_manager_provider.dart';
@@ -6,10 +7,10 @@ import 'account_manager_provider.dart';
 part 'auth_interceptor.g.dart';
 
 @Riverpod(keepAlive: true)
-AuthInterceptor authInterceptor(AuthInterceptorRef ref) => AuthInterceptor(ref);
+AuthInterceptor authInterceptor(Ref ref) => AuthInterceptor(ref);
 
 class AuthInterceptor extends Interceptor {
-  final AuthInterceptorRef _ref;
+  final Ref _ref;
 
   const AuthInterceptor(this._ref);
 

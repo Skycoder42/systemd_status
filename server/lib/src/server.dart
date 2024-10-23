@@ -27,7 +27,7 @@ class Server {
 
   late final ProviderContainer _providerContainer;
   late final Handler _handler;
-  final _signalSubs = <StreamSubscription>[];
+  final _signalSubs = <StreamSubscription<dynamic>>[];
 
   late final HttpServer _server;
   var _isClosing = false;

@@ -77,7 +77,7 @@ jobs:
       artifactDependencies: systemd_status_server
       manifestPath: linux/flatpak/de.skycoder42.systemdStatusClient.yaml
       bundleName: de.skycoder42.systemdStatusClient.flatpak
-      flatpakPlatformImage: flatpak-github-actions:freedesktop-23.08
+      flatpakPlatformImage: flatpak-github-actions:freedesktop-24.08
     secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}

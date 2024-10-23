@@ -12,7 +12,7 @@ part 'units_page.g.dart';
 
 @riverpod
 // ignore: avoid_positional_boolean_parameters
-Future<List<UnitInfo>> units(UnitsRef ref, bool showAll) async {
+Future<List<UnitInfo>> units(Ref ref, bool showAll) async {
   final units =
       await ref.watch(systemdStatusApiClientProvider).unitsList(all: showAll);
   units.sort((lhs, rhs) => lhs.compareTo(rhs) * -1);

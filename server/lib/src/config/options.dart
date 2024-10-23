@@ -5,12 +5,13 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:posix/posix.dart' as posix;
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'options.g.dart';
 
 @Riverpod(keepAlive: true)
-Options options(OptionsRef ref) => throw StateError('Must be overridden');
+Options options(Ref ref) => throw StateError('Must be overridden');
 
 @immutable
 @CliOptions()

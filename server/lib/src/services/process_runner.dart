@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:logging/logging.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'process_runner.g.dart';
@@ -25,7 +26,7 @@ class InvalidExitCode implements Exception {
 }
 
 @riverpod
-ProcessRunner processRunner(ProcessRunnerRef ref) => ProcessRunner();
+ProcessRunner processRunner(Ref ref) => ProcessRunner();
 
 class ProcessRunner {
   final _logger = Logger('ProcessRunner');

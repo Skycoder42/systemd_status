@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'options.dart';
@@ -12,7 +13,7 @@ part 'server_config.freezed.dart';
 part 'server_config.g.dart';
 
 @Riverpod(keepAlive: true)
-ServerConfig serverConfig(ServerConfigRef ref) {
+ServerConfig serverConfig(Ref ref) {
   final path = ref.watch(optionsProvider).config;
   final configFile = File(path);
   return checkedYamlDecode<ServerConfig>(
@@ -105,6 +106,6 @@ sealed class ServerConfig with _$ServerConfig {
   factory ServerConfig.fromJson(Map<String, dynamic> json) =>
       _$ServerConfigFromJson(json);
 
-  factory ServerConfig.fromYaml(Map? yaml) =>
+  factory ServerConfig.fromYaml(Map<dynamic, dynamic>? yaml) =>
       _$$ServerConfigImplFromJson(yaml!);
 }

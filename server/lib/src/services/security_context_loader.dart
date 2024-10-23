@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../config/server_config.dart';
@@ -7,8 +8,7 @@ import '../config/server_config.dart';
 part 'security_context_loader.g.dart';
 
 @riverpod
-SecurityContextLoader securityContextLoader(SecurityContextLoaderRef ref) =>
-    SecurityContextLoader(
+SecurityContextLoader securityContextLoader(Ref ref) => SecurityContextLoader(
       ref.watch(serverConfigProvider.select((c) => c.tls)),
     );
 

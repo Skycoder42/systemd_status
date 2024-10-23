@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry/sentry.dart';
 import 'package:sentry_dio/sentry_dio.dart';
@@ -10,7 +11,7 @@ import '../startup/common/startup_controller.dart';
 part 'api_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-Dio dioClient(DioClientRef ref) {
+Dio dioClient(Ref ref) {
   final serverUrl = ref.watch(serverUrlProvider);
   final client = Dio(
     BaseOptions(
@@ -33,5 +34,5 @@ Dio dioClient(DioClientRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-SystemdStatusApiClient systemdStatusApiClient(SystemdStatusApiClientRef ref) =>
+SystemdStatusApiClient systemdStatusApiClient(Ref ref) =>
     SystemdStatusApiClient.dio(ref.watch(dioClientProvider));

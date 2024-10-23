@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme.g.dart';
 
 @riverpod
-ThemeData appTheme(AppThemeRef ref, Brightness brightness) =>
+ThemeData appTheme(Ref ref, Brightness brightness) =>
     SystemdStatusTheme.createFor(brightness);
 
 abstract base class SystemdStatusTheme {
