@@ -14,3 +14,6 @@ edit="with(.aur.extraSources[0];
 yq "$edit" "$server_pubspec" \
   | diff -B "$server_pubspec" - \
   | patch "$server_pubspec" -
+
+cd ../server
+cider log c "Updated embedded web client to $version"
