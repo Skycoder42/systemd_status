@@ -59,5 +59,32 @@
     }
   },
   "logs_page_priority_button": "Priority",
-  "logs_page_copied_to_clipboard": "Copied line!"
+  "logs_page_copied_to_clipboard": "Copied line!",
+  "restart_dialog_hint_title": "Restart {unitName}?",
+  "@restart_dialog_hint_title": {
+    "placeholders": {
+      "unitName": {
+        "type": "String"
+      }
+    }
+  },
+  "restart_dialog_hint_text": "Restarting the unit may take a while. This will not start any currently not running units.",
+  "restart_dialog_pending_title": "Restarting {unitName}...",
+  "@restart_dialog_pending_title": {
+    "placeholders": {
+      "unitName": {
+        "type": "String"
+      }
+    }
+  },
+  "restart_dialog_restart_button": "Restart",
+  "restart_dialog_success_message": "Successfully issued restart command.",
+  "restart_dialog_failed_message": "Unable to restart {unitName}! Please check the journal logs for more details.",
+  "@restart_dialog_failed_message": {
+    "placeholders": {
+      "unitName": {
+        "type": "String"
+      }
+    }
+  }
 }

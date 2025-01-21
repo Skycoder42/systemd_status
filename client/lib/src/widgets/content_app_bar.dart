@@ -29,14 +29,14 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: Text(title),
         actions: [
           ...actions,
+          if (onRefresh != null && defaultTargetPlatform.isDesktop)
+            IconButton(
+              onPressed: onRefresh,
+              icon: const Icon(Icons.refresh),
+            ),
           MenuAnchor(
             menuChildren: [
               ...menuItems,
-              if (onRefresh != null && defaultTargetPlatform.isDesktop)
-                MenuItemButton(
-                  onPressed: onRefresh,
-                  child: Text(context.strings.units_page_reload_action),
-                ),
               const Divider(),
               MenuItemButton(
                 onPressed: () async => const LogoutRoute().push(context),

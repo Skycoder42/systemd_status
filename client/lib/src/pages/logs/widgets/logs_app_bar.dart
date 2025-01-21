@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:systemd_status_server/api.dart';
 
+import '../../../app/router.dart';
 import '../../../localization/localization.dart';
 import '../../../widgets/content_app_bar.dart';
 import 'log_priority_extensions.dart';
@@ -43,8 +44,19 @@ class LogsAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
             child: Text(context.strings.logs_page_priority_button),
           ),
+          MenuItemButton(
+            onPressed: () async => await _restart(context),
+            child: Text(context.strings.restart_dialog_restart_button),
+          ),
         ],
       );
+
+  Future<void> _restart(BuildContext context) async {
+    final needsReload = await RestartUnitRoute(unitName).push<bool>(context);
+    if (needsReload ?? false) {
+      onRefresh();
+    }
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

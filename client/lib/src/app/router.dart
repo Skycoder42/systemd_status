@@ -9,6 +9,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import '../pages/login/login_page.dart';
 import '../pages/login/logout_dialog.dart';
 import '../pages/logs/logs_page.dart';
+import '../pages/restart/restart_dialog.dart';
 import '../pages/units/units_page.dart';
 import 'auth/account_manager_provider.dart';
 import 'pages/dialog_page.dart';
@@ -90,6 +91,7 @@ class RootRoute extends GoRouteData {
   path: '/units',
   routes: [
     TypedGoRoute<LogsRoute>(path: ':unitName/logs'),
+    TypedGoRoute<RestartUnitRoute>(path: ':unitName/restart'),
   ],
 )
 @immutable
@@ -109,6 +111,18 @@ class LogsRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       LogsPage(unitName: unitName);
+}
+
+class RestartUnitRoute extends GoRouteData {
+  final String unitName;
+
+  RestartUnitRoute(this.unitName);
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) => DialogPage(
+        state: state,
+        builder: (context) => RestartDialog(unit: unitName),
+      );
 }
 
 @TypedGoRoute<LoginRoute>(path: '/login')

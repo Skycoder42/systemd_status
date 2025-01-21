@@ -49,4 +49,17 @@ class UnitsEndpoint extends ShelfEndpoint {
         .toList();
     return TResponse.ok(logs);
   }
+
+  @Post('/<unit>/restart')
+  Future<TResponse<void>> restart(String unit) async {
+    if (!ref.read(unitFilterProvider).isAllowed(unit)) {
+      return TResponse.forbidden(
+        'User is not allowed to restart $unit',
+      );
+    }
+
+    final systemctlService = ref.read(systemctlServiceProvider);
+    await systemctlService.restartUnit(unit);
+    return TResponse.ok(null);
+  }
 }

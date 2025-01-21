@@ -39,6 +39,24 @@ class SystemctlService {
     return units;
   }
 
+  Future<void> restartUnit(String unit) async {
+    _logger.fine('Calling restartUnit($unit)');
+    await _systemctl(['try-restart', unit, '--no-ask-password']);
+  }
+
+  Future<int> _systemctl(
+    List<String> args, {
+    int? expectedExitCode = 0,
+  }) async =>
+      await _processRunner.exec(
+        _systemctlBinary,
+        [
+          if (_runAsUser) '--user',
+          ...args,
+        ],
+        expectedExitCode: expectedExitCode,
+      );
+
   Future<TData> _systemctlJson<TJson, TData>(
     List<String> args, {
     required TData Function(TJson) fromJson,

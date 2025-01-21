@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -29,38 +30,85 @@ class InvalidExitCode implements Exception {
 ProcessRunner processRunner(Ref ref) => ProcessRunner();
 
 class ProcessRunner {
+  static const defaultProcessTimeout = Duration(minutes: 1);
+
   final _logger = Logger('ProcessRunner');
+
+  Future<int> exec(
+    String binary,
+    List<String> args, {
+    int? expectedExitCode = 0,
+    Duration timeout = defaultProcessTimeout,
+  }) async {
+    _logger.fine('Invoking $binary ${args.join(' ')}');
+    final process = await Process.start(binary, args);
+    final stderrSub = _pipeToStd(process.stderr);
+    try {
+      process.stdout.drain<void>().ignore();
+      return await _waitForExit(
+        process,
+        binary,
+        args,
+        expectedExitCode,
+        timeout,
+      );
+    } finally {
+      await stderrSub.cancel();
+    }
+  }
 
   Stream<TData> streamJson<TJson, TData>(
     String binary,
     List<String> args, {
     required TData Function(TJson) fromJson,
     int? expectedExitCode = 0,
+    Duration timeout = defaultProcessTimeout,
   }) =>
-      streamLines(binary, args, expectedExitCode: expectedExitCode)
-          .map(json.decode)
-          .cast<TJson>()
-          .map(fromJson);
+      streamLines(
+        binary,
+        args,
+        expectedExitCode: expectedExitCode,
+        timeout: timeout,
+      ).map(json.decode).cast<TJson>().map(fromJson);
 
   Stream<String> streamLines(
     String binary,
     List<String> args, {
     int? expectedExitCode = 0,
+    Duration timeout = defaultProcessTimeout,
   }) async* {
     _logger.fine('Invoking $binary ${args.join(' ')}');
     final process = await Process.start(binary, args);
-
-    final stderrSub = process.stderr
-        .transform(systemEncoding.decoder)
-        .transform(const LineSplitter())
-        .listen(stderr.writeln);
-
+    final stderrSub = _pipeToStd(process.stderr);
     try {
       yield* process.stdout
           .transform(systemEncoding.decoder)
           .transform(const LineSplitter());
 
-      final exitCode = await process.exitCode;
+      await _waitForExit(process, binary, args, expectedExitCode, timeout);
+    } finally {
+      await stderrSub.cancel();
+    }
+  }
+
+  StreamSubscription<String> _pipeToStd(
+    Stream<List<int>> stream, [
+    Stdout? out,
+  ]) =>
+      stream
+          .transform(systemEncoding.decoder)
+          .transform(const LineSplitter())
+          .listen((out ?? stderr).writeln);
+
+  Future<int> _waitForExit(
+    Process process,
+    String binary,
+    List<String> args,
+    int? expectedExitCode,
+    Duration timeout,
+  ) async {
+    try {
+      final exitCode = await process.exitCode.timeout(timeout);
       _logger.fine('Finished with exit code $exitCode');
       if (expectedExitCode != null && exitCode != expectedExitCode) {
         throw InvalidExitCode(
@@ -70,8 +118,12 @@ class ProcessRunner {
           actualExitCode: exitCode,
         );
       }
-    } finally {
-      await stderrSub.cancel();
+
+      return exitCode;
+    } on TimeoutException {
+      _logger.warning('Process timed out after $timeout - sending sigterm');
+      process.kill();
+      rethrow;
     }
   }
 }
