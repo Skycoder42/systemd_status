@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-export 'package:flutter_gen/gen_l10n/app_localizations.dart'
-    show AppLocalizations;
+import '../../gen/localization/app_localizations.dart';
+
+export '../../gen/localization/app_localizations.dart' show AppLocalizations;
 
 const localizationsDelegates = [
   AppLocalizations.delegate,
