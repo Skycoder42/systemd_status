@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "Systemd Status" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "systemd_status_client" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 de.skycoder42. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 de.skycoder42. All rights reserved." "\0"
             VALUE "OriginalFilename", "systemd_status_client.exe" "\0"
             VALUE "ProductName", "Systemd Status" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
