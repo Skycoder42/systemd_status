@@ -9,6 +9,13 @@ environment:
   flutter: ">=3.27.0"
 resolution: workspace
 
+platforms:
+  android:
+  linux:
+  macos:
+  windows:
+  web:
+
 dependencies:
   ansicolor: ^2.0.3
   dio: ^5.7.0
