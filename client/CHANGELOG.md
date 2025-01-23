@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2025-01-23
+### Added
+- Added service restart action
+
+### Changed
+- Updated dependencies
+- Updated min flutter sdk to 3.27.0
+
 ## [0.3.1] - 2024-10-24
 ### Changed
 - Updated dependencies
@@ -88,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
+[0.3.2]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.3.1...v0.3.2
 [0.3.1]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.3.0...v0.3.1
 [0.3.0]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.2.9...v0.3.0
 [0.2.9]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.2.8...v0.2.9
