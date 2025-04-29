@@ -61,7 +61,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  generate: false # true
   assets:
     - assets/icons/
 
