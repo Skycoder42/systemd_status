@@ -7,10 +7,7 @@ import '../../../providers/api_provider.dart';
 
 part 'logs_controller.g.dart';
 
-typedef LogsQuery = ({
-  String unitName,
-  LogPriority? logPriority,
-});
+typedef LogsQuery = ({String unitName, LogPriority? logPriority});
 
 @riverpod
 class LogsController extends _$LogsController {

@@ -48,7 +48,7 @@ class AsyncAction extends StatefulWidget {
 class AsyncActionState extends State<AsyncAction> {
   bool _isRunning = false;
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
-      _snackbarController;
+  _snackbarController;
 
   bool triggerAction() {
     if (!widget.enabled || _isRunning) {
@@ -61,17 +61,15 @@ class AsyncActionState extends State<AsyncAction> {
 
   @override
   Widget build(BuildContext context) => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (_isRunning) ...[
-            const CircularProgressIndicator(),
-            const SizedBox(width: 8),
-          ],
-          widget.builder(
-            !widget.enabled || _isRunning ? null : _onAction,
-          ),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      if (_isRunning) ...[
+        const CircularProgressIndicator(),
+        const SizedBox(width: 8),
+      ],
+      widget.builder(!widget.enabled || _isRunning ? null : _onAction),
+    ],
+  );
 
   Future<void> _onAction() async {
     setState(() {
@@ -100,12 +98,12 @@ class AsyncActionState extends State<AsyncAction> {
 
     final controller =
         _snackbarController = ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-      ErrorSnackBar(
-        context: context,
-        content: Text(errorMessage),
-        duration: widget.errorToastDuration ?? const Duration(seconds: 4),
-      ),
-    );
+          ErrorSnackBar(
+            context: context,
+            content: Text(errorMessage),
+            duration: widget.errorToastDuration ?? const Duration(seconds: 4),
+          ),
+        );
     unawaited(
       controller?.closed.whenComplete(() {
         if (_snackbarController == controller) {

@@ -33,9 +33,7 @@ final class StartupController extends StartupControllerBase {
     runApp(
       UncontrolledProviderScope(
         container: container,
-        child: SetupApp(
-          setupCompleter: completer,
-        ),
+        child: SetupApp(setupCompleter: completer),
       ),
     );
 

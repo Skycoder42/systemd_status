@@ -31,35 +31,33 @@ class AccountManager extends _$AccountManager {
     }
   }
 
-  Future<void> signIn(String email, String password) =>
-      update((oldAccount) async {
-        final firebaseAuth = ref.read(firebaseAuthProvider);
-        final secureStorage = ref.read(secureStorageProvider);
+  Future<void> signIn(String email, String password) => update((
+    oldAccount,
+  ) async {
+    final firebaseAuth = ref.read(firebaseAuthProvider);
+    final secureStorage = ref.read(secureStorageProvider);
 
-        final newAccount = await firebaseAuth.signInWithPassword(
-          email,
-          password,
-        );
-        try {
-          await secureStorage.write(
-            key: _refreshTokenKey,
-            value: newAccount.refreshToken,
-          );
+    final newAccount = await firebaseAuth.signInWithPassword(email, password);
+    try {
+      await secureStorage.write(
+        key: _refreshTokenKey,
+        value: newAccount.refreshToken,
+      );
 
-          await oldAccount?.dispose();
-          return newAccount;
+      await oldAccount?.dispose();
+      return newAccount;
 
-          // ignore: avoid_catches_without_on_clauses
-        } catch (e) {
-          await newAccount.dispose();
-          rethrow;
-        }
-      });
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      await newAccount.dispose();
+      rethrow;
+    }
+  });
 
   Future<void> signOut() => update((account) async {
-        final secureStorage = ref.read(secureStorageProvider);
-        await secureStorage.delete(key: _refreshTokenKey);
-        await account?.dispose();
-        return null;
-      });
+    final secureStorage = ref.read(secureStorageProvider);
+    await secureStorage.delete(key: _refreshTokenKey);
+    await account?.dispose();
+    return null;
+  });
 }

@@ -3,9 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-typedef SuggestionsBuilder = FutureOr<Iterable<String>> Function(
-  BuildContext context,
-);
+typedef SuggestionsBuilder =
+    FutureOr<Iterable<String>> Function(BuildContext context);
 
 class FilterButton extends StatefulWidget {
   final ValueSetter<String> onFilterUpdated;
@@ -56,30 +55,27 @@ class _FilterButtonState extends State<FilterButton> {
 
   @override
   Widget build(BuildContext context) => SearchAnchor(
-        searchController: _searchController,
-        viewOnSubmitted: _updateAndClose,
-        viewTrailing: [
-          CloseButton(
-            onPressed: () => _updateAndClose(''),
-          ),
-        ],
-        builder: (context, controller) => IconButton(
+    searchController: _searchController,
+    viewOnSubmitted: _updateAndClose,
+    viewTrailing: [CloseButton(onPressed: () => _updateAndClose(''))],
+    builder:
+        (context, controller) => IconButton(
           onPressed: controller.openView,
           icon: const Icon(Icons.search),
         ),
-        suggestionsBuilder: (context, controller) async {
-          final suggestions = await widget.suggestionsBuilder(context);
-          return [
-            for (final suggestion in suggestions)
-              if (suggestion.contains(controller.text))
-                ListTile(
-                  key: Key(suggestion),
-                  title: Text(suggestion),
-                  onTap: () => _updateAndClose(suggestion),
-                ),
-          ];
-        },
-      );
+    suggestionsBuilder: (context, controller) async {
+      final suggestions = await widget.suggestionsBuilder(context);
+      return [
+        for (final suggestion in suggestions)
+          if (suggestion.contains(controller.text))
+            ListTile(
+              key: Key(suggestion),
+              title: Text(suggestion),
+              onTap: () => _updateAndClose(suggestion),
+            ),
+      ];
+    },
+  );
 
   void _updateAndClose(String text) {
     _searchController.closeView(text);

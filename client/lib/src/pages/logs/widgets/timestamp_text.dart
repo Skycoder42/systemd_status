@@ -11,9 +11,9 @@ class TimestampText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        context.strings.short_date_time(timestamp),
-        style: context.theme.textTheme.labelSmall,
-      );
+    context.strings.short_date_time(timestamp),
+    style: context.theme.textTheme.labelSmall,
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

@@ -6,12 +6,7 @@ import '../../../providers/api_provider.dart';
 
 part 'restart_controller.g.dart';
 
-enum RestartState {
-  hint,
-  pending,
-  success,
-  failure,
-}
+enum RestartState { hint, pending, success, failure }
 
 @riverpod
 class RestartController extends _$RestartController {

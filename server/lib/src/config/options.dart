@@ -37,7 +37,8 @@ class Options {
   @CliOption(
     abbr: 'c',
     valueHelp: 'path',
-    help: 'The <path> to the server configuration file '
+    help:
+        'The <path> to the server configuration file '
         'with additional configuration options.',
     provideDefaultToOverride: true,
   )
@@ -60,21 +61,16 @@ class Options {
     ],
     defaultsTo: 'info',
     valueHelp: 'level',
-    help: 'Customize the logging level. '
+    help:
+        'Customize the logging level. '
         'Listed from most verbose (all) to least verbose (off).',
   )
   final Level logLevel;
 
-  @CliOption(
-    name: 'debug-overwrite-systemctl',
-    hide: true,
-  )
+  @CliOption(name: 'debug-overwrite-systemctl', hide: true)
   final String? debugOverwriteSystemctl;
 
-  @CliOption(
-    name: 'debug-overwrite-journalctl',
-    hide: true,
-  )
+  @CliOption(name: 'debug-overwrite-journalctl', hide: true)
   final String? debugOverwriteJournalctl;
 
   @CliOption(
@@ -96,28 +92,33 @@ class Options {
   });
 
   static ArgParser buildArgParser() => _$populateOptionsParser(
-        ArgParser(
-          allowTrailingOptions: false,
-          usageLineLength: stdout.hasTerminal ? stdout.terminalColumns : null,
-        ),
-        configDefaultOverride: _configDefault,
-      );
+    ArgParser(
+      allowTrailingOptions: false,
+      usageLineLength: stdout.hasTerminal ? stdout.terminalColumns : null,
+    ),
+    configDefaultOverride: _configDefault,
+  );
 
   static Options parseOptions(ArgResults argResults) =>
       _$parseOptionsResult(argResults);
 
   static String? get _configDefault => switch (posix.geteuid() == 0) {
-        true => path.join('/etc', _configName),
-        false => switch (Platform.environment['XDG_CONFIG_HOME']) {
-            final String xdgConfig when xdgConfig.isNotEmpty =>
-              path.join(xdgConfig, _configName),
-            _ => switch (Platform.environment['HOME']) {
-                final String home when home.isNotEmpty =>
-                  path.join(home, '.config', _configName),
-                _ => null,
-              }
-          }
-      };
+    true => path.join('/etc', _configName),
+    false => switch (Platform.environment['XDG_CONFIG_HOME']) {
+      final String xdgConfig when xdgConfig.isNotEmpty => path.join(
+        xdgConfig,
+        _configName,
+      ),
+      _ => switch (Platform.environment['HOME']) {
+        final String home when home.isNotEmpty => path.join(
+          home,
+          '.config',
+          _configName,
+        ),
+        _ => null,
+      },
+    },
+  };
 }
 
 Level _logLevelFromString(String level) =>

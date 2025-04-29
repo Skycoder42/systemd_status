@@ -14,28 +14,28 @@ sealed class ActiveState with _$ActiveState {
   const factory ActiveState.unknown(String raw) = UnknownActiveState;
 
   factory ActiveState.fromJson(String json) => switch (json) {
-        'active' => const ActiveState.active(),
-        'reloading' => const ActiveState.reloading(),
-        'inactive' => const ActiveState.inactive(),
-        'failed' => const ActiveState.failed(),
-        'activating' => const ActiveState.activating(),
-        'deactivating' => const ActiveState.deactivating(),
-        'maintenance' => const ActiveState.maintenance(),
-        _ => ActiveState.unknown(json),
-      };
+    'active' => const ActiveState.active(),
+    'reloading' => const ActiveState.reloading(),
+    'inactive' => const ActiveState.inactive(),
+    'failed' => const ActiveState.failed(),
+    'activating' => const ActiveState.activating(),
+    'deactivating' => const ActiveState.deactivating(),
+    'maintenance' => const ActiveState.maintenance(),
+    _ => ActiveState.unknown(json),
+  };
 
   const ActiveState._();
 
   String get name => switch (this) {
-        ActiveActiveState() => 'active',
-        ReloadingActiveState() => 'reloading',
-        InactiveActiveState() => 'inactive',
-        FailedActiveState() => 'failed',
-        ActivatingActiveState() => 'activating',
-        DeactivatingActiveState() => 'deactivating',
-        MaintenanceActiveState() => 'maintenance',
-        UnknownActiveState(raw: final raw) => raw,
-      };
+    ActiveActiveState() => 'active',
+    ReloadingActiveState() => 'reloading',
+    InactiveActiveState() => 'inactive',
+    FailedActiveState() => 'failed',
+    ActivatingActiveState() => 'activating',
+    DeactivatingActiveState() => 'deactivating',
+    MaintenanceActiveState() => 'maintenance',
+    UnknownActiveState(raw: final raw) => raw,
+  };
 
   String toJson() => name;
 

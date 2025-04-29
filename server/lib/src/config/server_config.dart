@@ -25,15 +25,8 @@ ServerConfig serverConfig(Ref ref) {
 
 @freezed
 sealed class AppConfig with _$AppConfig {
-  @JsonSerializable(
-    anyMap: true,
-    checked: true,
-    disallowUnrecognizedKeys: true,
-  )
-  const factory AppConfig({
-    String? appDir,
-    String? sentryDsn,
-  }) = _AppConfig;
+  @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
+  const factory AppConfig({String? appDir, String? sentryDsn}) = _AppConfig;
 
   factory AppConfig.fromJson(Map<String, dynamic> json) =>
       _$AppConfigFromJson(json);
@@ -41,11 +34,7 @@ sealed class AppConfig with _$AppConfig {
 
 @freezed
 sealed class UserInfo with _$UserInfo {
-  @JsonSerializable(
-    anyMap: true,
-    checked: true,
-    disallowUnrecognizedKeys: true,
-  )
+  @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
   const factory UserInfo({
     @JsonKey(required: true) required String uid,
     List<String>? unitFilters,
@@ -57,11 +46,7 @@ sealed class UserInfo with _$UserInfo {
 
 @freezed
 sealed class FirebaseConfig with _$FirebaseConfig {
-  @JsonSerializable(
-    anyMap: true,
-    checked: true,
-    disallowUnrecognizedKeys: true,
-  )
+  @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
   const factory FirebaseConfig({
     @JsonKey(required: true) required String projectId,
     @JsonKey(required: true) required String apiKey,
@@ -74,11 +59,7 @@ sealed class FirebaseConfig with _$FirebaseConfig {
 
 @freezed
 sealed class TlsConfig with _$TlsConfig {
-  @JsonSerializable(
-    anyMap: true,
-    checked: true,
-    disallowUnrecognizedKeys: true,
-  )
+  @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
   const factory TlsConfig({
     @JsonKey(required: true) required String pfxPath,
     String? pfxPassphrase,
@@ -90,11 +71,7 @@ sealed class TlsConfig with _$TlsConfig {
 
 @freezed
 sealed class ServerConfig with _$ServerConfig {
-  @JsonSerializable(
-    anyMap: true,
-    checked: true,
-    disallowUnrecognizedKeys: true,
-  )
+  @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
   const factory ServerConfig({
     List<String>? allowedOrigins,
     List<String>? unitFilters,
@@ -107,5 +84,5 @@ sealed class ServerConfig with _$ServerConfig {
       _$ServerConfigFromJson(json);
 
   factory ServerConfig.fromYaml(Map<dynamic, dynamic>? yaml) =>
-      _$$ServerConfigImplFromJson(yaml!);
+      _$ServerConfigFromJson(yaml!);
 }

@@ -10,17 +10,17 @@ class SystemdStatusApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => MaterialApp.router(
-        routerConfig: ref.watch(routerProvider),
-        restorationScopeId: 'systemd_status_client',
+    routerConfig: ref.watch(routerProvider),
+    restorationScopeId: 'systemd_status_client',
 
-        // localization
-        localizationsDelegates: localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        onGenerateTitle: (context) => context.strings.app_name,
+    // localization
+    localizationsDelegates: localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    onGenerateTitle: (context) => context.strings.app_name,
 
-        // theming
-        color: SystemdStatusTheme.appColor,
-        theme: ref.watch(appThemeProvider(Brightness.light)),
-        darkTheme: ref.watch(appThemeProvider(Brightness.dark)),
-      );
+    // theming
+    color: SystemdStatusTheme.appColor,
+    theme: ref.watch(appThemeProvider(Brightness.light)),
+    darkTheme: ref.watch(appThemeProvider(Brightness.dark)),
+  );
 }

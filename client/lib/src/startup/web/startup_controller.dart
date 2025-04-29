@@ -8,9 +8,10 @@ import '../../providers/api_provider.dart';
 import '../common/startup_controller.dart';
 
 final class StartupController extends StartupControllerBase {
-  static const _serverUrl = bool.hasEnvironment('SERVER_URL')
-      ? String.fromEnvironment('SERVER_URL')
-      : null;
+  static const _serverUrl =
+      bool.hasEnvironment('SERVER_URL')
+          ? String.fromEnvironment('SERVER_URL')
+          : null;
 
   @override
   Uri loadServerUrl() => Uri.parse(_serverUrl ?? window.location.origin);

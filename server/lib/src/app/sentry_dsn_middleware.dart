@@ -10,23 +10,22 @@ class _SentryDsnMiddleware {
   const _SentryDsnMiddleware(this._sentryDsn);
 
   Handler call(Handler next) => (request) async {
-        final response = await next(request);
-        if (response.statusCode != HttpStatus.ok) {
-          return response;
-        }
+    final response = await next(request);
+    if (response.statusCode != HttpStatus.ok) {
+      return response;
+    }
 
-        if (request.requestedUri.path != '') {
-          return response;
-        }
+    if (request.requestedUri.path != '') {
+      return response;
+    }
 
-        final sentryDsnCookie = Cookie('sentryDsn', _sentryDsn)
+    final sentryDsnCookie =
+        Cookie('sentryDsn', _sentryDsn)
           ..httpOnly = false
           ..secure = true
           ..sameSite = SameSite.strict;
-        return response.change(
-          headers: {
-            HttpHeaders.setCookieHeader: sentryDsnCookie.toString(),
-          },
-        );
-      };
+    return response.change(
+      headers: {HttpHeaders.setCookieHeader: sentryDsnCookie.toString()},
+    );
+  };
 }

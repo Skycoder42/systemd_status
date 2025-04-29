@@ -27,22 +27,22 @@ class UnitsAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ContentAppBar(
-        title: context.strings.units_page_title,
-        onRefresh: onRefresh,
-        actions: [
-          FilterButton(
-            onFilterUpdated: onFilterUpdated,
-            suggestionsBuilder: suggestionsBuilder,
-          ),
-        ],
-        menuItems: [
-          CheckboxMenuButton(
-            value: showAll,
-            onChanged: onToggleShowAll,
-            child: Text(context.strings.units_page_display_all_action),
-          ),
-        ],
-      );
+    title: context.strings.units_page_title,
+    onRefresh: onRefresh,
+    actions: [
+      FilterButton(
+        onFilterUpdated: onFilterUpdated,
+        suggestionsBuilder: suggestionsBuilder,
+      ),
+    ],
+    menuItems: [
+      CheckboxMenuButton(
+        value: showAll,
+        onChanged: onToggleShowAll,
+        child: Text(context.strings.units_page_display_all_action),
+      ),
+    ],
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

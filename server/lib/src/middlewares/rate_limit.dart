@@ -10,8 +10,7 @@ Middleware rateLimit({
   int maxRequests = 300,
   Duration window = const Duration(minutes: 1),
   DateTimeNow dateTimeNow = DateTime.now,
-}) =>
-    _RateLimitMiddleware(maxRequests, window, dateTimeNow).call;
+}) => _RateLimitMiddleware(maxRequests, window, dateTimeNow).call;
 
 class _IpInfo {
   DateTime windowEndTime;
@@ -36,25 +35,19 @@ class _RateLimitMiddleware {
   final _cache = <String, _IpInfo>{};
   final _logger = Logger('RateLimitMiddleware');
 
-  _RateLimitMiddleware(
-    this._maxRequests,
-    this._window,
-    this._dateTimeNow,
-  );
+  _RateLimitMiddleware(this._maxRequests, this._window, this._dateTimeNow);
 
   Handler call(Handler next) => (request) async {
-        final blockTime = _checkRateLimit(request);
-        if (blockTime > Duration.zero) {
-          return Response(
-            HttpStatus.tooManyRequests,
-            headers: {
-              HttpHeaders.retryAfterHeader: blockTime.inSeconds.toString(),
-            },
-          );
-        }
+    final blockTime = _checkRateLimit(request);
+    if (blockTime > Duration.zero) {
+      return Response(
+        HttpStatus.tooManyRequests,
+        headers: {HttpHeaders.retryAfterHeader: blockTime.inSeconds.toString()},
+      );
+    }
 
-        return next(request);
-      };
+    return next(request);
+  };
 
   Duration _checkRateLimit(Request request) {
     final now = _dateTimeNow();
@@ -89,11 +82,6 @@ class _RateLimitMiddleware {
           .remoteAddress
           .address;
 
-  _IpInfo _createInfo(String ip, DateTime now) => _IpInfo(
-        now.add(_window),
-        Timer(
-          _window,
-          () => _cache.remove(ip),
-        ),
-      );
+  _IpInfo _createInfo(String ip, DateTime now) =>
+      _IpInfo(now.add(_window), Timer(_window, () => _cache.remove(ip)));
 }

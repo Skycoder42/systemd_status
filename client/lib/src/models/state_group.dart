@@ -14,44 +14,45 @@ enum StateGroup implements Comparable<StateGroup> {
   int compareTo(StateGroup other) => index.compareTo(other.index);
 
   Color? color(BuildContext context) => switch (this) {
-        StateGroup.success => context.theme.colorScheme.primary,
-        StateGroup.special => context.theme.colorScheme.secondary,
-        StateGroup.inactive => null,
-        StateGroup.transition => context.theme.colorScheme.tertiary,
-        StateGroup.failure => context.theme.colorScheme.error,
-      };
+    StateGroup.success => context.theme.colorScheme.primary,
+    StateGroup.special => context.theme.colorScheme.secondary,
+    StateGroup.inactive => null,
+    StateGroup.transition => context.theme.colorScheme.tertiary,
+    StateGroup.failure => context.theme.colorScheme.error,
+  };
 }
 
 extension LoadStateGroupX on LoadState {
   StateGroup get group => switch (this) {
-        StubLoadState() => StateGroup.success,
-        LoadedLoadState() => StateGroup.success,
-        NotFoundLoadState() => StateGroup.failure,
-        BadSettingLoadState() => StateGroup.failure,
-        ErrorLoadState() => StateGroup.failure,
-        MergedLoadState() => StateGroup.special,
-        MaskedLoadState() => StateGroup.special,
-        UnknownLoadState() => StateGroup.inactive,
-      };
+    StubLoadState() => StateGroup.success,
+    LoadedLoadState() => StateGroup.success,
+    NotFoundLoadState() => StateGroup.failure,
+    BadSettingLoadState() => StateGroup.failure,
+    ErrorLoadState() => StateGroup.failure,
+    MergedLoadState() => StateGroup.special,
+    MaskedLoadState() => StateGroup.special,
+    UnknownLoadState() => StateGroup.inactive,
+  };
 }
 
 extension ActiveStateGroupX on ActiveState {
   StateGroup get group => switch (this) {
-        ActiveActiveState() => StateGroup.success,
-        ReloadingActiveState() => StateGroup.transition,
-        InactiveActiveState() => StateGroup.inactive,
-        FailedActiveState() => StateGroup.failure,
-        ActivatingActiveState() => StateGroup.transition,
-        DeactivatingActiveState() => StateGroup.transition,
-        MaintenanceActiveState() => StateGroup.special,
-        UnknownActiveState() => StateGroup.inactive,
-      };
+    ActiveActiveState() => StateGroup.success,
+    ReloadingActiveState() => StateGroup.transition,
+    InactiveActiveState() => StateGroup.inactive,
+    FailedActiveState() => StateGroup.failure,
+    ActivatingActiveState() => StateGroup.transition,
+    DeactivatingActiveState() => StateGroup.transition,
+    MaintenanceActiveState() => StateGroup.special,
+    UnknownActiveState() => StateGroup.inactive,
+  };
 }
 
 extension UnitInfoStateGroupX on UnitInfo {
-  StateGroup get group => loadState.group != StateGroup.success
-      ? loadState.group
-      : activeState.group;
+  StateGroup get group =>
+      loadState.group != StateGroup.success
+          ? loadState.group
+          : activeState.group;
 
   int compareTo(UnitInfo other) {
     if (group.compareTo(other.group) case final result when result != 0) {

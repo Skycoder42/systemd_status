@@ -2,8 +2,11 @@ name: systemd_status_melos
 
 publish_to: none
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.7.0
 
 workspace:
   - server
   - client
+
+dependency_overrides:
+  intl: ^0.20.0

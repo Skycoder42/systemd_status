@@ -8,9 +8,8 @@ import '../config/server_config.dart';
 part 'security_context_loader.g.dart';
 
 @riverpod
-SecurityContextLoader securityContextLoader(Ref ref) => SecurityContextLoader(
-      ref.watch(serverConfigProvider.select((c) => c.tls)),
-    );
+SecurityContextLoader securityContextLoader(Ref ref) =>
+    SecurityContextLoader(ref.watch(serverConfigProvider.select((c) => c.tls)));
 
 class SecurityContextLoader {
   final TlsConfig? _tlsConfig;

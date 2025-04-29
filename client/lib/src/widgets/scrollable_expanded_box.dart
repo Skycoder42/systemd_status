@@ -9,15 +9,12 @@ class ScrollableExpandedBox extends StatelessWidget {
   final ScrollPhysics? physics;
   final Widget child;
 
-  const ScrollableExpandedBox({
-    super.key,
-    this.physics,
-    required this.child,
-  });
+  const ScrollableExpandedBox({super.key, this.physics, required this.child});
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
-        builder: (context, constraints) => SingleChildScrollView(
+    builder:
+        (context, constraints) => SingleChildScrollView(
           physics: physics,
           child: Center(
             child: ConstrainedBox(
@@ -30,7 +27,7 @@ class ScrollableExpandedBox extends StatelessWidget {
             ),
           ),
         ),
-      );
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

@@ -9,12 +9,10 @@ class ErrorSnackBar extends SnackBar {
     required Widget content,
     super.duration,
   }) : super(
-          backgroundColor: context.theme.colorScheme.error,
-          content: DefaultTextStyle(
-            style: TextStyle(
-              color: context.theme.colorScheme.onError,
-            ),
-            child: content,
-          ),
-        );
+         backgroundColor: context.theme.colorScheme.error,
+         content: DefaultTextStyle(
+           style: TextStyle(color: context.theme.colorScheme.onError),
+           child: content,
+         ),
+       );
 }

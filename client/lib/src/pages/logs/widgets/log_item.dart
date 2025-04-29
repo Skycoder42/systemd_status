@@ -11,29 +11,25 @@ import 'timestamp_text.dart';
 class LogItem extends StatelessWidget {
   final JournalEntry item;
 
-  const LogItem({
-    super.key,
-    required this.item,
-  });
+  const LogItem({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) => ListTile(
-        title: Text(
-          item.message,
-          style: item.priority.style,
-        ),
-        subtitle: MediaQuery.orientationOf(context) == Orientation.portrait
+    title: Text(item.message, style: item.priority.style),
+    subtitle:
+        MediaQuery.orientationOf(context) == Orientation.portrait
             ? Align(
-                alignment: Alignment.centerRight,
-                child: TimestampText(item.timeStamp),
-              )
+              alignment: Alignment.centerRight,
+              child: TimestampText(item.timeStamp),
+            )
             : null,
-        trailing: MediaQuery.orientationOf(context) == Orientation.landscape
+    trailing:
+        MediaQuery.orientationOf(context) == Orientation.landscape
             ? TimestampText(item.timeStamp)
             : null,
-        onTap: () async => _onTap(context, item),
-        dense: true,
-      );
+    onTap: () async => _onTap(context, item),
+    dense: true,
+  );
 
   Future<void> _onTap(BuildContext context, JournalEntry entry) async {
     final contentText = context.strings.logs_page_copied_to_clipboard;

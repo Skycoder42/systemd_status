@@ -42,12 +42,15 @@ abstract base class StartupControllerBase {
   @protected
   final ProviderContainer container = ProviderContainer(
     overrides: [
-      serverUrlProvider
-          .overrideWith((ref) => throw UnsupportedError('Not ready')),
-      httpClientAdapterProvider
-          .overrideWith((ref) => throw UnsupportedError('Not ready')),
-      clientConfigProvider
-          .overrideWith((ref) => throw UnsupportedError('Not ready')),
+      serverUrlProvider.overrideWith(
+        (ref) => throw UnsupportedError('Not ready'),
+      ),
+      httpClientAdapterProvider.overrideWith(
+        (ref) => throw UnsupportedError('Not ready'),
+      ),
+      clientConfigProvider.overrideWith(
+        (ref) => throw UnsupportedError('Not ready'),
+      ),
     ],
   );
 
@@ -89,8 +92,9 @@ abstract base class StartupControllerBase {
       ..updateOverrides([
         serverUrlProvider.overrideWith((_) => serverUrl),
         httpClientAdapterProvider.overrideWith((_) => serverCertificate),
-        clientConfigProvider
-            .overrideWith((ref) => throw UnsupportedError('Not ready')),
+        clientConfigProvider.overrideWith(
+          (ref) => throw UnsupportedError('Not ready'),
+        ),
       ])
       ..invalidate(serverUrlProvider);
 
@@ -107,15 +111,16 @@ abstract base class StartupControllerBase {
 
   Future<void> _initWithSentry(String sentryDsn) async =>
       await SentryFlutter.init(
-        (options) => options
-          ..dsn = sentryDsn
-          ..attachThreads = true
-          ..anrEnabled = true
-          ..autoAppStart = false
-          ..attachViewHierarchy = true
-          ..addIntegration(
-            LoggingIntegration(minBreadcrumbLevel: Level.CONFIG),
-          ),
+        (options) =>
+            options
+              ..dsn = sentryDsn
+              ..attachThreads = true
+              ..anrEnabled = true
+              ..autoAppStart = false
+              ..attachViewHierarchy = true
+              ..addIntegration(
+                LoggingIntegration(minBreadcrumbLevel: Level.CONFIG),
+              ),
         appRunner: _runApp,
       );
 

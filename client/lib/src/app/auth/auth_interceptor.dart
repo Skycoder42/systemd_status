@@ -24,10 +24,7 @@ class AuthInterceptor extends Interceptor {
 
     handler.next(
       options.copyWith(
-        headers: {
-          ...options.headers,
-          'Authorization': 'Bearer $idToken',
-        },
+        headers: {...options.headers, 'Authorization': 'Bearer $idToken'},
       ),
     );
   }

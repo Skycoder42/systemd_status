@@ -3,4 +3,5 @@ export 'common/startup_controller.dart'
 
 export 'common/startup_controller.dart'
     if (dart.library.js_interop) 'web/startup_controller.dart'
-    if (dart.library.io) 'vm/startup_controller.dart' show StartupController;
+    if (dart.library.io) 'vm/startup_controller.dart'
+    show StartupController;

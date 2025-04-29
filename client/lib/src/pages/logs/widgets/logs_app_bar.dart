@@ -26,30 +26,30 @@ class LogsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) => ContentAppBar(
-        title: context.strings.logs_page_title(unitName),
-        onRefresh: onRefresh,
-        menuItems: [
-          SubmenuButton(
-            menuChildren: [
-              for (final priority in LogPriority.values)
-                RadioMenuButton<LogPriority>(
-                  value: priority,
-                  groupValue: logPriority,
-                  onChanged: onLogPriorityChanged,
-                  child: Text(
-                    context.strings.log_priority(priority.name),
-                    style: priority.style,
-                  ),
-                ),
-            ],
-            child: Text(context.strings.logs_page_priority_button),
-          ),
-          MenuItemButton(
-            onPressed: () async => await _restart(context),
-            child: Text(context.strings.restart_dialog_restart_button),
-          ),
+    title: context.strings.logs_page_title(unitName),
+    onRefresh: onRefresh,
+    menuItems: [
+      SubmenuButton(
+        menuChildren: [
+          for (final priority in LogPriority.values)
+            RadioMenuButton<LogPriority>(
+              value: priority,
+              groupValue: logPriority,
+              onChanged: onLogPriorityChanged,
+              child: Text(
+                context.strings.log_priority(priority.name),
+                style: priority.style,
+              ),
+            ),
         ],
-      );
+        child: Text(context.strings.logs_page_priority_button),
+      ),
+      MenuItemButton(
+        onPressed: () async => await _restart(context),
+        child: Text(context.strings.restart_dialog_restart_button),
+      ),
+    ],
+  );
 
   Future<void> _restart(BuildContext context) async {
     final needsReload = await RestartUnitRoute(unitName).push<bool>(context);

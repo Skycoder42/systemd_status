@@ -17,6 +17,6 @@ http.Client httpClient(Ref ref) {
 
 @Riverpod(keepAlive: true)
 FirebaseAuth firebaseAuth(Ref ref) => FirebaseAuth(
-      ref.watch(httpClientProvider),
-      ref.watch(clientConfigProvider.select((c) => c.firebaseApiKey)),
-    );
+  ref.watch(httpClientProvider),
+  ref.watch(clientConfigProvider.select((c) => c.firebaseApiKey)),
+);

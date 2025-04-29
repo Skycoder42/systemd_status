@@ -39,23 +39,22 @@ class UnitsEndpoint extends ShelfEndpoint {
     }
 
     final journalctlService = ref.read(journalctlServiceProvider);
-    final logs = await journalctlService
-        .streamJournal(
-          unit,
-          priority: priority,
-          offset: offset,
-          count: count,
-        )
-        .toList();
+    final logs =
+        await journalctlService
+            .streamJournal(
+              unit,
+              priority: priority,
+              offset: offset,
+              count: count,
+            )
+            .toList();
     return TResponse.ok(logs);
   }
 
   @Post('/<unit>/restart')
   Future<TResponse<void>> restart(String unit) async {
     if (!ref.read(unitFilterProvider).isAllowed(unit)) {
-      return TResponse.forbidden(
-        'User is not allowed to restart $unit',
-      );
+      return TResponse.forbidden('User is not allowed to restart $unit');
     }
 
     final systemctlService = ref.read(systemctlServiceProvider);

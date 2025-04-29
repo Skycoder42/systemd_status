@@ -8,5 +8,5 @@ part 'firebase_verify_token_id_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 FirebaseVerifyTokenId firebaseVerifyTokenId(Ref ref) => FirebaseVerifyTokenId(
-      ref.watch(serverConfigProvider.select((c) => c.firebase.projectId)),
-    );
+  ref.watch(serverConfigProvider.select((c) => c.firebase.projectId)),
+);

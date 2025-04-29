@@ -13,9 +13,9 @@ part 'systemctl_service.g.dart';
 
 @riverpod
 SystemctlService systemctlService(Ref ref) => SystemctlService(
-      ref.watch(optionsProvider),
-      ref.watch(processRunnerProvider),
-    );
+  ref.watch(optionsProvider),
+  ref.watch(processRunnerProvider),
+);
 
 class SystemctlService {
   final Options _options;
@@ -27,15 +27,12 @@ class SystemctlService {
 
   Future<List<UnitInfo>> listUnits({bool all = false}) async {
     _logger.fine('Calling listUnits');
-    final units = await _systemctlJson<List<dynamic>, List<UnitInfo>>(
-      [
-        'list-units',
-        if (all) '--all',
-        '*.service',
-        '*.timer',
-      ],
-      fromJson: UnitInfo.fromJsonList,
-    );
+    final units = await _systemctlJson<List<dynamic>, List<UnitInfo>>([
+      'list-units',
+      if (all) '--all',
+      '*.service',
+      '*.timer',
+    ], fromJson: UnitInfo.fromJsonList);
     return units;
   }
 
@@ -47,15 +44,10 @@ class SystemctlService {
   Future<int> _systemctl(
     List<String> args, {
     int? expectedExitCode = 0,
-  }) async =>
-      await _processRunner.exec(
-        _systemctlBinary,
-        [
-          if (_runAsUser) '--user',
-          ...args,
-        ],
-        expectedExitCode: expectedExitCode,
-      );
+  }) async => await _processRunner.exec(_systemctlBinary, [
+    if (_runAsUser) '--user',
+    ...args,
+  ], expectedExitCode: expectedExitCode);
 
   Future<TData> _systemctlJson<TJson, TData>(
     List<String> args, {
@@ -65,11 +57,7 @@ class SystemctlService {
       await _processRunner
           .streamJson(
             _systemctlBinary,
-            [
-              if (_runAsUser) '--user',
-              ...args,
-              '--output=json',
-            ],
+            [if (_runAsUser) '--user', ...args, '--output=json'],
             fromJson: fromJson,
             expectedExitCode: expectedExitCode,
           )

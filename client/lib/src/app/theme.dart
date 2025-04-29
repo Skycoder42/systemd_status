@@ -14,11 +14,11 @@ abstract base class SystemdStatusTheme {
   static const appColor = Color(0xFF30d475);
 
   static ThemeData createFor(Brightness brightness) => ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(
-          brightness: brightness,
-          seedColor: appColor,
-        ),
-      );
+    colorScheme: ColorScheme.fromSeed(
+      brightness: brightness,
+      seedColor: appColor,
+    ),
+  );
 }
 
 extension BuildContextThemeX on BuildContext {

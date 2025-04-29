@@ -10,11 +10,7 @@ import '../../../providers/secure_storage_provider.dart';
 
 part 'logout_controller.g.dart';
 
-enum LogoutState {
-  canLogout,
-  canLogoutAndReset,
-  loggingOut,
-}
+enum LogoutState { canLogout, canLogoutAndReset, loggingOut }
 
 @riverpod
 class LogoutController extends _$LogoutController {

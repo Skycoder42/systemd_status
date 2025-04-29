@@ -37,20 +37,14 @@ class _FirebaseAuthMiddleware {
   final _logger = Logger('FirebaseAuthMiddleware');
 
   Handler call(Handler next) => (request) async {
-        final authResult = await _checkAuthorization(request);
-        switch (authResult) {
-          case _AuthSuccess(userInfo: final userInfo):
-            return await next(
-              request.change(
-                context: {
-                  _userInfoKey: userInfo,
-                },
-              ),
-            );
-          case _AuthFailure(response: final response):
-            return response;
-        }
-      };
+    final authResult = await _checkAuthorization(request);
+    switch (authResult) {
+      case _AuthSuccess(userInfo: final userInfo):
+        return await next(request.change(context: {_userInfoKey: userInfo}));
+      case _AuthFailure(response: final response):
+        return response;
+    }
+  };
 
   Future<_AuthResult> _checkAuthorization(Request request) async {
     final authHeader = request.headers[HttpHeaders.authorizationHeader];
@@ -88,11 +82,7 @@ class _FirebaseAuthMiddleware {
 
       return _AuthResult.success(userInfo ?? UserInfo(uid: userId));
     } on FirebaseIdTokenException catch (e, s) {
-      _logger.warning(
-        'Rejecting request with token validation error',
-        e,
-        s,
-      );
+      _logger.warning('Rejecting request with token validation error', e, s);
       return _AuthResult.failure(Response.unauthorized(e.message));
 
       // ignore: avoid_catches_without_on_clauses

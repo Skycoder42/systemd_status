@@ -22,7 +22,8 @@ class InvalidExitCode implements Exception {
   });
 
   @override
-  String toString() => 'Command "$binary ${arguments.join(' ')}" failed '
+  String toString() =>
+      'Command "$binary ${arguments.join(' ')}" failed '
       'with exit code $actualExitCode. (Expected $expectedExitCode)';
 }
 
@@ -63,13 +64,12 @@ class ProcessRunner {
     required TData Function(TJson) fromJson,
     int? expectedExitCode = 0,
     Duration timeout = defaultProcessTimeout,
-  }) =>
-      streamLines(
-        binary,
-        args,
-        expectedExitCode: expectedExitCode,
-        timeout: timeout,
-      ).map(json.decode).cast<TJson>().map(fromJson);
+  }) => streamLines(
+    binary,
+    args,
+    expectedExitCode: expectedExitCode,
+    timeout: timeout,
+  ).map(json.decode).cast<TJson>().map(fromJson);
 
   Stream<String> streamLines(
     String binary,
@@ -94,11 +94,10 @@ class ProcessRunner {
   StreamSubscription<String> _pipeToStd(
     Stream<List<int>> stream, [
     Stdout? out,
-  ]) =>
-      stream
-          .transform(systemEncoding.decoder)
-          .transform(const LineSplitter())
-          .listen((out ?? stderr).writeln);
+  ]) => stream
+      .transform(systemEncoding.decoder)
+      .transform(const LineSplitter())
+      .listen((out ?? stderr).writeln);
 
   Future<int> _waitForExit(
     Process process,

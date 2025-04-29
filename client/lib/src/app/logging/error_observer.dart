@@ -63,26 +63,29 @@ class ErrorObserver extends ProviderObserver {
         Sentry.captureException(
           error,
           stackTrace: stackTrace,
-          withScope: (scope) async => Future.wait([
-            if (provider.name case final String name)
-              scope.setTag('provider', name),
-            scope.setContexts('Provider', {
-              'identifier': provider.toString(),
-              'name': provider.name,
-              'providerType': provider.runtimeType.toString(),
-              'argument': provider.argument?.toString(),
-              'familyTree': _familyTree(provider),
-              'dependencies': _toList(provider.dependencies),
-              'allTransitiveDependencies':
-                  _toList(provider.allTransitiveDependencies),
-            }),
-          ]),
+          withScope:
+              (scope) async => Future.wait([
+                if (provider.name case final String name)
+                  scope.setTag('provider', name),
+                scope.setContexts('Provider', {
+                  'identifier': provider.toString(),
+                  'name': provider.name,
+                  'providerType': provider.runtimeType.toString(),
+                  'argument': provider.argument?.toString(),
+                  'familyTree': _familyTree(provider),
+                  'dependencies': _toList(provider.dependencies),
+                  'allTransitiveDependencies': _toList(
+                    provider.allTransitiveDependencies,
+                  ),
+                }),
+              ]),
         ),
       );
     } else {
       final name = provider.name ?? provider.runtimeType.toString();
-      Logger('provider.$name')
-          .severe('Provider $provider did fail', error, stackTrace);
+      Logger(
+        'provider.$name',
+      ).severe('Provider $provider did fail', error, stackTrace);
     }
   }
 

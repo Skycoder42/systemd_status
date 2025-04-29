@@ -53,9 +53,7 @@ class Server {
 
   void _setupHandler() {
     _providerContainer = ProviderContainer(
-      overrides: [
-        optionsProvider.overrideWithValue(options),
-      ],
+      overrides: [optionsProvider.overrideWithValue(options)],
     );
 
     final config = _providerContainer.read(serverConfigProvider);
@@ -77,9 +75,10 @@ class Server {
         .addMiddleware(rateLimit())
         .addMiddleware(
           corsHeaders(
-            originChecker: allowedOrigins != null
-                ? originOneOf(allowedOrigins)
-                : originAllowAll,
+            originChecker:
+                allowedOrigins != null
+                    ? originOneOf(allowedOrigins)
+                    : originAllowAll,
           ),
         )
         .addMiddleware(
@@ -90,9 +89,7 @@ class Server {
         )
         .addMiddleware(
           helmet(
-            options: const HelmetOptions(
-              enableContentSecurityPolicy: false,
-            ),
+            options: const HelmetOptions(enableContentSecurityPolicy: false),
           ),
         )
         .addMiddleware(handleFormatExceptions())
@@ -106,10 +103,7 @@ class Server {
     if (config.app.appDir case final String appDir) {
       _logger.config('Mounting app from $appDir');
       router
-        ..mount(
-          '/app',
-          AppHandler(appDir, config.app.sentryDsn).call,
-        )
+        ..mount('/app', AppHandler(appDir, config.app.sentryDsn).call)
         ..get('/', _redirectRoot);
     }
     router.mount('/', SystemdStatusApi().call);

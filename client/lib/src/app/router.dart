@@ -18,20 +18,16 @@ part 'router.g.dart';
 
 @riverpod
 GoRouter router(Ref ref) => GoRouter(
-      routes: $appRoutes,
-      redirect: ref.watch(_globalRedirectProvider).call,
-      observers: [
-        if (Sentry.isEnabled) SentryNavigatorObserver(),
-      ],
-    );
+  routes: $appRoutes,
+  redirect: ref.watch(_globalRedirectProvider).call,
+  observers: [if (Sentry.isEnabled) SentryNavigatorObserver()],
+);
 
 @riverpod
 _GlobalRedirect _globalRedirect(Ref ref) => _GlobalRedirect(ref);
 
 class _GlobalRedirect {
-  static final _whitelistedRoutes = [
-    const LoginRoute().location,
-  ];
+  static final _whitelistedRoutes = [const LoginRoute().location];
 
   final Ref ref;
   final _logger = Logger('GlobalRedirect');
@@ -39,8 +35,9 @@ class _GlobalRedirect {
   _GlobalRedirect(this.ref);
 
   String? call(BuildContext context, GoRouterState state) {
-    if (_whitelistedRoutes
-        .any((route) => state.fullPath?.startsWith(route) ?? false)) {
+    if (_whitelistedRoutes.any(
+      (route) => state.fullPath?.startsWith(route) ?? false,
+    )) {
       return null;
     }
 
@@ -66,9 +63,7 @@ class _GlobalRedirect {
         _logger.config('Not logged in redirecting to login page');
         return LoginRoute(redirectTo: state.matchedLocation).location;
       case AsyncError():
-        _logger.config(
-          'Failed to load account. Redirecting to login page',
-        );
+        _logger.config('Failed to load account. Redirecting to login page');
         return LoginRoute(redirectTo: state.matchedLocation).location;
       default:
         _logger.severe('Unknown account state: $accountState');
@@ -120,9 +115,9 @@ class RestartUnitRoute extends GoRouteData {
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) => DialogPage(
-        state: state,
-        builder: (context) => RestartDialog(unit: unitName),
-      );
+    state: state,
+    builder: (context) => RestartDialog(unit: unitName),
+  );
 }
 
 @TypedGoRoute<LoginRoute>(path: '/login')
@@ -144,8 +139,8 @@ class LogoutRoute extends GoRouteData {
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) => DialogPage(
-        state: state,
-        barrierDismissible: false,
-        builder: (context) => const LogoutDialog(),
-      );
+    state: state,
+    barrierDismissible: false,
+    builder: (context) => const LogoutDialog(),
+  );
 }

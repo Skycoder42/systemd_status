@@ -26,24 +26,22 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) => AppBar(
-        title: Text(title),
-        actions: [
-          ...actions,
-          if (onRefresh != null && defaultTargetPlatform.isDesktop)
-            IconButton(
-              onPressed: onRefresh,
-              icon: const Icon(Icons.refresh),
-            ),
-          MenuAnchor(
-            menuChildren: [
-              ...menuItems,
-              const Divider(),
-              MenuItemButton(
-                onPressed: () async => const LogoutRoute().push(context),
-                child: Text(context.strings.logout),
-              ),
-            ],
-            builder: (context, controller, child) => IconButton(
+    title: Text(title),
+    actions: [
+      ...actions,
+      if (onRefresh != null && defaultTargetPlatform.isDesktop)
+        IconButton(onPressed: onRefresh, icon: const Icon(Icons.refresh)),
+      MenuAnchor(
+        menuChildren: [
+          ...menuItems,
+          const Divider(),
+          MenuItemButton(
+            onPressed: () async => const LogoutRoute().push(context),
+            child: Text(context.strings.logout),
+          ),
+        ],
+        builder:
+            (context, controller, child) => IconButton(
               onPressed: () {
                 if (controller.isOpen) {
                   controller.close();
@@ -53,9 +51,9 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
               },
               icon: const Icon(Icons.more_vert),
             ),
-          ),
-        ],
-      );
+      ),
+    ],
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

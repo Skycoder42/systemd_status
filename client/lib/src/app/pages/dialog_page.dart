@@ -12,21 +12,18 @@ class DialogPage extends Page<void> {
     this.barrierDismissible = true,
     this.useSafeArea = true,
   }) : super(
-          key: state.pageKey,
-          restorationId: state.pageKey.value,
-          name: state.name ?? state.path,
-          arguments: {
-            ...state.pathParameters,
-            ...state.uri.queryParameters,
-          },
-        );
+         key: state.pageKey,
+         restorationId: state.pageKey.value,
+         name: state.name ?? state.path,
+         arguments: {...state.pathParameters, ...state.uri.queryParameters},
+       );
 
   @override
   Route<void> createRoute(BuildContext context) => DialogRoute<void>(
-        context: context,
-        settings: this,
-        barrierDismissible: barrierDismissible,
-        useSafeArea: useSafeArea,
-        builder: builder,
-      );
+    context: context,
+    settings: this,
+    barrierDismissible: barrierDismissible,
+    useSafeArea: useSafeArea,
+    builder: builder,
+  );
 }

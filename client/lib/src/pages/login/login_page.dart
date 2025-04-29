@@ -13,10 +13,7 @@ import '../../widgets/scrollable_expanded_box.dart';
 class LoginPage extends ConsumerStatefulWidget {
   final String? redirectTo;
 
-  const LoginPage({
-    super.key,
-    this.redirectTo,
-  });
+  const LoginPage({super.key, this.redirectTo});
 
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
@@ -44,75 +41,71 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(context.strings.login_page_title),
-        ),
-        body: Form(
-          key: _formKey,
-          onChanged: _updateValidState,
-          child: ScrollableExpandedBox(
-            child: SafeArea(
-              top: false,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                        label: Text(
-                          context.strings.login_page_email_label,
-                        ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      autofocus: true,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.email(),
-                      ]),
-                      onSaved: (newValue) => _savedEmail = newValue,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        label: Text(
-                          context.strings.login_page_password_label,
-                        ),
-                      ),
-                      keyboardType: TextInputType.visiblePassword,
-                      autocorrect: false,
-                      enableIMEPersonalizedLearning: false,
-                      enableSuggestions: false,
-                      obscureText: true,
-                      textInputAction: TextInputAction.done,
-                      autofocus: true,
-                      validator: FormBuilderValidators.required(),
-                      onSaved: (newValue) => _savedPassword = newValue,
-                      onFieldSubmitted: (_) =>
-                          _submitKey.currentState?.triggerAction(),
-                    ),
-                    const SizedBox(height: 16),
-                    AsyncAction(
-                      key: _submitKey,
-                      enabled: _isValid,
-                      onAction: _submit,
-                      onError: _onError,
-                      builder: (onAction) => FilledButton.icon(
+    appBar: AppBar(title: Text(context.strings.login_page_title)),
+    body: Form(
+      key: _formKey,
+      onChanged: _updateValidState,
+      child: ScrollableExpandedBox(
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    label: Text(context.strings.login_page_email_label),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  autofocus: true,
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                    FormBuilderValidators.email(),
+                  ]),
+                  onSaved: (newValue) => _savedEmail = newValue,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(
+                    label: Text(context.strings.login_page_password_label),
+                  ),
+                  keyboardType: TextInputType.visiblePassword,
+                  autocorrect: false,
+                  enableIMEPersonalizedLearning: false,
+                  enableSuggestions: false,
+                  obscureText: true,
+                  textInputAction: TextInputAction.done,
+                  autofocus: true,
+                  validator: FormBuilderValidators.required(),
+                  onSaved: (newValue) => _savedPassword = newValue,
+                  onFieldSubmitted:
+                      (_) => _submitKey.currentState?.triggerAction(),
+                ),
+                const SizedBox(height: 16),
+                AsyncAction(
+                  key: _submitKey,
+                  enabled: _isValid,
+                  onAction: _submit,
+                  onError: _onError,
+                  builder:
+                      (onAction) => FilledButton.icon(
                         icon: const Icon(Icons.login),
-                        label:
-                            Text(context.strings.login_page_login_button_text),
+                        label: Text(
+                          context.strings.login_page_login_button_text,
+                        ),
                         onPressed: onAction,
                       ),
-                    ),
-                  ],
                 ),
-              ),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    ),
+  );
 
   void _updateValidState() {
     final isValid = _formKey.currentState?.validate() ?? false;

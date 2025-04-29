@@ -9,10 +9,9 @@ part 'unit_filter.g.dart';
 
 @Riverpod(dependencies: [userInfo])
 UnitFilter unitFilter(Ref ref) => UnitFilter(
-      globalFilters:
-          ref.watch(serverConfigProvider.select((c) => c.unitFilters)),
-      userFilters: ref.watch(userInfoProvider.select((u) => u.unitFilters)),
-    );
+  globalFilters: ref.watch(serverConfigProvider.select((c) => c.unitFilters)),
+  userFilters: ref.watch(userInfoProvider.select((u) => u.unitFilters)),
+);
 
 class UnitFilter {
   final List<RegExp>? globalFilters;
@@ -21,8 +20,8 @@ class UnitFilter {
   UnitFilter({
     required Iterable<String>? globalFilters,
     required Iterable<String>? userFilters,
-  })  : globalFilters = globalFilters?.map(RegExp.new).toList(),
-        userFilters = userFilters?.map(RegExp.new).toList();
+  }) : globalFilters = globalFilters?.map(RegExp.new).toList(),
+       userFilters = userFilters?.map(RegExp.new).toList();
 
   Iterable<UnitInfo> call(Iterable<UnitInfo> units) =>
       units.where((unit) => isAllowed(unit.name));
