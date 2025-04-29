@@ -27,8 +27,6 @@ class LogsPage extends ConsumerStatefulWidget {
 }
 
 class _LogsPageState extends ConsumerState<LogsPage> {
-  late final PagingController<String?, JournalEntry> _pagingController;
-
   var _refreshVisible = true;
   LogPriority? _logPriority;
 
@@ -38,83 +36,60 @@ class _LogsPageState extends ConsumerState<LogsPage> {
   );
 
   @override
-  void initState() {
-    super.initState();
-
-    _pagingController = PagingController(firstPageKey: null)
-      ..addPageRequestListener(_loadPage);
-  }
-
-  @override
-  void dispose() {
-    _pagingController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _pagingController.value = ref.read(logsControllerProvider(_query));
-    ref.listen(
-      logsControllerProvider(_query),
-      (_, next) => _pagingController.value = next,
-    );
-    return Scaffold(
-      appBar: LogsAppBar(
-        unitName: widget.unitName,
-        onRefresh: () => ref.invalidate(logsControllerProvider(_query)),
-        logPriority: _logPriority,
-        onLogPriorityChanged:
-            (value) => _updatePriority(
-              _logPriority = value == _logPriority ? null : value,
-            ),
-      ),
-      floatingActionButton:
-          defaultTargetPlatform.isMobile && _refreshVisible
-              ? FloatingActionButton(
-                child: const Icon(Icons.refresh),
-                onPressed: () => ref.invalidate(logsControllerProvider(_query)),
-              )
-              : null,
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          final visible = notification.metrics.pixels == 0;
-          if (visible != _refreshVisible) {
-            setState(() => _refreshVisible = visible);
-          }
-          return false;
-        },
-        child: PagedListView<String?, JournalEntry>.separated(
-          pagingController: _pagingController,
-          primary: true,
-          reverse: true,
-          builderDelegate: PagedChildBuilderDelegate<JournalEntry>(
-            itemBuilder: (context, item, index) => LogItem(item: item),
+  Widget build(BuildContext context) => Scaffold(
+    appBar: LogsAppBar(
+      unitName: widget.unitName,
+      onRefresh: () => ref.invalidate(logsControllerProvider(_query)),
+      logPriority: _logPriority,
+      onLogPriorityChanged:
+          (value) => _updatePriority(
+            _logPriority = value == _logPriority ? null : value,
           ),
-          separatorBuilder:
-              (context, index) =>
-                  _isBoot(index) ? const Divider() : const SizedBox.shrink(),
+    ),
+    floatingActionButton:
+        defaultTargetPlatform.isMobile && _refreshVisible
+            ? FloatingActionButton(
+              child: const Icon(Icons.refresh),
+              onPressed: () => ref.invalidate(logsControllerProvider(_query)),
+            )
+            : null,
+    body: NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        final visible = notification.metrics.pixels == 0;
+        if (visible != _refreshVisible) {
+          setState(() => _refreshVisible = visible);
+        }
+        return false;
+      },
+      child: PagedListView<String?, JournalEntry>.separated(
+        state: ref.watch(logsControllerProvider(_query)),
+        fetchNextPage: _loadNextPage,
+        primary: true,
+        reverse: true,
+        builderDelegate: PagedChildBuilderDelegate<JournalEntry>(
+          itemBuilder: (context, item, index) => LogItem(item: item),
         ),
+        separatorBuilder:
+            (context, index) =>
+                _isBoot(index) ? const Divider() : const SizedBox.shrink(),
       ),
-    );
-  }
+    ),
+  );
 
-  Future<void> _loadPage(String? offset) async => await ref
-      .read(logsControllerProvider(_query).notifier)
-      .loadNextPage(offset);
+  Future<void> _loadNextPage() async =>
+      await ref.read(logsControllerProvider(_query).notifier).loadNextPage();
 
   void _updatePriority(LogPriority? priority) {
     setState(() => _logPriority = priority);
   }
 
   bool _isBoot(int index) {
-    final items = _pagingController.itemList ?? const [];
-    final itemCount = items.length;
-    if (index + 1 >= itemCount) {
-      return false;
-    }
-
-    final currentItem = items[index];
-    final nextItem = items[index + 1];
-    return nextItem.bootId != currentItem.bootId;
+    final items =
+        ref.read(logsControllerProvider(_query)).itemsIn(index, 2).toList();
+    return switch (items) {
+      [final currentItem, final nextItem] =>
+        nextItem.bootId != currentItem.bootId,
+      _ => false,
+    };
   }
 }
