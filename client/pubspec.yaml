@@ -27,7 +27,7 @@ dependencies:
     sdk: flutter
   flutter_native_splash: ^2.4.6
   flutter_riverpod: ^2.6.1
-  flutter_secure_storage: ^10.0.0-beta.4
+  flutter_secure_storage: ^9.2.4
   flutter_svg: ^2.1.0
   form_builder_validators: ^11.1.2
   freezed_annotation: ^3.0.0

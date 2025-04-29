@@ -18,8 +18,7 @@ FlutterSecureStorage secureStorage(Ref ref) => const FlutterSecureStorage(
   mOptions: MacOsOptions(
     accessibility: KeychainAccessibility.unlocked_this_device,
     accountName: 'systemd_status_secure_storage',
-    usesDataProtectionKeychain: false,
-    isInvisible: true,
+    useDataProtectionKeyChain: false,
   ),
   webOptions: WebOptions(
     dbName: 'systemd_status_secure_storage',
