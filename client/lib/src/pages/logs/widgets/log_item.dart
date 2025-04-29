@@ -27,7 +27,7 @@ class LogItem extends StatelessWidget {
         MediaQuery.orientationOf(context) == Orientation.landscape
             ? TimestampText(item.timeStamp)
             : null,
-    onTap: () async => _onTap(context, item),
+    onTap: () async => await _onTap(context, item),
     dense: true,
   );
 

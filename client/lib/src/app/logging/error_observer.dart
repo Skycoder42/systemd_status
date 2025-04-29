@@ -64,7 +64,7 @@ class ErrorObserver extends ProviderObserver {
           error,
           stackTrace: stackTrace,
           withScope:
-              (scope) async => Future.wait([
+              (scope) async => await Future.wait([
                 if (provider.name case final String name)
                   scope.setTag('provider', name),
                 scope.setContexts('Provider', {

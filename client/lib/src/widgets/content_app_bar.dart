@@ -36,7 +36,7 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
           ...menuItems,
           const Divider(),
           MenuItemButton(
-            onPressed: () async => const LogoutRoute().push(context),
+            onPressed: () async => await const LogoutRoute().push(context),
             child: Text(context.strings.logout),
           ),
         ],

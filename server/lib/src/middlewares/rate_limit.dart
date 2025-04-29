@@ -37,7 +37,7 @@ class _RateLimitMiddleware {
 
   _RateLimitMiddleware(this._maxRequests, this._window, this._dateTimeNow);
 
-  Handler call(Handler next) => (request) async {
+  Handler call(Handler next) => (request) {
     final blockTime = _checkRateLimit(request);
     if (blockTime > Duration.zero) {
       return Response(

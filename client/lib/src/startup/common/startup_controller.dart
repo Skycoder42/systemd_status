@@ -116,7 +116,6 @@ abstract base class StartupControllerBase {
               ..dsn = sentryDsn
               ..attachThreads = true
               ..anrEnabled = true
-              ..autoAppStart = false
               ..attachViewHierarchy = true
               ..addIntegration(
                 LoggingIntegration(minBreadcrumbLevel: Level.CONFIG),
@@ -143,10 +142,6 @@ abstract base class StartupControllerBase {
         ),
       ),
     );
-
-    if (Sentry.isEnabled) {
-      SentryFlutter.setAppStartEnd(DateTime.now());
-    }
   }
 }
 

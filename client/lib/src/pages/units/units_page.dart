@@ -39,7 +39,7 @@ class _UnitsPageState extends ConsumerState<UnitsPage> {
     appBar: UnitsAppBar(
       showAll: _showAll,
       onToggleShowAll: (value) => setState(() => _showAll = value ?? false),
-      onRefresh: () async => _refreshIndicatorKey.currentState?.show(),
+      onRefresh: () async => await _refreshIndicatorKey.currentState?.show(),
       onFilterUpdated: (value) => setState(() => _filter = value),
       suggestionsBuilder: (context) async {
         final units = await ref.read(unitsProvider(_showAll).future);
