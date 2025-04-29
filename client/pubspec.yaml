@@ -89,6 +89,9 @@ msix_config:
   output_name: Systemd Status
   build_windows: false
 
+dependency_overrides:
+  intl: ^0.20.0
+
 cask:
   downloadUrl: https://github.com/Skycoder42/systemd_status/releases/download/client%2Fv#{version}/Systemd.Status.dmg
 

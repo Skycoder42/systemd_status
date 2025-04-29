@@ -7,6 +7,3 @@ environment:
 workspace:
   - server
   - client
-
-dependency_overrides:
-  intl: ^0.20.0
