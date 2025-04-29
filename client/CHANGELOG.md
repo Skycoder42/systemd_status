@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated dependencies
 - Updated min flutter sdk to 3.29.0
 - Updated Flatpak base image to gnome-48
+  - Including llvm20
+- Update embedded zenity to 4.1.90
 
 ## [0.3.2] - 2025-01-23
 ### Added
