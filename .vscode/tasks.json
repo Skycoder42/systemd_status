@@ -38,11 +38,12 @@
 		},
 		{
 			"type": "shell",
-			"command": "docker-compose",
+			"command": "docker",
 			"options": {
 				"cwd": "${workspaceFolder}/server"
 			},
 			"args": [
+				"compose",
 				"up",
 				"-d"
 			],

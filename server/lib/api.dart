@@ -4,4 +4,5 @@ export 'src/api/models/journal_entry.dart';
 export 'src/api/models/load_state.dart';
 export 'src/api/models/log_priority.dart';
 export 'src/api/models/unit_info.dart';
+export 'src/api/models/user_permissions.dart';
 export 'src/api/systemd_status_api.client.dart';

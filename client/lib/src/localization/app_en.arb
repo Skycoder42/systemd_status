@@ -50,6 +50,7 @@
   "units_page_title": "Units",
   "units_page_display_all_action": "Display all units",
   "units_page_reload_action": "Reload",
+  "units_page_reboot_action": "Reboot",
   "logs_page_title": "{unitName}",
   "@logs_page_title": {
     "placeholders": {
@@ -86,5 +87,11 @@
         "type": "String"
       }
     }
-  }
+  },
+  "reboot_dialog_hint_title": "Reboot system?",
+  "reboot_dialog_hint": "Do you want to reboot the system? This can take a few minutes and Systemd Status will not be able to report any status until the system rebooted successfully",
+  "reboot_dialog_action_title": "Enqueuing reboot...",
+  "reboot_dialog_action_button": "Reboot",
+  "reboot_dialog_success_message": "Restart is pending!",
+  "reboot_dialog_failed_message": "Unable to reboot the system! Please check the logs for more details."
 }

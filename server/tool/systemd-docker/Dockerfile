@@ -23,5 +23,5 @@ RUN apt-get update ; \
   rm -f /lib/systemd/system/systemd-update-utmp*
 
 VOLUME [ "/sys/fs/cgroup" ]
-
+ENV SYSTEMD_COLORS=0
 CMD ["/lib/systemd/systemd"]

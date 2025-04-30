@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide SuggestionsBuilder;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/auth/permissions_provider.dart';
+import '../../../app/router.dart';
 import '../../../localization/localization.dart';
 import '../../../widgets/content_app_bar.dart';
 import 'filter_button.dart';
@@ -41,6 +43,15 @@ class UnitsAppBar extends ConsumerWidget implements PreferredSizeWidget {
         onChanged: onToggleShowAll,
         child: Text(context.strings.units_page_display_all_action),
       ),
+      if (ref.watch(
+        userPermissionsProvider.select(
+          (p) => p.valueOrNull?.canReboot ?? false,
+        ),
+      ))
+        MenuItemButton(
+          onPressed: () => const RebootRoute().go(context),
+          child: Text(context.strings.units_page_reboot_action),
+        ),
     ],
   );
 

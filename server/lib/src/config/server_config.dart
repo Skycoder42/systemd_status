@@ -38,6 +38,7 @@ sealed class UserInfo with _$UserInfo {
   const factory UserInfo({
     @JsonKey(required: true) required String uid,
     List<String>? unitFilters,
+    @Default(false) bool canReboot,
   }) = _UserInfo;
 
   factory UserInfo.fromJson(Map<String, dynamic> json) =>

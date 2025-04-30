@@ -26,7 +26,7 @@ class SystemctlService {
   SystemctlService(this._options, this._processRunner);
 
   Future<List<UnitInfo>> listUnits({bool all = false}) async {
-    _logger.fine('Calling listUnits');
+    _logger.fine('calling listUnits');
     final units = await _systemctlJson<List<dynamic>, List<UnitInfo>>([
       'list-units',
       if (all) '--all',
@@ -37,17 +37,25 @@ class SystemctlService {
   }
 
   Future<void> restartUnit(String unit) async {
-    _logger.fine('Calling restartUnit($unit)');
+    _logger.fine('calling restartUnit($unit)');
     await _systemctl(['try-restart', unit, '--no-ask-password']);
+  }
+
+  Future<void> reboot() async {
+    _logger.fine('calling reboot()');
+    await _systemctl(['reboot'], runAsRoot: true);
   }
 
   Future<int> _systemctl(
     List<String> args, {
     int? expectedExitCode = 0,
-  }) async => await _processRunner.exec(_systemctlBinary, [
-    if (_runAsUser) '--user',
-    ...args,
-  ], expectedExitCode: expectedExitCode);
+    bool runAsRoot = false,
+  }) async => await _processRunner.exec(
+    _systemctlBinary,
+    [if (_runAsUser && !runAsRoot) '--user', ...args],
+    expectedExitCode: expectedExitCode,
+    runWithSudo: runAsRoot && _runAsUser,
+  );
 
   Future<TData> _systemctlJson<TJson, TData>(
     List<String> args, {

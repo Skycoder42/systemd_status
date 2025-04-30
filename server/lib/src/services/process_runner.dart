@@ -40,9 +40,15 @@ class ProcessRunner {
     List<String> args, {
     int? expectedExitCode = 0,
     Duration timeout = defaultProcessTimeout,
+    bool runWithSudo = false,
   }) async {
-    _logger.fine('Invoking $binary ${args.join(' ')}');
-    final process = await Process.start(binary, args);
+    _logger.fine(
+      'Invoking $binary ${args.join(' ')}${runWithSudo ? ' (sudo)' : ''}',
+    );
+    final process =
+        runWithSudo
+            ? await Process.start('sudo', [binary, ...args])
+            : await Process.start(binary, args);
     final stderrSub = _pipeToStd(process.stderr);
     try {
       process.stdout.drain<void>().ignore();
