@@ -152,8 +152,21 @@ jobs:
       clientId: ${{ secrets.CLIENT_ID }}
       clientSecret: ${{ secrets.CLIENT_SECRET }}
 
-  server_deploy:
-    name: Server - Deploy
+  server_deploy_noble:
+    name: Server - Deploy (noble)
+    needs:
+      - server_cd
+      - client_deploy
+    if: needs.server_cd.outputs.releaseCreated == 'true'
+    uses: Skycoder42/dart_test_tools/.github/workflows/deb.yml@main
+    with:
+      workingDirectory: server
+      packagecloudRepository: systemd_status/ubuntu/noble
+    secrets:
+      packagecloudToken: ${{ secrets.PACKAGECLOUD_TOKEN }}
+
+  server_deploy_jammy:
+    name: Server - Deploy (jammy)
     needs:
       - server_cd
       - client_deploy
