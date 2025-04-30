@@ -19,7 +19,7 @@ platforms:
 dependencies:
   ansicolor: ^2.0.3
   dio: ^5.8.0+1
-  file_picker: ^10.1.2
+  file_picker: ^10.1.0
   firebase_auth_rest: ^2.1.1
   flutter:
     sdk: flutter
@@ -89,6 +89,7 @@ msix_config:
   build_windows: false
 
 dependency_overrides:
+  file_picker: 10.1.0  # https://github.com/miguelpruivo/flutter_file_picker/issues/1769
   intl: ^0.20.0
 
 cask:

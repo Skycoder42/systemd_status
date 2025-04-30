@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Ensure autofill works for login page
+- Downgrade `file_picker` because of Android bug (See https://github.com/miguelpruivo/flutter_file_picker/issues/1769)
+- Fix empty state of logs page
 
 ## [0.3.3] - 2025-04-29
 ### Changed

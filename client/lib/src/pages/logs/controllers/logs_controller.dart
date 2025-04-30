@@ -33,6 +33,16 @@ class LogsController extends _$LogsController {
         count: _pageSize,
       );
 
+      if (newItems.isEmpty && state.pages == null) {
+        state = state.copyWith(
+          hasNextPage: false,
+          isLoading: false,
+          pages: const [],
+          keys: const [],
+        );
+        return;
+      }
+
       final isLastPage = newItems.length < _pageSize;
       state = state.copyWith(
         pages: newItems.isNotEmpty ? [...?state.pages, newItems] : const Omit(),
@@ -56,11 +66,6 @@ class LogsController extends _$LogsController {
 }
 
 extension PagingStateX<TKey, TItem> on PagingState<TKey, TItem> {
-  int get itemCount => switch (pages) {
-    null => 0,
-    final p => p.map((i) => i.length).fold(0, (a, b) => a + b),
-  };
-
   Iterable<TItem> itemsIn(int index, int count) sync* {
     var offset = 0;
     var processedItems = 0;
