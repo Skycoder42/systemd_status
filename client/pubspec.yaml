@@ -104,4 +104,4 @@ scripts:
     splash: dart run flutter_native_splash:create
   start:
     linux: flutter run -d linux
-    web: flutter run -d web-server --web-port 8088 --dart-define=SERVER_URL=http://localhost:8080
+    web: flutter run -d web-server --web-port 8088 --dart-define=SERVER_URL=https://localhost:8080

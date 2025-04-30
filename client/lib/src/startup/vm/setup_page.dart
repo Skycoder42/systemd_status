@@ -74,6 +74,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 TextFormField(
+                  autofillHints: const [AutofillHints.url],
                   keyboardType: TextInputType.url,
                   textInputAction: TextInputAction.next,
                   autofocus: true,

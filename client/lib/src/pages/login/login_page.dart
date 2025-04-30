@@ -50,56 +50,59 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           top: false,
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                    label: Text(context.strings.login_page_email_label),
+            child: AutofillGroup(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text(context.strings.login_page_email_label),
+                    ),
+                    autofillHints: const [AutofillHints.email],
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    autofocus: true,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(),
+                      FormBuilderValidators.email(),
+                    ]),
+                    onSaved: (newValue) => _savedEmail = newValue,
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  autofocus: true,
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                    FormBuilderValidators.email(),
-                  ]),
-                  onSaved: (newValue) => _savedEmail = newValue,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    label: Text(context.strings.login_page_password_label),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text(context.strings.login_page_password_label),
+                    ),
+                    autofillHints: const [AutofillHints.password],
+                    keyboardType: TextInputType.visiblePassword,
+                    autocorrect: false,
+                    enableIMEPersonalizedLearning: false,
+                    enableSuggestions: false,
+                    obscureText: true,
+                    textInputAction: TextInputAction.done,
+                    validator: FormBuilderValidators.required(),
+                    onSaved: (newValue) => _savedPassword = newValue,
+                    onFieldSubmitted:
+                        (_) => _submitKey.currentState?.triggerAction(),
                   ),
-                  keyboardType: TextInputType.visiblePassword,
-                  autocorrect: false,
-                  enableIMEPersonalizedLearning: false,
-                  enableSuggestions: false,
-                  obscureText: true,
-                  textInputAction: TextInputAction.done,
-                  autofocus: true,
-                  validator: FormBuilderValidators.required(),
-                  onSaved: (newValue) => _savedPassword = newValue,
-                  onFieldSubmitted:
-                      (_) => _submitKey.currentState?.triggerAction(),
-                ),
-                const SizedBox(height: 16),
-                AsyncAction(
-                  key: _submitKey,
-                  enabled: _isValid,
-                  onAction: _submit,
-                  onError: _onError,
-                  builder:
-                      (onAction) => FilledButton.icon(
-                        icon: const Icon(Icons.login),
-                        label: Text(
-                          context.strings.login_page_login_button_text,
+                  const SizedBox(height: 16),
+                  AsyncAction(
+                    key: _submitKey,
+                    enabled: _isValid,
+                    onAction: _submit,
+                    onError: _onError,
+                    builder:
+                        (onAction) => FilledButton.icon(
+                          icon: const Icon(Icons.login),
+                          label: Text(
+                            context.strings.login_page_login_button_text,
+                          ),
+                          onPressed: onAction,
                         ),
-                        onPressed: onAction,
-                      ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
