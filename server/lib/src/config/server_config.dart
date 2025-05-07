@@ -7,20 +7,50 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'options.dart';
-
 part 'server_config.freezed.dart';
 part 'server_config.g.dart';
 
 @Riverpod(keepAlive: true)
-ServerConfig serverConfig(Ref ref) {
-  final path = ref.watch(optionsProvider).config;
-  final configFile = File(path);
-  return checkedYamlDecode<ServerConfig>(
-    configFile.readAsStringSync(),
-    ServerConfig.fromYaml,
-    sourceUrl: configFile.uri,
-  );
+ServerConfig serverConfig(Ref ref) => throw StateError('Must be overridden');
+
+@freezed
+sealed class ServerConfig with _$ServerConfig {
+  @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
+  const factory ServerConfig({
+    List<String>? allowedOrigins,
+    List<String>? unitFilters,
+    TlsConfig? tls,
+    @JsonKey(required: true) required AppConfig app,
+    @JsonKey(required: true) required FirebaseConfig firebase,
+    String? sentryDsn,
+  }) = _ServerConfig;
+
+  factory ServerConfig.fromJson(Map<String, dynamic> json) =>
+      _$ServerConfigFromJson(json);
+
+  factory ServerConfig.fromYaml(Map<dynamic, dynamic>? yaml) =>
+      _$ServerConfigFromJson(yaml!);
+
+  factory ServerConfig.load(String path) {
+    final configFile = File(path);
+    return checkedYamlDecode<ServerConfig>(
+      configFile.readAsStringSync(),
+      ServerConfig.fromYaml,
+      sourceUrl: configFile.uri,
+    );
+  }
+}
+
+@freezed
+sealed class TlsConfig with _$TlsConfig {
+  @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
+  const factory TlsConfig({
+    @JsonKey(required: true) required String pfxPath,
+    String? pfxPassphrase,
+  }) = _TlsConfig;
+
+  factory TlsConfig.fromJson(Map<String, dynamic> json) =>
+      _$TlsConfigFromJson(json);
 }
 
 @freezed
@@ -30,19 +60,6 @@ sealed class AppConfig with _$AppConfig {
 
   factory AppConfig.fromJson(Map<String, dynamic> json) =>
       _$AppConfigFromJson(json);
-}
-
-@freezed
-sealed class UserInfo with _$UserInfo {
-  @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
-  const factory UserInfo({
-    @JsonKey(required: true) required String uid,
-    List<String>? unitFilters,
-    @Default(false) bool canReboot,
-  }) = _UserInfo;
-
-  factory UserInfo.fromJson(Map<String, dynamic> json) =>
-      _$UserInfoFromJson(json);
 }
 
 @freezed
@@ -59,31 +76,14 @@ sealed class FirebaseConfig with _$FirebaseConfig {
 }
 
 @freezed
-sealed class TlsConfig with _$TlsConfig {
+sealed class UserInfo with _$UserInfo {
   @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
-  const factory TlsConfig({
-    @JsonKey(required: true) required String pfxPath,
-    String? pfxPassphrase,
-  }) = _TlsConfig;
-
-  factory TlsConfig.fromJson(Map<String, dynamic> json) =>
-      _$TlsConfigFromJson(json);
-}
-
-@freezed
-sealed class ServerConfig with _$ServerConfig {
-  @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
-  const factory ServerConfig({
-    List<String>? allowedOrigins,
+  const factory UserInfo({
+    @JsonKey(required: true) required String uid,
     List<String>? unitFilters,
-    TlsConfig? tls,
-    @JsonKey(required: true) required AppConfig app,
-    @JsonKey(required: true) required FirebaseConfig firebase,
-  }) = _ServerConfig;
+    @Default(false) bool canReboot,
+  }) = _UserInfo;
 
-  factory ServerConfig.fromJson(Map<String, dynamic> json) =>
-      _$ServerConfigFromJson(json);
-
-  factory ServerConfig.fromYaml(Map<dynamic, dynamic>? yaml) =>
-      _$ServerConfigFromJson(yaml!);
+  factory UserInfo.fromJson(Map<String, dynamic> json) =>
+      _$UserInfoFromJson(json);
 }

@@ -23,6 +23,7 @@ class Server {
   static const _maxContentLength = 1 * 1024 * 1024; // 1 MB
 
   final Options options;
+  final ServerConfig config;
   final _logger = Logger('Server');
 
   late final ProviderContainer _providerContainer;
@@ -32,7 +33,7 @@ class Server {
   late final HttpServer _server;
   var _isClosing = false;
 
-  Server(this.options) {
+  Server(this.options, this.config) {
     _setupHandler();
     _setupSignals();
   }
@@ -53,16 +54,18 @@ class Server {
 
   void _setupHandler() {
     _providerContainer = ProviderContainer(
-      overrides: [optionsProvider.overrideWithValue(options)],
+      overrides: [
+        optionsProvider.overrideWithValue(options),
+        serverConfigProvider.overrideWithValue(config),
+      ],
     );
 
-    final config = _providerContainer.read(serverConfigProvider);
     _handler = const Pipeline()
-        .addMiddleware(_middlewares(config))
-        .addHandler(_setupRouter(config));
+        .addMiddleware(_middlewares())
+        .addHandler(_setupRouter());
   }
 
-  Middleware _middlewares(ServerConfig config) {
+  Middleware _middlewares() {
     final allowedOrigins = config.allowedOrigins;
     if (allowedOrigins != null) {
       _logger.config('Enabling CORS for: $allowedOrigins');
@@ -98,7 +101,7 @@ class Server {
         .addHandler(next);
   }
 
-  Handler _setupRouter(ServerConfig config) {
+  Handler _setupRouter() {
     final router = Router();
     if (config.app.appDir case final String appDir) {
       _logger.config('Mounting app from $appDir');

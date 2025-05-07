@@ -30,6 +30,7 @@ custom_lint.log
 .artifacts
 
 # generated files
+**/lib/gen/
 *.g.dart
 *.freezed.dart
 *.api.dart
