@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2026-07-03
+### Changed
+- Updated min sdk version to ^3.12.0
+- Updated dependencies
+
 ## [0.4.1] - 2025-04-30
 ### Added
 - Added Ubuntu Noble (24.04) release builds
@@ -70,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
+[0.4.2]: https://github.com/Skycoder42/systemd_status/compare/server%2Fv0.4.1...v0.4.2
 [0.4.1]: https://github.com/Skycoder42/systemd_status/compare/server%2Fv0.4.0...v0.4.1
 [0.4.0]: https://github.com/Skycoder42/systemd_status/compare/server%2Fv0.3.3...v0.4.0
 [0.3.3]: https://github.com/Skycoder42/systemd_status/compare/server%2Fv0.3.2...v0.3.3

@@ -75,7 +75,7 @@ class _GlobalRedirect {
 
 @TypedGoRoute<RootRoute>(path: '/')
 @immutable
-class RootRoute extends GoRouteData {
+class RootRoute extends GoRouteData with $RootRoute {
   const RootRoute();
 
   @override
@@ -92,7 +92,7 @@ class RootRoute extends GoRouteData {
   ],
 )
 @immutable
-class UnitsRoute extends GoRouteData {
+class UnitsRoute extends GoRouteData with $UnitsRoute {
   const UnitsRoute();
 
   @override
@@ -100,7 +100,7 @@ class UnitsRoute extends GoRouteData {
 }
 
 @immutable
-class LogsRoute extends GoRouteData {
+class LogsRoute extends GoRouteData with $LogsRoute {
   final String unitName;
 
   const LogsRoute(this.unitName);
@@ -111,7 +111,7 @@ class LogsRoute extends GoRouteData {
 }
 
 @immutable
-class RestartUnitRoute extends GoRouteData {
+class RestartUnitRoute extends GoRouteData with $RestartUnitRoute {
   final String unitName;
 
   const RestartUnitRoute(this.unitName);
@@ -124,7 +124,7 @@ class RestartUnitRoute extends GoRouteData {
 }
 
 @immutable
-class RebootRoute extends GoRouteData {
+class RebootRoute extends GoRouteData with $RebootRoute {
   const RebootRoute();
 
   @override
@@ -134,7 +134,7 @@ class RebootRoute extends GoRouteData {
 
 @TypedGoRoute<LoginRoute>(path: '/login')
 @immutable
-class LoginRoute extends GoRouteData {
+class LoginRoute extends GoRouteData with $LoginRoute {
   final String? redirectTo;
 
   const LoginRoute({this.redirectTo});
@@ -146,7 +146,7 @@ class LoginRoute extends GoRouteData {
 
 @TypedGoRoute<LogoutRoute>(path: '/logout')
 @immutable
-class LogoutRoute extends GoRouteData {
+class LogoutRoute extends GoRouteData with $LogoutRoute{
   const LogoutRoute();
 
   @override

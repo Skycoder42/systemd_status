@@ -4,36 +4,20 @@
 		{
 			"type": "dart",
 			"command": "dart",
-			"cwd": "server",
 			"args": [
 				"run",
 				"build_runner",
-				"watch"
+				"watch",
+				"--workspace"
 			],
 			"problemMatcher": [],
-			"label": "build server",
-		},
-		{
-			"type": "dart",
-			"command": "dart",
-			"cwd": "client",
-			"args": [
-				"run",
-				"build_runner",
-				"watch"
-			],
-			"problemMatcher": [],
-			"label": "build client",
-		},
-		{
 			"label": "Build",
-			"dependsOn": [
-				"build server",
-				"build client",
-			],
 			"group": {
 				"kind": "build",
 				"isDefault": true
+			},
+			"runOptions": {
+				"runOn": "folderOpen"
 			}
 		},
 		{

@@ -1,9 +1,0 @@
-include: package:dart_test_tools/strict.yaml
-
-analyzer:
-  exclude:
-    - lib/gen/**
-
-custom_lint:
-  rules:
-    - no_self_package_imports: false
