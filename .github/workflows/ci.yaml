@@ -18,15 +18,6 @@ jobs:
       buildRunner: true
       unitTestPaths: ""
 
-  server_package:
-    name: Server - CI
-    uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
-    needs:
-      - server_ci
-    with:
-      workingDirectory: server
-      buildRunner: true
-
   server_cd:
     name: Server - Build
     uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
@@ -38,29 +29,25 @@ jobs:
       enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
       workingDirectory: server
       buildRunner: true
-      archivePrefix: systemd-status-server
       tagPrefix: server/v
 
   client_ci:
     name: Client - CI
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
-    needs:
-      - server_package
     with:
       workingDirectory: client
-      artifactDependencies: systemd_status_server
+      buildDependencies: systemd_status_server
       buildRunner: true
       unitTestPaths: ""
 
   client_build_android:
     name: Client - Build
     needs:
-      - server_package
       - client_ci
     uses: Skycoder42/dart_test_tools/.github/workflows/build-android.yml@main
     with:
       workingDirectory: client
-      artifactDependencies: systemd_status_server
+      buildDependencies: systemd_status_server
       buildRunner: true
     secrets:
       keystore: ${{ secrets.KEYSTORE }}
@@ -69,12 +56,10 @@ jobs:
   client_build_linux:
     name: Client - Build
     needs:
-      - server_package
       - client_ci
     uses: Skycoder42/dart_test_tools/.github/workflows/build-linux.yml@main
     with:
       workingDirectory: client
-      artifactDependencies: systemd_status_server
       manifestPath: linux/flatpak/de.skycoder42.systemdStatusClient.yaml
       bundleName: de.skycoder42.systemdStatusClient.flatpak
     secrets:
@@ -84,35 +69,32 @@ jobs:
   client_build_windows:
     name: Client - Build
     needs:
-      - server_package
       - client_ci
     uses: Skycoder42/dart_test_tools/.github/workflows/build-windows.yml@main
     with:
       workingDirectory: client
-      artifactDependencies: systemd_status_server
+      buildDependencies: systemd_status_server
       buildRunner: true
 
   client_build_macos:
     name: Client - Build
     needs:
-      - server_package
       - client_ci
     uses: Skycoder42/dart_test_tools/.github/workflows/build-macos.yml@main
     with:
       workingDirectory: client
-      artifactDependencies: systemd_status_server
+      buildDependencies: systemd_status_server
       buildRunner: true
       dmgConfigPath: macos/dmg-config.json
 
   client_build_web:
     name: Client - Build
     needs:
-      - server_package
       - client_ci
     uses: Skycoder42/dart_test_tools/.github/workflows/build-web.yml@main
     with:
       workingDirectory: client
-      artifactDependencies: systemd_status_server
+      buildDependencies: systemd_status_server
       buildRunner: true
       baseHref: /app/
 

@@ -3,10 +3,10 @@
 ---
 id: de.skycoder42.systemdStatusClient
 runtime: org.gnome.Platform
-runtime-version: "48"
+runtime-version: "50"
 sdk: org.gnome.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm20
+  - org.freedesktop.Sdk.Extension.llvm22
   - org.freedesktop.Sdk.Extension.flutter
 command: systemd_status_client
 separate-locales: false
@@ -22,8 +22,8 @@ modules:
     buildsystem: meson
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/zenity/4.1/zenity-4.1.90.tar.xz
-        sha256: bf3679c6205ff48dcebd1e1dff3a3a4a6a0b3a53e1cbc3b098a9ec0b62bd7236
+        url: https://download.gnome.org/sources/zenity/4.2/zenity-4.2.2.tar.xz
+        sha256: 019186a996096ef4fc356e21577b5673f5baa3a29ac8e3d608b753371c18018d
     cleanup:
       - /share/man
       - /share/help
@@ -33,8 +33,8 @@ modules:
       - x86_64
       - aarch64
     build-options:
-      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/.pub-cache/bin:/usr/lib/sdk/llvm20/bin
-      prepend-ld-library-path: /usr/lib/sdk/llvm20/lib
+      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/.pub-cache/bin:/usr/lib/sdk/llvm22/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm22/lib
       build-args:
         - --share=network
       env:
@@ -44,11 +44,8 @@ modules:
         - BUILD_NUMBER
     sources:
       - type: dir
-        path: ../..
+        path: ../../..
         dest: .
-      - type: dir
-        path: ../../../.artifacts
-        dest: .artifacts
       - type: patch
         paths:
           - patch/compiler_warnings.patch
@@ -56,22 +53,22 @@ modules:
       - type: script
         commands:
           - cp -a build/linux/x64/release/bundle/* /app/
-        dest-filename: install.sh
+        dest-filename: client/install.sh
         only-arches:
           - x86_64
       - type: script
         commands:
           - cp -a build/linux/arm64/release/bundle/* /app/
-        dest-filename: install.sh
+        dest-filename: client/install.sh
         only-arches:
           - aarch64
     build-commands:
       - rm -f /etc/resolv.conf
       - echo 'nameserver 1.1.1.1' > /etc/resolv.conf
       - flutter pub get
-      - dart run build_runner build --release
-      - flutter build linux --release --build-number="$BUILD_NUMBER"
-      - ./install.sh
+      - dart run build_runner build --release --workspace
+      - cd client && flutter build linux --release --build-number="$BUILD_NUMBER"
+      - cd client && ./install.sh
   - name: metadata
     buildsystem: simple
     sources:
@@ -93,8 +90,8 @@ modules:
   - name: changelog
     buildsystem: simple
     build-options:
-      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/.pub-cache/bin:/usr/lib/sdk/llvm20/bin
-      prepend-ld-library-path: /usr/lib/sdk/llvm20/lib
+      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/.pub-cache/bin:/usr/lib/sdk/llvm22/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm22/lib
       build-args:
         - --share=network
       env:

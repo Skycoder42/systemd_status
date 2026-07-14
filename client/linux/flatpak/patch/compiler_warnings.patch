@@ -1,7 +1,7 @@
-diff --git a/linux/CMakeLists.txt b/linux/CMakeLists.txt
+diff --git a/client/linux/CMakeLists.txt b/client/linux/CMakeLists.txt
 index 30aaa0c..4547c3e 100644
---- a/linux/CMakeLists.txt
-+++ b/linux/CMakeLists.txt
+--- a/client/linux/CMakeLists.txt
++++ b/client/linux/CMakeLists.txt
 @@ -41,7 +41,7 @@ endif()
  # of modifying this function.
  function(APPLY_STANDARD_SETTINGS TARGET)
