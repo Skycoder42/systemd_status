@@ -1,13 +1,15 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-val keystoreProperties = new Properties()
+val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
-    keystorePropertiesFile.withReader("UTF-8") { reader ->
+    keystorePropertiesFile.reader(Charsets.UTF_8).use { reader ->
         keystoreProperties.load(reader)
     }
 }
@@ -34,9 +36,9 @@ android {
         if (keystorePropertiesFile.exists()) {
             register("release") {
                 keyAlias = defaultConfig.applicationId
-                keyPassword = keystoreProperties["password"]
-                storeFile = file(keystoreProperties["storeFile"])
-                storePassword = keystoreProperties["password"]
+                keyPassword = keystoreProperties["password"] as String
+                storeFile = file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["password"] as String
             }
         }
     }
@@ -46,7 +48,7 @@ android {
             if (keystorePropertiesFile.exists()) {
                 signingConfig = signingConfigs.getByName("release")
             } else {
-                signingConfig null
+                signingConfig = null
             }
         }
     }

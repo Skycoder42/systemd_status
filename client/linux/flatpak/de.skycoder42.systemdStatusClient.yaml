@@ -53,13 +53,15 @@ modules:
       - type: script
         commands:
           - cp -a build/linux/x64/release/bundle/* /app/
-        dest-filename: client/install.sh
+        dest: client
+        dest-filename: install.sh
         only-arches:
           - x86_64
       - type: script
         commands:
           - cp -a build/linux/arm64/release/bundle/* /app/
-        dest-filename: client/install.sh
+        dest: client
+        dest-filename: install.sh
         only-arches:
           - aarch64
     build-commands:
