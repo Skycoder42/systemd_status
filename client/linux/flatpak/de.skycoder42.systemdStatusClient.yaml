@@ -8,6 +8,7 @@ sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm22
   - org.freedesktop.Sdk.Extension.flutter
+  - org.freedesktop.Sdk.Extension.openjdk
 command: systemd_status_client
 separate-locales: false
 finish-args:
@@ -69,7 +70,10 @@ modules:
       - echo 'nameserver 1.1.1.1' > /etc/resolv.conf
       - flutter pub get
       - dart run build_runner build --release --workspace
-      - cd client && flutter build linux --release --build-number="$BUILD_NUMBER"
+      - >-
+        . /usr/lib/sdk/openjdk/enable.sh &&
+        cd client &&
+        flutter build linux --release --build-number="$BUILD_NUMBER"
       - cd client && ./install.sh
   - name: metadata
     buildsystem: simple
