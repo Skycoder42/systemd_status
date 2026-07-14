@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,51 +11,45 @@ abstract interface class ErrorState {
   StackTrace get stackTrace;
 }
 
-class ErrorObserver extends ProviderObserver {
+final class ErrorObserver extends ProviderObserver {
   const ErrorObserver();
 
   @override
-  void didAddProvider(
-    ProviderBase<dynamic> provider,
-    Object? value,
-    ProviderContainer container,
-  ) {
-    _maybeReportStateException(provider, value);
+  void didAddProvider(ProviderObserverContext context, Object? value) {
+    _maybeReportStateException(context, value);
   }
 
   @override
   void didUpdateProvider(
-    ProviderBase<dynamic> provider,
+    ProviderObserverContext context,
     Object? previousValue,
     Object? newValue,
-    ProviderContainer container,
   ) {
-    _maybeReportStateException(provider, newValue);
+    _maybeReportStateException(context, newValue);
   }
 
   @override
   void providerDidFail(
-    ProviderBase<Object?> provider,
+    ProviderObserverContext context,
     Object error,
     StackTrace stackTrace,
-    ProviderContainer container,
   ) {
-    reportException(provider, error, stackTrace);
+    reportException(context, error, stackTrace);
   }
 
   void _maybeReportStateException(
-    ProviderBase<dynamic> provider,
+    ProviderObserverContext context,
     Object? value,
   ) {
     switch (value) {
-      case ErrorState(error: final error, stackTrace: final stackTrace):
-        reportException(provider, error, stackTrace);
+      case ErrorState(:final error, :final stackTrace):
+        reportException(context, error, stackTrace);
     }
   }
 
   @visibleForOverriding
   void reportException(
-    ProviderBase<dynamic> provider,
+    ProviderObserverContext context,
     Object error,
     StackTrace stackTrace,
   ) {
@@ -63,34 +58,33 @@ class ErrorObserver extends ProviderObserver {
         Sentry.captureException(
           error,
           stackTrace: stackTrace,
-          withScope:
-              (scope) async => await Future.wait([
-                if (provider.name case final String name)
-                  scope.setTag('provider', name),
-                scope.setContexts('Provider', {
-                  'identifier': provider.toString(),
-                  'name': provider.name,
-                  'providerType': provider.runtimeType.toString(),
-                  'argument': provider.argument?.toString(),
-                  'familyTree': _familyTree(provider),
-                  'dependencies': _toList(provider.dependencies),
-                  'allTransitiveDependencies': _toList(
-                    provider.allTransitiveDependencies,
-                  ),
-                }),
-              ]),
+          withScope: (scope) async => await Future.wait<void>([
+            if (context.provider.name case final name?)
+              scope.setTag('provider', name),
+            Future.sync(
+              () => scope.setContexts('Provider', {
+                'identifier': context.provider.toString(),
+                'name': context.provider.name,
+                'providerType': context.provider.runtimeType.toString(),
+                'argument': context.provider.argument?.toString(),
+                'familyTree': _familyTree(context.provider),
+                'dependencies': _toList(context.provider.dependencies),
+              }),
+            ),
+          ]),
         ),
       );
     } else {
-      final name = provider.name ?? provider.runtimeType.toString();
+      final name =
+          context.provider.name ?? context.provider.runtimeType.toString();
       Logger(
         'provider.$name',
-      ).severe('Provider $provider did fail', error, stackTrace);
+      ).severe('Provider ${context.provider} did fail', error, stackTrace);
     }
   }
 
   List<String>? _familyTree(ProviderOrFamily provider) {
-    if (provider.from case final Family<dynamic> from) {
+    if (provider.from case final from?) {
       return [...?_familyTree(from), from.name ?? '<unnamed>'];
     }
     return null;

@@ -44,9 +44,7 @@ class UnitsAppBar extends ConsumerWidget implements PreferredSizeWidget {
         child: Text(context.strings.units_page_display_all_action),
       ),
       if (ref.watch(
-        userPermissionsProvider.select(
-          (p) => p.valueOrNull?.canReboot ?? false,
-        ),
+        userPermissionsProvider.select((p) => p.value?.canReboot ?? false),
       ))
         MenuItemButton(
           onPressed: () => const RebootRoute().go(context),

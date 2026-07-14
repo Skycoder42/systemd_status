@@ -59,6 +59,7 @@ dev_dependencies:
   sentry_dart_plugin: ^3.4.0
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/icons/

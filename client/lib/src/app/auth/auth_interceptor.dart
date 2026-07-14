@@ -31,7 +31,7 @@ class AuthInterceptor extends Interceptor {
 
   String? _loadIdToken() {
     final idToken = _ref.read(
-      accountManagerProvider.select((d) => d.valueOrNull?.idToken),
+      accountManagerProvider.select((d) => d.value?.idToken),
     );
     return idToken;
   }
