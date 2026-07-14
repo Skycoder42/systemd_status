@@ -33,14 +33,13 @@ void main(List<String> args) async {
     // start actual app (with or without sentry)
     if (config.sentryDsn case final String sentryDsn) {
       await Sentry.init(
-        (options) =>
-            options
-              ..dsn = sentryDsn
-              ..release = '${metadata.package}@${metadata.version}'
-              ..attachThreads = true
-              ..addIntegration(
-                LoggingIntegration(minBreadcrumbLevel: Level.CONFIG),
-              ),
+        (options) => options
+          ..dsn = sentryDsn
+          ..release = '${metadata.package}@${metadata.version}'
+          ..attachThreads = true
+          ..addIntegration(
+            LoggingIntegration(minBreadcrumbLevel: Level.CONFIG),
+          ),
         appRunner: () async => await _appMain(options, config),
       );
     } else {

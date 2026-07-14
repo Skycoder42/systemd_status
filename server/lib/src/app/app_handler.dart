@@ -26,12 +26,11 @@ class AppHandler {
       return result;
     }
 
-    final sentryDsnCookie =
-        Cookie('sentryDsn', _sentryDsn)
-          ..httpOnly = false
-          ..secure = true
-          ..sameSite = SameSite.strict
-          ..expires = DateTime.now().add(const Duration(days: 30));
+    final sentryDsnCookie = Cookie('sentryDsn', _sentryDsn)
+      ..httpOnly = false
+      ..secure = true
+      ..sameSite = SameSite.strict
+      ..expires = DateTime.now().add(const Duration(days: 30));
     return result.change(
       headers: {HttpHeaders.setCookieHeader: sentryDsnCookie.toString()},
     );

@@ -1,6 +1,5 @@
 import 'package:firebase_auth_rest/firebase_auth_rest.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -146,7 +145,7 @@ class LoginRoute extends GoRouteData with $LoginRoute {
 
 @TypedGoRoute<LogoutRoute>(path: '/logout')
 @immutable
-class LogoutRoute extends GoRouteData with $LogoutRoute{
+class LogoutRoute extends GoRouteData with $LogoutRoute {
   const LogoutRoute();
 
   @override

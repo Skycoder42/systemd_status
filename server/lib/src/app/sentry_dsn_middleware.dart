@@ -19,11 +19,10 @@ class _SentryDsnMiddleware {
       return response;
     }
 
-    final sentryDsnCookie =
-        Cookie('sentryDsn', _sentryDsn)
-          ..httpOnly = false
-          ..secure = true
-          ..sameSite = SameSite.strict;
+    final sentryDsnCookie = Cookie('sentryDsn', _sentryDsn)
+      ..httpOnly = false
+      ..secure = true
+      ..sameSite = SameSite.strict;
     return response.change(
       headers: {HttpHeaders.setCookieHeader: sentryDsnCookie.toString()},
     );

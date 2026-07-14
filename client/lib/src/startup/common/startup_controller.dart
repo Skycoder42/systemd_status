@@ -40,7 +40,7 @@ abstract base class StartupControllerBase {
   final logger = Logger('StartupController');
 
   @protected
-  final ProviderContainer container = ProviderContainer(
+  final container = ProviderContainer(
     overrides: [
       serverUrlProvider.overrideWith(
         (ref) => throw UnsupportedError('Not ready'),
@@ -111,15 +111,15 @@ abstract base class StartupControllerBase {
 
   Future<void> _initWithSentry(String sentryDsn) async =>
       await SentryFlutter.init(
-        (options) =>
-            options
-              ..dsn = sentryDsn
-              ..attachThreads = true
-              ..anrEnabled = true
-              ..attachViewHierarchy = true
-              ..addIntegration(
-                LoggingIntegration(minBreadcrumbLevel: Level.CONFIG),
-              ),
+        (options) => options
+          ..dsn = sentryDsn
+          ..attachThreads = true
+          ..anrEnabled = true
+          // ignore: experimental_member_use useful for now
+          ..attachViewHierarchy = true
+          ..addIntegration(
+            LoggingIntegration(minBreadcrumbLevel: Level.CONFIG),
+          ),
         appRunner: _runApp,
       );
 
@@ -128,7 +128,7 @@ abstract base class StartupControllerBase {
   Future<void> _runApp() async {
     try {
       await container.read(accountManagerProvider.future);
-      // ignore: avoid_catches_without_on_clauses
+      // ignore: avoid_catches_without_on_clauses for clean startups
     } catch (e, s) {
       logger.warning('Failed to load account', e, s);
     }

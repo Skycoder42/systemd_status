@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 import 'package:posix/posix.dart' as posix;
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/models/unit_info.dart';
@@ -61,15 +60,14 @@ class SystemctlService {
     List<String> args, {
     required TData Function(TJson) fromJson,
     int? expectedExitCode = 0,
-  }) async =>
-      await _processRunner
-          .streamJson(
-            _systemctlBinary,
-            [if (_runAsUser) '--user', ...args, '--output=json'],
-            fromJson: fromJson,
-            expectedExitCode: expectedExitCode,
-          )
-          .single;
+  }) async => await _processRunner
+      .streamJson(
+        _systemctlBinary,
+        [if (_runAsUser) '--user', ...args, '--output=json'],
+        fromJson: fromJson,
+        expectedExitCode: expectedExitCode,
+      )
+      .single;
 
   String get _systemctlBinary =>
       _options.debugOverwriteSystemctl ?? 'systemctl';

@@ -40,17 +40,16 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Text(context.strings.logout),
           ),
         ],
-        builder:
-            (context, controller, child) => IconButton(
-              onPressed: () {
-                if (controller.isOpen) {
-                  controller.close();
-                } else {
-                  controller.open();
-                }
-              },
-              icon: const Icon(Icons.more_vert),
-            ),
+        builder: (context, controller, child) => IconButton(
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          icon: const Icon(Icons.more_vert),
+        ),
       ),
     ],
   );

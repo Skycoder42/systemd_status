@@ -34,7 +34,7 @@ sealed class LoadState with _$LoadState {
     ErrorLoadState() => 'error',
     MergedLoadState() => 'merged',
     MaskedLoadState() => 'masked',
-    UnknownLoadState(raw: final raw) => raw,
+    UnknownLoadState(:final raw) => raw,
   };
 
   String toJson() => name;

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:logging/logging.dart';
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'process_runner.g.dart';
@@ -45,10 +44,9 @@ class ProcessRunner {
     _logger.fine(
       'Invoking $binary ${args.join(' ')}${runWithSudo ? ' (sudo)' : ''}',
     );
-    final process =
-        runWithSudo
-            ? await Process.start('sudo', [binary, ...args])
-            : await Process.start(binary, args);
+    final process = runWithSudo
+        ? await Process.start('sudo', [binary, ...args])
+        : await Process.start(binary, args);
     final stderrSub = _pipeToStd(process.stderr);
     try {
       process.stdout.drain<void>().ignore();

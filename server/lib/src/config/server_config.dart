@@ -1,10 +1,9 @@
-// ignore_for_file: invalid_annotation_target
+// ignore_for_file: invalid_annotation_target for freezed
 
 import 'dart:io';
 
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_config.freezed.dart';

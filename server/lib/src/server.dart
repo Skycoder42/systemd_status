@@ -39,8 +39,9 @@ class Server {
   }
 
   Future<void> start() async {
-    final securityContext =
-        await _providerContainer.read(securityContextLoaderProvider).load();
+    final securityContext = await _providerContainer
+        .read(securityContextLoaderProvider)
+        .load();
 
     _server = await serve(
       _handler,
@@ -78,10 +79,9 @@ class Server {
         .addMiddleware(rateLimit())
         .addMiddleware(
           corsHeaders(
-            originChecker:
-                allowedOrigins != null
-                    ? originOneOf(allowedOrigins)
-                    : originAllowAll,
+            originChecker: allowedOrigins != null
+                ? originOneOf(allowedOrigins)
+                : originAllowAll,
           ),
         )
         .addMiddleware(

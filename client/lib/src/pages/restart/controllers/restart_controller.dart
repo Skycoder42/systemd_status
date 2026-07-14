@@ -9,11 +9,9 @@ part 'restart_controller.g.dart';
 
 @riverpod
 class RestartController extends _$RestartController with ActionController {
-  // ignore: avoid_public_notifier_properties
   @override
   String get action => 'restart unit $unit';
 
-  // ignore: avoid_public_notifier_properties
   @override
   Logger get logger => Logger('RestartController');
 

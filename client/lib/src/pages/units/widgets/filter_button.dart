@@ -58,11 +58,10 @@ class _FilterButtonState extends State<FilterButton> {
     searchController: _searchController,
     viewOnSubmitted: _updateAndClose,
     viewTrailing: [CloseButton(onPressed: () => _updateAndClose(''))],
-    builder:
-        (context, controller) => IconButton(
-          onPressed: controller.openView,
-          icon: const Icon(Icons.search),
-        ),
+    builder: (context, controller) => IconButton(
+      onPressed: controller.openView,
+      icon: const Icon(Icons.search),
+    ),
     suggestionsBuilder: (context, controller) async {
       final suggestions = await widget.suggestionsBuilder(context);
       return [

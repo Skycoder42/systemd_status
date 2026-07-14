@@ -49,10 +49,9 @@ extension ActiveStateGroupX on ActiveState {
 }
 
 extension UnitInfoStateGroupX on UnitInfo {
-  StateGroup get group =>
-      loadState.group != StateGroup.success
-          ? loadState.group
-          : activeState.group;
+  StateGroup get group => loadState.group != StateGroup.success
+      ? loadState.group
+      : activeState.group;
 
   int compareTo(UnitInfo other) {
     if (group.compareTo(other.group) case final result when result != 0) {

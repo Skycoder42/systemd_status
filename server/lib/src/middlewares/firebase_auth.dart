@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:firebase_verify_id_tokens/firebase_verify_id_tokens.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_api/shelf_api.dart';
@@ -39,9 +38,9 @@ class _FirebaseAuthMiddleware {
   Handler call(Handler next) => (request) async {
     final authResult = await _checkAuthorization(request);
     switch (authResult) {
-      case _AuthSuccess(userInfo: final userInfo):
+      case _AuthSuccess(:final userInfo):
         return await next(request.change(context: {_userInfoKey: userInfo}));
-      case _AuthFailure(response: final response):
+      case _AuthFailure(:final response):
         return response;
     }
   };
@@ -85,7 +84,7 @@ class _FirebaseAuthMiddleware {
       _logger.warning('Rejecting request with token validation error', e, s);
       return _AuthResult.failure(Response.unauthorized(e.message));
 
-      // ignore: avoid_catches_without_on_clauses
+      // ignore: avoid_catches_without_on_clauses as fail safe for authentication
     } catch (e, s) {
       _logger.severe('Rejecting request with unexpected error', e, s);
       return _AuthResult.failure(Response.unauthorized(null));

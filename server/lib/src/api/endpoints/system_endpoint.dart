@@ -1,3 +1,5 @@
+// ignore_for_file: riverpod_lint/provider_dependencies false positive
+
 import 'package:shelf_api/shelf_api.dart';
 
 import '../../middlewares/firebase_auth.dart';

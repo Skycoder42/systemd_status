@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../localization/localization.dart';
 import 'controllers/action_controller.dart';
@@ -32,18 +33,17 @@ class ActionDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(provider, (_, next) {
       switch (next) {
-        case ActionState.success:
+        case .success:
           Navigator.pop<bool>(context, true);
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(successMessage)));
-        case ActionState.failure:
+        case .failure:
           Navigator.pop<bool>(context, true);
           ScaffoldMessenger.of(context).showSnackBar(
             ErrorSnackBar(context: context, content: Text(failureMessage)),
           );
-        // ignore: no_default_cases
-        default:
+        case _:
           break;
       }
     });

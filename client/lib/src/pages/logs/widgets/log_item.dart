@@ -16,17 +16,15 @@ class LogItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListTile(
     title: Text(item.message, style: item.priority.style),
-    subtitle:
-        MediaQuery.orientationOf(context) == Orientation.portrait
-            ? Align(
-              alignment: Alignment.centerRight,
-              child: TimestampText(item.timeStamp),
-            )
-            : null,
-    trailing:
-        MediaQuery.orientationOf(context) == Orientation.landscape
-            ? TimestampText(item.timeStamp)
-            : null,
+    subtitle: MediaQuery.orientationOf(context) == Orientation.portrait
+        ? Align(
+            alignment: Alignment.centerRight,
+            child: TimestampText(item.timeStamp),
+          )
+        : null,
+    trailing: MediaQuery.orientationOf(context) == Orientation.landscape
+        ? TimestampText(item.timeStamp)
+        : null,
     onTap: () async => await _onTap(context, item),
     dense: true,
   );

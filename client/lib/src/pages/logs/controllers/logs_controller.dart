@@ -46,10 +46,9 @@ class LogsController extends _$LogsController {
       final isLastPage = newItems.length < _pageSize;
       state = state.copyWith(
         pages: newItems.isNotEmpty ? [...?state.pages, newItems] : const Omit(),
-        keys:
-            newItems.isNotEmpty
-                ? [...?state.keys, newItems.last.cursor]
-                : const Omit(),
+        keys: newItems.isNotEmpty
+            ? [...?state.keys, newItems.last.cursor]
+            : const Omit(),
         hasNextPage: !isLastPage,
         isLoading: false,
       );

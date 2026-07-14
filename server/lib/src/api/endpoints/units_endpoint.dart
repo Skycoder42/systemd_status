@@ -1,3 +1,5 @@
+// ignore_for_file: riverpod_lint/provider_dependencies false positive
+
 import 'package:shelf_api/shelf_api.dart';
 
 import '../../middlewares/firebase_auth.dart';
@@ -39,15 +41,9 @@ class UnitsEndpoint extends ShelfEndpoint {
     }
 
     final journalctlService = ref.read(journalctlServiceProvider);
-    final logs =
-        await journalctlService
-            .streamJournal(
-              unit,
-              priority: priority,
-              offset: offset,
-              count: count,
-            )
-            .toList();
+    final logs = await journalctlService
+        .streamJournal(unit, priority: priority, offset: offset, count: count)
+        .toList();
     return TResponse.ok(logs);
   }
 

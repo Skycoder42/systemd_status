@@ -46,8 +46,6 @@ class AccountManager extends _$AccountManager {
 
       await oldAccount?.dispose();
       return newAccount;
-
-      // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       await newAccount.dispose();
       rethrow;

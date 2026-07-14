@@ -11,7 +11,7 @@ import 'widgets/units_app_bar.dart';
 part 'units_page.g.dart';
 
 @riverpod
-// ignore: avoid_positional_boolean_parameters
+// ignore: avoid_positional_boolean_parameters for single param provider
 Future<List<UnitInfo>> units(Ref ref, bool showAll) async {
   final units = await ref
       .watch(systemdStatusApiClientProvider)
@@ -60,14 +60,13 @@ class _UnitsPageState extends ConsumerState<UnitsPage> {
               if (unit.name.contains(_filter)) UnitCard(unit: unit),
           ],
         ),
-        AsyncError(error: final error, stackTrace: final stackTrace) =>
-          SingleChildScrollView(
-            primary: true,
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [Text(error.toString()), Text(stackTrace.toString())],
-            ),
+        AsyncError(:final error, :final stackTrace) => SingleChildScrollView(
+          primary: true,
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [Text(error.toString()), Text(stackTrace.toString())],
           ),
+        ),
         _ => const Center(child: CircularProgressIndicator()),
       },
     ),

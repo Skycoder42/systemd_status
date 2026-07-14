@@ -34,7 +34,7 @@ sealed class ActiveState with _$ActiveState {
     ActivatingActiveState() => 'activating',
     DeactivatingActiveState() => 'deactivating',
     MaintenanceActiveState() => 'maintenance',
-    UnknownActiveState(raw: final raw) => raw,
+    UnknownActiveState(:final raw) => raw,
   };
 
   String toJson() => name;

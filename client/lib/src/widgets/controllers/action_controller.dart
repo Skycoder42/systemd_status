@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 enum ActionState { hint, pending, success, failure }
 
-// ignore: invalid_use_of_internal_member
-mixin ActionController on BuildlessAutoDisposeNotifier<ActionState> {
+mixin ActionController on AnyNotifier<ActionState, ActionState> {
   @visibleForOverriding
   String get action;
 

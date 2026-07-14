@@ -10,7 +10,6 @@ import 'package:logging/logging.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../localization/localization.dart';
-import '../../providers/file_picker_provider.dart';
 import '../../widgets/async_action.dart';
 import '../../widgets/scrollable_expanded_box.dart';
 import 'http_client_adapter_factory.dart';
@@ -42,7 +41,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
 
   late final TextEditingController _serverCertController;
 
-  bool _isValid = false;
+  var _isValid = false;
   Uri? _savedUrl;
   Uint8List? _savedCertBytes;
 
@@ -85,10 +84,8 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                       requireProtocol: true,
                     ),
                   ]),
-                  onSaved:
-                      (newValue) =>
-                          _savedUrl =
-                              newValue != null ? Uri.parse(newValue) : null,
+                  onSaved: (newValue) =>
+                      _savedUrl = newValue != null ? Uri.parse(newValue) : null,
                   decoration: InputDecoration(
                     label: Text(context.strings.setup_page_server_url_label),
                   ),
@@ -111,14 +108,11 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                   onAction: _submit,
                   onError: _onError,
                   errorToastDuration: const Duration(seconds: 10),
-                  builder:
-                      (onAction) => FilledButton.icon(
-                        icon: const Icon(Icons.save),
-                        label: Text(
-                          context.strings.setup_page_save_button_text,
-                        ),
-                        onPressed: onAction,
-                      ),
+                  builder: (onAction) => FilledButton.icon(
+                    icon: const Icon(Icons.save),
+                    label: Text(context.strings.setup_page_save_button_text),
+                    onPressed: onAction,
+                  ),
                 ),
               ],
             ),
@@ -136,13 +130,10 @@ class _SetupPageState extends ConsumerState<SetupPage> {
   }
 
   Future<void> _pickFile() async {
-    final filePicker = ref.read(filePickerProvider);
-    final result = await filePicker.pickFiles(
+    final result = await FilePicker.pickFiles(
       dialogTitle: context.strings.setup_page_server_cert_pick_title,
-      type: FileType.custom,
+      type: .custom,
       allowedExtensions: const ['crt', 'pem', 'pfx'],
-      withData: true,
-      lockParentWindow: true,
     );
 
     final selectedFile = result?.files.singleOrNull;
@@ -151,7 +142,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
     }
 
     _serverCertController.text = selectedFile.name;
-    _savedCertBytes = selectedFile.bytes;
+    _savedCertBytes = await selectedFile.readAsBytes();
   }
 
   Future<void> _submit() async {

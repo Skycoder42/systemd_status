@@ -38,16 +38,14 @@ class _LogoutDialogState extends ConsumerState<LogoutDialog> {
         ),
       if (ref.watch(logoutControllerProvider) == LogoutState.canLogoutAndReset)
         TextButton(
-          onPressed:
-              () async =>
-                  await ref.read(logoutControllerProvider.notifier).reset(),
+          onPressed: () async =>
+              await ref.read(logoutControllerProvider.notifier).reset(),
           child: Text(context.strings.reset),
         ),
       if (ref.watch(logoutControllerProvider) != LogoutState.loggingOut)
         TextButton(
-          onPressed:
-              () async =>
-                  await ref.read(logoutControllerProvider.notifier).logOut(),
+          onPressed: () async =>
+              await ref.read(logoutControllerProvider.notifier).logOut(),
           child: Text(context.strings.logout),
         ),
     ],

@@ -30,7 +30,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _submitKey = GlobalKey<AsyncActionState>();
   final _logger = Logger('LoginPage');
 
-  bool _isValid = false;
+  var _isValid = false;
   String? _savedEmail;
   String? _savedPassword;
 
@@ -83,8 +83,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     textInputAction: TextInputAction.done,
                     validator: FormBuilderValidators.required(),
                     onSaved: (newValue) => _savedPassword = newValue,
-                    onFieldSubmitted:
-                        (_) => _submitKey.currentState?.triggerAction(),
+                    onFieldSubmitted: (_) =>
+                        _submitKey.currentState?.triggerAction(),
                   ),
                   const SizedBox(height: 16),
                   AsyncAction(
@@ -92,14 +92,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     enabled: _isValid,
                     onAction: _submit,
                     onError: _onError,
-                    builder:
-                        (onAction) => FilledButton.icon(
-                          icon: const Icon(Icons.login),
-                          label: Text(
-                            context.strings.login_page_login_button_text,
-                          ),
-                          onPressed: onAction,
-                        ),
+                    builder: (onAction) => FilledButton.icon(
+                      icon: const Icon(Icons.login),
+                      label: Text(context.strings.login_page_login_button_text),
+                      onPressed: onAction,
+                    ),
                   ),
                 ],
               ),

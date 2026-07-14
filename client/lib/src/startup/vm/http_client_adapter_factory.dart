@@ -8,12 +8,10 @@ class HttpClientAdapterFactory {
   const HttpClientAdapterFactory();
 
   HttpClientAdapter create(Uint8List certBytes) => IOHttpClientAdapter(
-    createHttpClient:
-        () => HttpClient(
-          context:
-              SecurityContext(withTrustedRoots: true)
-                ..setAlpnProtocols(['http/1.1'], false)
-                ..setTrustedCertificatesBytes(certBytes),
-        ),
+    createHttpClient: () => HttpClient(
+      context: SecurityContext(withTrustedRoots: true)
+        ..setAlpnProtocols(['http/1.1'], false)
+        ..setTrustedCertificatesBytes(certBytes),
+    ),
   );
 }

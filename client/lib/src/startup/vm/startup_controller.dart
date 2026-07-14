@@ -73,8 +73,9 @@ final class StartupController extends StartupControllerBase {
   @override
   FutureOr<ClientConfig> loadClientConfig() async {
     try {
-      final remoteConfig =
-          await container.read(systemdStatusApiClientProvider).configGet();
+      final remoteConfig = await container
+          .read(systemdStatusApiClientProvider)
+          .configGet();
       await _saveClientConfigInStorage(remoteConfig);
       return remoteConfig;
     } on DioException catch (e, s) {

@@ -13,20 +13,19 @@ class ScrollableExpandedBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
-    builder:
-        (context, constraints) => SingleChildScrollView(
-          physics: physics,
-          child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: min(constraints.maxWidth, _maxWidth),
-                maxWidth: _maxWidth,
-                minHeight: constraints.maxHeight,
-              ),
-              child: child,
-            ),
+    builder: (context, constraints) => SingleChildScrollView(
+      physics: physics,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: min(constraints.maxWidth, _maxWidth),
+            maxWidth: _maxWidth,
+            minHeight: constraints.maxHeight,
           ),
+          child: child,
         ),
+      ),
+    ),
   );
 
   @override

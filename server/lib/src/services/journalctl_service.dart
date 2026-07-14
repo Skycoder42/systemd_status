@@ -1,5 +1,4 @@
 import 'package:posix/posix.dart' as posix;
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/models/journal_entry.dart';
@@ -32,9 +31,9 @@ class JournalctlService {
     '--lines=$count',
     '--no-pager',
     '--boot=all',
-    // ignore: lines_longer_than_80_chars
+    // ignore: lines_longer_than_80_chars for readability
     '--output-fields=PRIORITY,MESSAGE,_SOURCE_REALTIME_TIMESTAMP,__REALTIME_TIMESTAMP,__CURSOR,_BOOT_ID',
-    if (priority case LogPriority(level: final level)) '--priority=$level',
+    if (priority case LogPriority(:final level)) '--priority=$level',
     if (offset case final String curser) '--after-cursor=$curser',
   ], fromJson: JournalEntry.fromJson);
 

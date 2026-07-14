@@ -30,10 +30,8 @@ class _LogsPageState extends ConsumerState<LogsPage> {
   var _refreshVisible = true;
   LogPriority? _logPriority;
 
-  LogsQuery get _query => (
-    unitName: widget.unitName,
-    logPriority: _logPriority,
-  );
+  LogsQuery get _query =>
+      (unitName: widget.unitName, logPriority: _logPriority);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -41,18 +39,15 @@ class _LogsPageState extends ConsumerState<LogsPage> {
       unitName: widget.unitName,
       onRefresh: () => ref.invalidate(logsControllerProvider(_query)),
       logPriority: _logPriority,
-      onLogPriorityChanged:
-          (value) => _updatePriority(
-            _logPriority = value == _logPriority ? null : value,
-          ),
+      onLogPriorityChanged: (value) =>
+          _updatePriority(_logPriority = value == _logPriority ? null : value),
     ),
-    floatingActionButton:
-        defaultTargetPlatform.isMobile && _refreshVisible
-            ? FloatingActionButton(
-              child: const Icon(Icons.refresh),
-              onPressed: () => ref.invalidate(logsControllerProvider(_query)),
-            )
-            : null,
+    floatingActionButton: defaultTargetPlatform.isMobile && _refreshVisible
+        ? FloatingActionButton(
+            child: const Icon(Icons.refresh),
+            onPressed: () => ref.invalidate(logsControllerProvider(_query)),
+          )
+        : null,
     body: NotificationListener<ScrollNotification>(
       onNotification: (notification) {
         final visible = notification.metrics.pixels == 0;
@@ -69,9 +64,8 @@ class _LogsPageState extends ConsumerState<LogsPage> {
         builderDelegate: PagedChildBuilderDelegate<JournalEntry>(
           itemBuilder: (context, item, index) => LogItem(item: item),
         ),
-        separatorBuilder:
-            (context, index) =>
-                _isBoot(index) ? const Divider() : const SizedBox.shrink(),
+        separatorBuilder: (context, index) =>
+            _isBoot(index) ? const Divider() : const SizedBox.shrink(),
       ),
     ),
   );
@@ -84,8 +78,10 @@ class _LogsPageState extends ConsumerState<LogsPage> {
   }
 
   bool _isBoot(int index) {
-    final items =
-        ref.read(logsControllerProvider(_query)).itemsIn(index, 2).toList();
+    final items = ref
+        .read(logsControllerProvider(_query))
+        .itemsIn(index, 2)
+        .toList();
     return switch (items) {
       [final currentItem, final nextItem] =>
         nextItem.bootId != currentItem.bootId,

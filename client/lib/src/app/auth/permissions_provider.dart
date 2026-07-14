@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_server/api.dart';
 
@@ -12,8 +11,9 @@ Future<UserPermissions> userPermissions(Ref ref) async {
   // ensure this is rebuilt when the account changes
   ref.watch(accountManagerProvider);
 
-  final permissions =
-      await ref.watch(systemdStatusApiClientProvider).systemGetPermissions();
+  final permissions = await ref
+      .watch(systemdStatusApiClientProvider)
+      .systemGetPermissions();
   ref.keepAlive();
   return permissions;
 }

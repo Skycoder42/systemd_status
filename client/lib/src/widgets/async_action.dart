@@ -46,7 +46,7 @@ class AsyncAction extends StatefulWidget {
 }
 
 class AsyncActionState extends State<AsyncAction> {
-  bool _isRunning = false;
+  var _isRunning = false;
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
   _snackbarController;
 
@@ -80,7 +80,7 @@ class AsyncActionState extends State<AsyncAction> {
 
     try {
       await widget.onAction();
-      // ignore: avoid_catches_without_on_clauses
+      // ignore: avoid_catches_without_on_clauses for error wrapping
     } catch (error, stackTrace) {
       _onError(error, stackTrace);
     } finally {
@@ -96,8 +96,8 @@ class AsyncActionState extends State<AsyncAction> {
       return;
     }
 
-    final controller =
-        _snackbarController = ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+    final controller = _snackbarController = ScaffoldMessenger.maybeOf(context)
+        ?.showSnackBar(
           ErrorSnackBar(
             context: context,
             content: Text(errorMessage),

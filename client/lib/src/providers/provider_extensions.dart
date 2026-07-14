@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 typedef Selector<TI, TR> = TR Function(TI value);
 
@@ -7,7 +8,7 @@ extension FutureProviderExtensions<T> on ProviderListenable<AsyncValue<T>> {
     Selector<T, TReturn> selector,
   ) => select(
     (asyncValue) => switch (asyncValue) {
-      AsyncData(value: final T value) => selector(value),
+      AsyncData(:final T value) => selector(value),
       _ => throw StateError('$this has not been initialized!'),
     },
   );
