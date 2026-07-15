@@ -34,13 +34,25 @@ modules:
       - x86_64
       - aarch64
     build-options:
-      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/.pub-cache/bin:/usr/lib/sdk/llvm22/bin
+      append-path: >-
+        /usr/lib/sdk/flutter/bin:
+        /usr/lib/sdk/flutter/install/bin:
+        /usr/lib/sdk/flutter/pub-cache/bin:
+        /usr/lib/sdk/llvm22/bin
       prepend-ld-library-path: /usr/lib/sdk/llvm22/lib
       build-args:
         - --share=network
       env:
         FLUTTER_ROOT: /usr/lib/sdk/flutter
-        PUB_CACHE: /usr/lib/sdk/flutter/.pub-cache
+        PUB_CACHE: /usr/lib/sdk/flutter/pub-cache
+        DART_DATA_HOME: /usr/lib/sdk/flutter
+      arch:
+        x86_64:
+          env:
+            BUNDLE_PATH: build/linux/x64/release/bundle
+        aarch64:
+          env:
+            BUNDLE_PATH: build/linux/arm64/release/bundle
       secret-env:
         - BUILD_NUMBER
     sources:
@@ -51,30 +63,16 @@ modules:
         paths:
           - patch/compiler_warnings.patch
         use-git: false
-      - type: script
-        commands:
-          - cp -a build/linux/x64/release/bundle/* /app/
-        dest: client
-        dest-filename: install.sh
-        only-arches:
-          - x86_64
-      - type: script
-        commands:
-          - cp -a build/linux/arm64/release/bundle/* /app/
-        dest: client
-        dest-filename: install.sh
-        only-arches:
-          - aarch64
     build-commands:
       - rm -f /etc/resolv.conf
       - echo 'nameserver 1.1.1.1' > /etc/resolv.conf
-      - flutter pub get
+      - flutter pub get --enforce-lockfile
       - dart run build_runner build --release --workspace
       - >-
         . /usr/lib/sdk/openjdk/enable.sh &&
         cd client &&
         flutter build linux --release --build-number="$BUILD_NUMBER"
-      - cd client && ./install.sh
+      - cd client && cp -a "$BUNDLE_PATH" /app/
   - name: metadata
     buildsystem: simple
     sources:
