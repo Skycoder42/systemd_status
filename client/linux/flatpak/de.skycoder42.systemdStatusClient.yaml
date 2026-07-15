@@ -34,11 +34,7 @@ modules:
       - x86_64
       - aarch64
     build-options:
-      append-path: >-
-        /usr/lib/sdk/flutter/bin:
-        /usr/lib/sdk/flutter/install/bin:
-        /usr/lib/sdk/flutter/pub-cache/bin:
-        /usr/lib/sdk/llvm22/bin
+      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/install/bin:/usr/lib/sdk/flutter/pub-cache/bin:/usr/lib/sdk/llvm22/bin
       prepend-ld-library-path: /usr/lib/sdk/llvm22/lib
       build-args:
         - --share=network
