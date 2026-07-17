@@ -45,10 +45,10 @@ modules:
       arch:
         x86_64:
           env:
-            BUNDLE_PATH: build/linux/x64/release/bundle
+            BUNDLE_ARCH: x64
         aarch64:
           env:
-            BUNDLE_PATH: build/linux/arm64/release/bundle
+            BUNDLE_ARCH: arm64
       secret-env:
         - BUILD_NUMBER
     sources:
@@ -68,7 +68,7 @@ modules:
         . /usr/lib/sdk/openjdk/enable.sh &&
         cd client &&
         flutter build linux --release --build-number="$BUILD_NUMBER"
-      - cd client && cp -a "$BUNDLE_PATH" /app/
+      - cd client && cp -a build/linux/$BUNDLE_ARCH/release/bundle/* /app/
   - name: metadata
     buildsystem: simple
     sources:
