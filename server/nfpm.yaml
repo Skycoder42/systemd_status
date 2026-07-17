@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://nfpm.goreleaser.com/schema.json
+---
+name: ${PUB_NAME}
+arch: ${BUNDLE_ARCH}
+platform: linux
+version: ${PUB_VERSION}
+section: admin
+maintainer: Skycoder42 <Skycoder42@users.noreply.github.com>
+description: ${PUB_DESCRIPTION}
+homepage: ${PUB_HOMEPAGE}
+license: BSD
+# changelog: ${GENERATED_CHANGELOG}
+depends:
+  - systemd
+umask: 0o022
+contents:
+  - src: ${BUNDLE_ROOT}
+    dst: /opt/${PUB_NAME}
+    type: tree
+    expand: true
+  - src: /opt/${PUB_NAME}/${PUB_EXECUTABLE}
+    dst: /usr/bin/${PUB_EXECUTABLE}
+    type: symlink
+    expand: true
+  - src: ${PUB_ROOT}/tool/package-config.yaml
+    dst: /etc/systemd-status-server.yaml
+    type: config|noreplace
+    expand: true
+  # Web sources
+  - src: ${CLIENT_ROOT}
+    dst: /opt/${PUB_NAME}/share/web-app
+    type: tree
+    expand: true
+deb:
+  arch: ${DEB_ARCH}
+  # signature:
