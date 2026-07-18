@@ -19,20 +19,6 @@ jobs:
       buildRunner: true
       unitTestPaths: ""
 
-  server_cd:
-    name: Server - Build
-    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
-    needs:
-      - server_ci
-    permissions:
-      contents: write
-    with:
-      enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
-      needsFlutterSdk: true
-      workingDirectory: server
-      buildRunner: true
-      tagPrefix: server/v
-
   client_ci:
     name: Client - CI
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
@@ -100,10 +86,31 @@ jobs:
       buildRunner: true
       baseHref: /app/
 
+  server_deploy:
+    name: Server - Deploy
+    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
+    needs:
+      - server_ci
+      - client_ci
+      - client_build_android
+      - client_build_linux
+      - client_build_windows
+      - client_build_macos
+      - client_build_web
+    permissions:
+      contents: write
+    with:
+      enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
+      needsFlutterSdk: true
+      workingDirectory: server
+      buildRunner: true
+      tagPrefix: server/v
+
   client_deploy:
     name: Client - Deploy
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
     needs:
+      - server_ci
       - client_ci
       - client_build_android
       - client_build_linux
@@ -135,16 +142,3 @@ jobs:
       sellerId: ${{ secrets.SELLER_ID }}
       clientId: ${{ secrets.CLIENT_ID }}
       clientSecret: ${{ secrets.CLIENT_SECRET }}
-
-  server_deploy:
-    name: Server - Deploy
-    needs:
-      - server_cd
-      - client_deploy
-    if: needs.server_cd.outputs.releaseCreated == 'true'
-    uses: Skycoder42/dart_test_tools/.github/workflows/deb.yml@main
-    with:
-      workingDirectory: server
-      packagecloudRepository: systemd_status/ubuntu
-    secrets:
-      packagecloudToken: ${{ secrets.PACKAGECLOUD_TOKEN }}

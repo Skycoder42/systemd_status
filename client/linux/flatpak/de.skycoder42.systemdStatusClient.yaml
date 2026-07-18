@@ -1,6 +1,16 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json
 
 ---
+x-flutter-build-options: &flutterBuildOptions
+  append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/install/bin:/usr/lib/sdk/flutter/pub-cache/bin:/usr/lib/sdk/llvm22/bin
+  prepend-ld-library-path: /usr/lib/sdk/llvm22/lib
+  build-args:
+    - --share=network
+  env:
+    FLUTTER_ROOT: /usr/lib/sdk/flutter
+    PUB_CACHE: /usr/lib/sdk/flutter/pub-cache
+    DART_DATA_HOME: /usr/lib/sdk/flutter
+
 id: de.skycoder42.systemdStatusClient
 runtime: org.gnome.Platform
 runtime-version: "50"
@@ -34,14 +44,7 @@ modules:
       - x86_64
       - aarch64
     build-options:
-      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/install/bin:/usr/lib/sdk/flutter/pub-cache/bin:/usr/lib/sdk/llvm22/bin
-      prepend-ld-library-path: /usr/lib/sdk/llvm22/lib
-      build-args:
-        - --share=network
-      env:
-        FLUTTER_ROOT: /usr/lib/sdk/flutter
-        PUB_CACHE: /usr/lib/sdk/flutter/pub-cache
-        DART_DATA_HOME: /usr/lib/sdk/flutter
+      <<: *flutterBuildOptions
       arch:
         x86_64:
           env:
@@ -89,14 +92,7 @@ modules:
       - cp -a flatpak/de.skycoder42.systemdStatusClient.metainfo.xml /app/share/metainfo/
   - name: changelog
     buildsystem: simple
-    build-options:
-      append-path: /usr/lib/sdk/flutter/bin:/usr/lib/sdk/flutter/.pub-cache/bin:/usr/lib/sdk/llvm22/bin
-      prepend-ld-library-path: /usr/lib/sdk/llvm22/lib
-      build-args:
-        - --share=network
-      env:
-        FLUTTER_ROOT: /usr/lib/sdk/flutter
-        PUB_CACHE: /usr/lib/sdk/flutter/.pub-cache
+    build-options: *flutterBuildOptions
     sources:
       - type: file
         path: ../../CHANGELOG.md
