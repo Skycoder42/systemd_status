@@ -1,7 +1,7 @@
 allowedOrigins: []
 unitFilters: []
 app:
-  appDir: /usr/share/systemd-status-server/web-app
+  appDir: /opt/systemd_status_server/share/web-app
   sentryDsn: null
 firebase:
   projectId: PLACEHOLDER
