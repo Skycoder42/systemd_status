@@ -165,6 +165,8 @@ jobs:
     needs:
       - client_release
     if: ${{ needs.client_release.outputs.releaseCreated == 'true' }}
+    permissions:
+      contents: write
     secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
