@@ -106,7 +106,7 @@ jobs:
     with:
       workingDirectory: server
       additionalArtifacts: ${{ needs.client_build_web.outputs.artifactName }}
-      additionalArtifactsPath: ${{ runner.temp }}/client_build_web
+      additionalArtifactsPath: server/build/client_build_web
 
   client_release:
     name: Client - Release
