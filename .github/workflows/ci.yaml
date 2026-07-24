@@ -98,7 +98,7 @@ jobs:
       baseHref: /app/
 
   server_package:
-    name: Server - Package
+    name: Server - Build
     needs:
       - server_build
       - client_build_web
@@ -106,7 +106,11 @@ jobs:
     with:
       workingDirectory: server
       additionalArtifacts: ${{ needs.client_build_web.outputs.artifactName }}
-      additionalArtifactsPath: server/build/client_build_web
+      additionalArtifactsPath: build/client_build_web
+      prepareArtifacts: |
+        set -euo pipefail
+        cd build/client_build_web
+        tar -xavf 'Systemd Status Web.tar.xz'
 
   client_release:
     name: Client - Release
@@ -148,7 +152,7 @@ jobs:
   #     tagPrefix: server/v
 
   client_deploy_android:
-    name: Client - Deploy Android
+    name: Client - Deploy
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy-android.yml@main
     needs:
       - client_release
@@ -160,7 +164,7 @@ jobs:
       googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
 
   client_deploy_linux:
-    name: Client - Deploy Linux
+    name: Client - Deploy
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy-linux.yml@main
     needs:
       - client_release
@@ -172,7 +176,7 @@ jobs:
       gpgKey: ${{ secrets.GPG_KEY }}
 
   client_deploy_windows:
-    name: Client - Deploy Windows
+    name: Client - Deploy
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy-windows.yml@main
     needs:
       - client_release
@@ -187,7 +191,7 @@ jobs:
       clientSecret: ${{ secrets.CLIENT_SECRET }}
 
   client_deploy_macos:
-    name: Client - Deploy macOS
+    name: Client - Deploy
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy-macos.yml@main
     needs:
       - client_release
