@@ -60,7 +60,6 @@ jobs:
     with:
       workingDirectory: client
       manifestPath: linux/flatpak/de.skycoder42.systemdStatusClient.yaml
-      bundleName: de.skycoder42.systemdStatusClient.flatpak
     secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
