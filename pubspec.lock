@@ -197,10 +197,10 @@ packages:
     dependency: transitive
     description:
       name: cli_util
-      sha256: "5909d2c6b66817222779e1eedc19e0e28b76d1df7bd9856a4792ccb9881df358"
+      sha256: "71e43f1976c3eae2d9468a5b4d6600bf8cae61508b87f27fa1799228935d48ab"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "0.5.2"
   clock:
     dependency: transitive
     description:
@@ -325,10 +325,10 @@ packages:
     dependency: "direct dev"
     description:
       name: dart_test_tools
-      sha256: ce804873c120594da46f76a5fc7b306836b88486b4e638f1bc61b7d47a738cb9
+      sha256: "1cca126317650619b82935f04f7373ab64825c9dfbf1a5d19c4ee1ff72682b6e"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.6"
+    version: "7.2.8"
   dartx:
     dependency: transitive
     description:
@@ -527,10 +527,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_secure_storage_platform_interface
-      sha256: "8ceea1223bee3c6ac1a22dabd8feefc550e4729b3675de4b5900f55afcb435d6"
+      sha256: "06686df417f34fe9f963ed217b7fdce250e2f637ddd6c374d7eb054549770633"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   flutter_secure_storage_web:
     dependency: transitive
     description:
@@ -641,10 +641,10 @@ packages:
     dependency: transitive
     description:
       name: go_router_builder
-      sha256: d67db3885eb0255e3782369c265be2d56050481ad9e56eec010cbffd7bf53ae2
+      sha256: "53253ae5bd3d3bfc38c5488ca844f6b054c4b905683667db4544e7ab995fddcc"
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.1"
+    version: "4.4.0"
   graphs:
     dependency: transitive
     description:
@@ -945,10 +945,10 @@ packages:
     dependency: transitive
     description:
       name: package_info_plus
-      sha256: f5c435dc0e0d461e5b32471a870f769b6a1cc46930637efe24fbc535314e78ad
+      sha256: "127e1751e37ffb2ff4658beeaca77bad0c27bf5f932bd3a501c2296926d4b481"
       url: "https://pub.dev"
     source: hosted
-    version: "10.2.0"
+    version: "10.2.1"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -1065,10 +1065,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: "185ef7606574f789b40f289c233efa52e96dead518aed988e040a10737febb07"
+      sha256: bc1bad54ad2b735816e31f8d4600cfde6c7839975085ddfbca48b6c9f7c4044e
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.0"
+    version: "6.5.2"
   process:
     dependency: transitive
     description:
@@ -1169,10 +1169,10 @@ packages:
     dependency: transitive
     description:
       name: sentry
-      sha256: "09c573f98ff6c5e98d527f351f037eb8ea9ff684a6e9e84b2e91357144016254"
+      sha256: a84bf3a83b3ce1c89fce28b9f97659e3826df14a73a256952465aac2c5efdf5a
       url: "https://pub.dev"
     source: hosted
-    version: "9.24.0"
+    version: "9.25.0"
   sentry_dart_plugin:
     dependency: transitive
     description:
@@ -1185,26 +1185,26 @@ packages:
     dependency: transitive
     description:
       name: sentry_dio
-      sha256: "4fb601f6958388564ac107d0e3b4c17b4eee7e4fc46fab8ea6467e5cd149e972"
+      sha256: "297caacf2ed037d859611d94165f35c34cf0462420aea1ceb1fed8c87a06f1dd"
       url: "https://pub.dev"
     source: hosted
-    version: "9.24.0"
+    version: "9.25.0"
   sentry_flutter:
     dependency: transitive
     description:
       name: sentry_flutter
-      sha256: "4a04b7e1901b8128df783b6d36d48706b07b0cd055e621517c998de87f5dafb9"
+      sha256: c85575266d91f57364e9b4cb522835156ec3c5581c78339dc7fae491cd0c6f76
       url: "https://pub.dev"
     source: hosted
-    version: "9.24.0"
+    version: "9.25.0"
   sentry_logging:
     dependency: transitive
     description:
       name: sentry_logging
-      sha256: b59977569aedefc965102b8e0f182252b223e427162e67177cfa44e8a1f21517
+      sha256: "7506853de2fe61dd1d814b5266b24360635cd7fc7076c89ea3676f4b4ce2b948"
       url: "https://pub.dev"
     source: hosted
-    version: "9.24.0"
+    version: "9.25.0"
   shelf:
     dependency: transitive
     description:
@@ -1294,10 +1294,10 @@ packages:
     dependency: transitive
     description:
       name: source_gen
-      sha256: ec37cc0e6694374cbef59ed79685572c870a54ede6fa30a3e420feb3adffea02
+      sha256: a603f1fb984a7391ae5978d1b92bfaaa08b350dca5c825256f925818f7943bf5
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.3"
+    version: "4.2.4"
   source_helper:
     dependency: transitive
     description:
@@ -1374,10 +1374,10 @@ packages:
     dependency: transitive
     description:
       name: synchronized
-      sha256: "93b153dcb6a26dcddee6ca087dd634b53e38c10b5aa163e8e49501a776456153"
+      sha256: "61894a1956de6b4fc1aefd0892e109514a1a706cbece3ac59decd90ff5a7a423"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.1"
+    version: "3.4.1+1"
   system_info2:
     dependency: transitive
     description:
@@ -1446,10 +1446,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: "1fef9e8e11e2991bb773070d4656b7bd5d850967a2456cfc83cf47925ba79489"
+      sha256: "9b129329f58692f6e6578329498a8fe9fbe98f090beb764ffbb8ee2eadd01dcd"
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.3"
+    version: "4.6.0"
   vector_graphics:
     dependency: transitive
     description:
