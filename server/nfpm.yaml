@@ -10,7 +10,7 @@ contents:
   - src: tool/package-config.yaml
     dst: /etc/systemd-status-server.yaml
     type: config|noreplace
-  - src: ../client/build/web
+  - src: ${RUNNER_TEMP}/client_build_web
     dst: /opt/%{name}/share/web-app
     type: tree
 # deb:

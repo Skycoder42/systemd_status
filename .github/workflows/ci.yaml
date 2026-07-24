@@ -24,9 +24,20 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
     with:
       workingDirectory: client
-      buildDependencies: systemd_status_server
       buildRunner: true
+      buildRunnerArgs: --workspace
       unitTestPaths: ""
+
+  server_build:
+    name: Server - Build
+    needs:
+      - server_ci
+    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
+    with:
+      enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
+      needsFlutterSdk: true
+      workingDirectory: server
+      buildRunner: true
 
   client_build_android:
     name: Client - Build
@@ -35,8 +46,8 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/build-android.yml@main
     with:
       workingDirectory: client
-      buildDependencies: systemd_status_server
       buildRunner: true
+      buildRunnerArgs: --workspace
     secrets:
       keystore: ${{ secrets.KEYSTORE }}
       keystorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -61,8 +72,8 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/build-windows.yml@main
     with:
       workingDirectory: client
-      buildDependencies: systemd_status_server
       buildRunner: true
+      buildRunnerArgs: --workspace
 
   client_build_macos:
     name: Client - Build
@@ -71,8 +82,8 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/build-macos.yml@main
     with:
       workingDirectory: client
-      buildDependencies: systemd_status_server
       buildRunner: true
+      buildRunnerArgs: --workspace
       dmgConfigPath: macos/dmg-config.json
 
   client_build_web:
@@ -82,63 +93,106 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/build-web.yml@main
     with:
       workingDirectory: client
-      buildDependencies: systemd_status_server
       buildRunner: true
+      buildRunnerArgs: --workspace
       baseHref: /app/
 
-  server_deploy:
-    name: Server - Deploy
-    uses: Skycoder42/dart_test_tools/.github/workflows/compile.yml@main
+  server_package:
+    name: Server - Package
     needs:
-      - server_ci
-      - client_ci
-      - client_build_android
-      - client_build_linux
-      - client_build_windows
-      - client_build_macos
+      - server_build
       - client_build_web
-    permissions:
-      contents: write
+    uses: Skycoder42/dart_test_tools/.github/workflows/nfpm.yml@main
     with:
-      enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
-      needsFlutterSdk: true
       workingDirectory: server
-      buildRunner: true
-      tagPrefix: server/v
+      additionalArtifacts: ${{ needs.client_build_web.outputs.artifactName }}
+      additionalArtifactsPath: ${{ runner.temp }}/client_build_web
 
-  client_deploy:
-    name: Client - Deploy
-    uses: Skycoder42/dart_test_tools/.github/workflows/deploy.yml@main
+  client_release:
+    name: Client - Release
     needs:
-      - server_ci
-      - client_ci
       - client_build_android
       - client_build_linux
       - client_build_windows
       - client_build_macos
       - client_build_web
+    uses: Skycoder42/dart_test_tools/.github/workflows/create-release.yml@main
     permissions:
       contents: write
     with:
-      enabledPlatforms: ${{ needs.client_ci.outputs.enabledPlatforms }}
       workingDirectory: client
       tagPrefix: client/v
-      # homebrew
-      targetRepo: Skycoder42/homebrew-systemd_status
-      # google play
+
+  server_release:
+    name: Server - Release
+    needs:
+      - server_package
+    uses: Skycoder42/dart_test_tools/.github/workflows/create-release.yml@main
+    permissions:
+      contents: write
+    with:
+      workingDirectory: server
+      tagPrefix: server/v
+
+  # server_deploy:
+  #   name: Server - Deploy
+  #   uses: Skycoder42/dart_test_tools/.github/workflows/deploy-deb.yml@main
+  #   needs:
+  #     - server_release
+  #   if: ${{ needs.server_release.outputs.releaseCreated == 'true' }}
+  #   with:
+  #     enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
+  #     needsFlutterSdk: true
+  #     workingDirectory: server
+  #     buildRunner: true
+  #     tagPrefix: server/v
+
+  client_deploy_android:
+    name: Client - Deploy Android
+    uses: Skycoder42/dart_test_tools/.github/workflows/deploy-android.yml@main
+    needs:
+      - client_release
+    if: ${{ needs.client_release.outputs.releaseCreated == 'true' }}
+    with:
+      workingDirectory: client
       googlePlayTrack: alpha
-      # msstore
-      flightId: 6783f678-f43f-4a6f-ba0c-2fc273a37d5a
     secrets:
-      # flatpak
+      googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
+
+  client_deploy_linux:
+    name: Client - Deploy Linux
+    uses: Skycoder42/dart_test_tools/.github/workflows/deploy-linux.yml@main
+    needs:
+      - client_release
+    if: ${{ needs.client_release.outputs.releaseCreated == 'true' }}
+    secrets:
       gpgKeyId: ${{ secrets.GPG_KEY_ID }}
       gpgKey: ${{ secrets.GPG_KEY }}
-      # homebrew
-      targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
-      # google play
-      googlePlayKey: ${{ secrets.GOOGLE_PLAY_KEY }}
-      # msstore
+
+  client_deploy_windows:
+    name: Client - Deploy Windows
+    uses: Skycoder42/dart_test_tools/.github/workflows/deploy-windows.yml@main
+    needs:
+      - client_release
+    if: ${{ needs.client_release.outputs.releaseCreated == 'true' }}
+    with:
+      workingDirectory: client
+      flightId: 6783f678-f43f-4a6f-ba0c-2fc273a37d5a
+    secrets:
       tenantId: ${{ secrets.TENANT_ID }}
       sellerId: ${{ secrets.SELLER_ID }}
       clientId: ${{ secrets.CLIENT_ID }}
       clientSecret: ${{ secrets.CLIENT_SECRET }}
+
+  client_deploy_macos:
+    name: Client - Deploy macOS
+    uses: Skycoder42/dart_test_tools/.github/workflows/deploy-macos.yml@main
+    needs:
+      - client_release
+    if: ${{ needs.client_release.outputs.releaseCreated == 'true' }}
+    with:
+      workingDirectory: client
+      targetRepo: Skycoder42/homebrew-systemd_status
+      version: ${{ needs.client_release.outputs.releaseVersion }}
+    secrets:
+      targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
