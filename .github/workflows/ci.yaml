@@ -137,25 +137,24 @@ jobs:
       workingDirectory: server
       tagPrefix: server/v
 
-  # server_deploy:
-  #   name: Server - Deploy
-  #   uses: Skycoder42/dart_test_tools/.github/workflows/deploy-deb.yml@main
-  #   needs:
-  #     - server_release
-  #   if: ${{ needs.server_release.outputs.releaseCreated == 'true' }}
-  #   with:
-  #     enabledPlatforms: ${{ needs.server_ci.outputs.enabledPlatforms }}
-  #     needsFlutterSdk: true
-  #     workingDirectory: server
-  #     buildRunner: true
-  #     tagPrefix: server/v
+  server_deploy:
+    name: Server - Deploy
+    uses: Skycoder42/dart_test_tools/.github/workflows/deploy-packagecloud.yml@main
+    needs:
+      - server_release
+    if: needs.server_release.outputs.releaseCreated == 'true'
+    with:
+      workingDirectory: server
+      packagecloudRepository: systemd_status/ubuntu
+    secrets:
+      packagecloudToken: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
   client_deploy_android:
     name: Client - Deploy
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy-android.yml@main
     needs:
       - client_release
-    if: ${{ needs.client_release.outputs.releaseCreated == 'true' }}
+    if: needs.client_release.outputs.releaseCreated == 'true'
     with:
       workingDirectory: client
       googlePlayTrack: alpha
@@ -167,7 +166,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy-linux.yml@main
     needs:
       - client_release
-    if: ${{ needs.client_release.outputs.releaseCreated == 'true' }}
+    if: needs.client_release.outputs.releaseCreated == 'true'
     permissions:
       contents: write
     secrets:
@@ -179,7 +178,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy-windows.yml@main
     needs:
       - client_release
-    if: ${{ needs.client_release.outputs.releaseCreated == 'true' }}
+    if: needs.client_release.outputs.releaseCreated == 'true'
     with:
       workingDirectory: client
       flightId: 6783f678-f43f-4a6f-ba0c-2fc273a37d5a
@@ -194,7 +193,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/deploy-macos.yml@main
     needs:
       - client_release
-    if: ${{ needs.client_release.outputs.releaseCreated == 'true' }}
+    if: needs.client_release.outputs.releaseCreated == 'true'
     with:
       workingDirectory: client
       targetRepo: Skycoder42/homebrew-systemd_status
