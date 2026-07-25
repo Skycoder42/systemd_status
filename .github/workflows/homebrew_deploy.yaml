@@ -1,0 +1,19 @@
+name: Homebrew manual deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: "Release version"
+        required: true
+
+jobs:
+  client_deploy_macos:
+    name: Client - Deploy
+    uses: Skycoder42/dart_test_tools/.github/workflows/deploy-macos.yml@main
+    with:
+      workingDirectory: client
+      targetRepo: Skycoder42/homebrew-systemd_status
+      version: ${{ inputs.releaseVersion }}
+    secrets:
+      targetRepoToken: ${{ secrets.HOMEBREW_REPO_PAT }}
