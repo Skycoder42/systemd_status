@@ -88,25 +88,21 @@ abstract base class StartupControllerBase {
     // load server url
     final serverUrl = await loadServerUrl();
     final serverCertificate = await loadHttpClientAdapter();
-    container
-      ..updateOverrides([
-        serverUrlProvider.overrideWith((_) => serverUrl),
-        httpClientAdapterProvider.overrideWith((_) => serverCertificate),
-        clientConfigProvider.overrideWith(
-          (ref) => throw UnsupportedError('Not ready'),
-        ),
-      ])
-      ..invalidate(serverUrlProvider);
+    ClientConfig? clientConfig;
+    container.updateOverrides([
+      serverUrlProvider.overrideWithValue(serverUrl),
+      httpClientAdapterProvider.overrideWithValue(serverCertificate),
+      clientConfigProvider.overrideWith((ref) {
+        if (clientConfig != null) {
+          return clientConfig;
+        }
+        throw UnsupportedError('Not ready');
+      }),
+    ]);
 
     // load client config
-    final clientConfig = await loadClientConfig();
-    container
-      ..updateOverrides([
-        serverUrlProvider.overrideWith((_) => serverUrl),
-        httpClientAdapterProvider.overrideWith((_) => serverCertificate),
-        clientConfigProvider.overrideWith((_) => clientConfig),
-      ])
-      ..invalidate(clientConfigProvider);
+    clientConfig = await loadClientConfig();
+    container.invalidate(clientConfigProvider);
   }
 
   Future<void> _initWithSentry(String sentryDsn) async =>
