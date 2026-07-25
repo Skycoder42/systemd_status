@@ -27,6 +27,7 @@ finish-args:
   - --socket=wayland
   - --device=dri
   - --share=network
+  - --talk-name=org.freedesktop.secrets
 writable-sdk: true
 modules:
   - name: zenity
