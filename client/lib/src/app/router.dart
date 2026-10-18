@@ -1,7 +1,7 @@
 import 'package:firebase_auth_rest/firebase_auth_rest.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -26,13 +26,10 @@ GoRouter router(Ref ref) => GoRouter(
 @riverpod
 _GlobalRedirect _globalRedirect(Ref ref) => _GlobalRedirect(ref);
 
-class _GlobalRedirect {
+class _GlobalRedirect(final Ref ref) {
   static final _whitelistedRoutes = [const LoginRoute().location];
 
-  final Ref ref;
   final _logger = Logger('GlobalRedirect');
-
-  _GlobalRedirect(this.ref);
 
   String? call(BuildContext context, GoRouterState state) {
     if (_whitelistedRoutes.any(
@@ -74,9 +71,7 @@ class _GlobalRedirect {
 
 @TypedGoRoute<RootRoute>(path: '/')
 @immutable
-class RootRoute extends GoRouteData with $RootRoute {
-  const RootRoute();
-
+class const RootRoute() extends GoRouteData with $RootRoute {
   @override
   String redirect(BuildContext context, GoRouterState state) =>
       const UnitsRoute().location;
@@ -91,30 +86,24 @@ class RootRoute extends GoRouteData with $RootRoute {
   ],
 )
 @immutable
-class UnitsRoute extends GoRouteData with $UnitsRoute {
-  const UnitsRoute();
-
+class const UnitsRoute() extends GoRouteData with $UnitsRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) => const UnitsPage();
 }
 
 @immutable
-class LogsRoute extends GoRouteData with $LogsRoute {
-  final String unitName;
-
-  const LogsRoute(this.unitName);
-
+class const LogsRoute(final String unitName)
+    extends GoRouteData
+    with $LogsRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       LogsPage(unitName: unitName);
 }
 
 @immutable
-class RestartUnitRoute extends GoRouteData with $RestartUnitRoute {
-  final String unitName;
-
-  const RestartUnitRoute(this.unitName);
-
+class const RestartUnitRoute(final String unitName)
+    extends GoRouteData
+    with $RestartUnitRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) => DialogPage(
     state: state,
@@ -123,9 +112,7 @@ class RestartUnitRoute extends GoRouteData with $RestartUnitRoute {
 }
 
 @immutable
-class RebootRoute extends GoRouteData with $RebootRoute {
-  const RebootRoute();
-
+class const RebootRoute() extends GoRouteData with $RebootRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) =>
       DialogPage(state: state, builder: (context) => const RebootDialog());
@@ -133,11 +120,9 @@ class RebootRoute extends GoRouteData with $RebootRoute {
 
 @TypedGoRoute<LoginRoute>(path: '/login')
 @immutable
-class LoginRoute extends GoRouteData with $LoginRoute {
-  final String? redirectTo;
-
-  const LoginRoute({this.redirectTo});
-
+class const LoginRoute({final String? redirectTo})
+    extends GoRouteData
+    with $LoginRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       LoginPage(redirectTo: redirectTo);
@@ -145,9 +130,7 @@ class LoginRoute extends GoRouteData with $LoginRoute {
 
 @TypedGoRoute<LogoutRoute>(path: '/logout')
 @immutable
-class LogoutRoute extends GoRouteData with $LogoutRoute {
-  const LogoutRoute();
-
+class const LogoutRoute() extends GoRouteData with $LogoutRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) => DialogPage(
     state: state,

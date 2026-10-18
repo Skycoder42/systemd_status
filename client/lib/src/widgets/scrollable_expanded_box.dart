@@ -3,13 +3,12 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-class ScrollableExpandedBox extends StatelessWidget {
+class const ScrollableExpandedBox({
+  super.key,
+  final ScrollPhysics? physics,
+  required final Widget child,
+}) extends StatelessWidget {
   static const _maxWidth = 1000.0;
-
-  final ScrollPhysics? physics;
-  final Widget child;
-
-  const ScrollableExpandedBox({super.key, this.physics, required this.child});
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(

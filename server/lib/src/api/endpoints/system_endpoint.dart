@@ -7,9 +7,7 @@ import '../../services/systemctl_service.dart';
 import '../models/user_permissions.dart';
 
 @ApiEndpoint('/system', middleware: firebaseAuth)
-class SystemEndpoint extends ShelfEndpoint {
-  SystemEndpoint(super.request);
-
+class SystemEndpoint(super.request) extends ShelfEndpoint {
   @Get('/permissions')
   UserPermissions getPermissions() {
     final userInfo = ref.read(userInfoProvider);

@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../localization/localization.dart';
@@ -15,11 +15,10 @@ import '../../widgets/scrollable_expanded_box.dart';
 import 'http_client_adapter_factory.dart';
 import 'setup_result.dart';
 
-class SetupPage extends ConsumerStatefulWidget {
-  final Completer<SetupResult> setupCompleter;
-
-  const SetupPage({super.key, required this.setupCompleter});
-
+class const SetupPage({
+  super.key,
+  required final Completer<SetupResult> setupCompleter,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<SetupPage> createState() => _SetupPageState();
 
@@ -35,7 +34,7 @@ class SetupPage extends ConsumerStatefulWidget {
   }
 }
 
-class _SetupPageState extends ConsumerState<SetupPage> {
+class _SetupPageState() extends ConsumerState<SetupPage> {
   final _formKey = GlobalKey<FormState>();
   final _logger = Logger('SetupPage');
 
@@ -130,13 +129,11 @@ class _SetupPageState extends ConsumerState<SetupPage> {
   }
 
   Future<void> _pickFile() async {
-    final result = await FilePicker.pickFiles(
+    final selectedFile = await FilePicker.pickFile(
       dialogTitle: context.strings.setup_page_server_cert_pick_title,
       type: .custom,
       allowedExtensions: const ['crt', 'pem', 'pfx'],
     );
-
-    final selectedFile = result?.files.singleOrNull;
     if (selectedFile == null) {
       return;
     }

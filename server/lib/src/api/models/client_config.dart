@@ -5,11 +5,8 @@ part 'client_config.g.dart';
 
 @freezed
 sealed class ClientConfig with _$ClientConfig {
-  const factory ClientConfig({
-    required String firebaseApiKey,
-    String? sentryDsn,
-  }) = _AppConfig;
+  const factory({required String firebaseApiKey, String? sentryDsn}) =
+      _AppConfig;
 
-  factory ClientConfig.fromJson(Map<String, dynamic> json) =>
-      _$ClientConfigFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$ClientConfigFromJson(json);
 }

@@ -3,7 +3,7 @@ import 'package:systemd_status_server/api.dart';
 
 import '../app/theme.dart';
 
-enum StateGroup implements Comparable<StateGroup> {
+enum StateGroup() implements Comparable<StateGroup> {
   inactive,
   success,
   special,

@@ -4,9 +4,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 
-class HttpClientAdapterFactory {
-  const HttpClientAdapterFactory();
-
+class const HttpClientAdapterFactory() {
   HttpClientAdapter create(Uint8List certBytes) => IOHttpClientAdapter(
     createHttpClient: () => HttpClient(
       context: SecurityContext(withTrustedRoots: true)

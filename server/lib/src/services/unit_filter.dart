@@ -13,15 +13,12 @@ UnitFilter unitFilter(Ref ref) => UnitFilter(
   userFilters: ref.watch(userInfoProvider.select((u) => u.unitFilters)),
 );
 
-class UnitFilter {
-  final List<RegExp>? globalFilters;
-  final List<RegExp>? userFilters;
-
-  UnitFilter({
-    required Iterable<String>? globalFilters,
-    required Iterable<String>? userFilters,
-  }) : globalFilters = globalFilters?.map(RegExp.new).toList(),
-       userFilters = userFilters?.map(RegExp.new).toList();
+class UnitFilter({
+  required Iterable<String>? globalFilters,
+  required Iterable<String>? userFilters,
+}) {
+  final List<RegExp>? globalFilters = globalFilters?.map(RegExp.new).toList();
+  final List<RegExp>? userFilters = userFilters?.map(RegExp.new).toList();
 
   Iterable<UnitInfo> call(Iterable<UnitInfo> units) =>
       units.where((unit) => isAllowed(unit.name));

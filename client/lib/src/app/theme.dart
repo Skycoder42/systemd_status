@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme.g.dart';
@@ -7,9 +7,7 @@ part 'theme.g.dart';
 ThemeData appTheme(Ref ref, Brightness brightness) =>
     SystemdStatusTheme.createFor(brightness);
 
-abstract base class SystemdStatusTheme {
-  SystemdStatusTheme._();
-
+abstract base class SystemdStatusTheme._() {
   static const appColor = Color(0xFF30d475);
 
   static ThemeData createFor(Brightness brightness) => ThemeData.from(

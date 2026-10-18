@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../extensions/flutter_x.dart';
@@ -11,11 +11,8 @@ import 'controllers/logs_controller.dart';
 import 'widgets/log_item.dart';
 import 'widgets/logs_app_bar.dart';
 
-class LogsPage extends ConsumerStatefulWidget {
-  final String unitName;
-
-  const LogsPage({super.key, required this.unitName});
-
+class const LogsPage({super.key, required final String unitName})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<LogsPage> createState() => _LogsPageState();
 
@@ -26,7 +23,7 @@ class LogsPage extends ConsumerStatefulWidget {
   }
 }
 
-class _LogsPageState extends ConsumerState<LogsPage> {
+class _LogsPageState() extends ConsumerState<LogsPage> {
   var _refreshVisible = true;
   LogPriority? _logPriority;
 

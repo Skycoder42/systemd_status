@@ -35,7 +35,7 @@ ClientConfig clientConfig(Ref ref) => throw UnimplementedError();
 /// 1. open setup page & validate server URL
 /// 2. persist server URL
 /// continue with 1.2
-abstract base class StartupControllerBase {
+abstract base class StartupControllerBase() {
   @protected
   final logger = Logger('StartupController');
 
@@ -111,7 +111,6 @@ abstract base class StartupControllerBase {
           ..dsn = sentryDsn
           ..attachThreads = true
           ..anrEnabled = true
-          // ignore: experimental_member_use useful for now
           ..attachViewHierarchy = true
           ..addIntegration(
             LoggingIntegration(minBreadcrumbLevel: Level.CONFIG),
@@ -141,7 +140,7 @@ abstract base class StartupControllerBase {
   }
 }
 
-final class StartupController extends StartupControllerBase {
+final class StartupController() extends StartupControllerBase {
   @override
   FutureOr<Uri> loadServerUrl() => throw UnimplementedError();
 

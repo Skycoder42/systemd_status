@@ -14,12 +14,10 @@ JournalctlService journalctlService(Ref ref) => JournalctlService(
   ref.watch(processRunnerProvider),
 );
 
-class JournalctlService {
-  final Options _options;
-  final ProcessRunner _processRunner;
-
-  JournalctlService(this._options, this._processRunner);
-
+class JournalctlService(
+  final Options _options,
+  final ProcessRunner _processRunner,
+) {
   Stream<JournalEntry> streamJournal(
     String unit, {
     required int count,

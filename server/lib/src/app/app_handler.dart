@@ -4,13 +4,10 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_static/shelf_static.dart';
 
-class AppHandler {
-  final String _appDir;
-  final String? _sentryDsn;
-
+class AppHandler(final String _appDir, final String? _sentryDsn) {
   late final Handler _handler;
 
-  AppHandler(this._appDir, this._sentryDsn) {
+  this {
     _handler = const Pipeline().addHandler(
       createStaticHandler(
         _appDir,

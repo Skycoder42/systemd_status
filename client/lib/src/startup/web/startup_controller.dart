@@ -7,7 +7,7 @@ import 'package:web/web.dart';
 import '../../providers/api_provider.dart';
 import '../common/startup_controller.dart';
 
-final class StartupController extends StartupControllerBase {
+final class StartupController() extends StartupControllerBase {
   static const _serverUrl = bool.hasEnvironment('SERVER_URL')
       ? String.fromEnvironment('SERVER_URL')
       : null;

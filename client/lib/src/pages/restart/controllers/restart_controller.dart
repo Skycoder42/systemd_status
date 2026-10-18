@@ -8,7 +8,7 @@ import '../../../widgets/controllers/action_controller.dart';
 part 'restart_controller.g.dart';
 
 @riverpod
-class RestartController extends _$RestartController with ActionController {
+class RestartController() extends _$RestartController with ActionController {
   @override
   String get action => 'restart unit $unit';
 

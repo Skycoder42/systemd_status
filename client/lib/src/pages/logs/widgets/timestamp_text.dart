@@ -1,14 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../app/theme.dart';
 import '../../../localization/localization.dart';
 
-class TimestampText extends StatelessWidget {
-  final DateTime timestamp;
-
-  const TimestampText(this.timestamp, {super.key});
-
+class const TimestampText(final DateTime timestamp, {super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
     context.strings.short_date_time(timestamp),

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../../app/router.dart';
@@ -7,20 +7,13 @@ import '../../../localization/localization.dart';
 import '../../../widgets/content_app_bar.dart';
 import 'log_priority_extensions.dart';
 
-class LogsAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String unitName;
-  final LogPriority? logPriority;
-  final ValueChanged<LogPriority?> onLogPriorityChanged;
-  final VoidCallback onRefresh;
-
-  const LogsAppBar({
-    super.key,
-    required this.unitName,
-    required this.logPriority,
-    required this.onLogPriorityChanged,
-    required this.onRefresh,
-  });
-
+class const LogsAppBar({
+  super.key,
+  required final String unitName,
+  required final LogPriority? logPriority,
+  required final ValueChanged<LogPriority?> onLogPriorityChanged,
+  required final VoidCallback onRefresh,
+}) extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => ContentAppBar.defaultSize;
 

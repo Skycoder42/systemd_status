@@ -1,14 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../../models/state_group.dart';
 
-class StateIcon extends StatelessWidget {
-  final UnitInfo unit;
-
-  const StateIcon({super.key, required this.unit});
-
+class const StateIcon({super.key, required final UnitInfo unit})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Icon(_loadIcon ?? _activeIcon, color: unit.group.color(context));

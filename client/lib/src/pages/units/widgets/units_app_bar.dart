@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' hide SuggestionsBuilder;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart' hide SuggestionsBuilder;
 
 import '../../../app/auth/permissions_provider.dart';
 import '../../../app/router.dart';
@@ -8,22 +8,14 @@ import '../../../localization/localization.dart';
 import '../../../widgets/content_app_bar.dart';
 import 'filter_button.dart';
 
-class UnitsAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  final bool showAll;
-  final ValueChanged<bool?> onToggleShowAll;
-  final VoidCallback onRefresh;
-  final ValueSetter<String> onFilterUpdated;
-  final SuggestionsBuilder suggestionsBuilder;
-
-  const UnitsAppBar({
-    super.key,
-    required this.showAll,
-    required this.onToggleShowAll,
-    required this.onRefresh,
-    required this.onFilterUpdated,
-    required this.suggestionsBuilder,
-  });
-
+class const UnitsAppBar({
+  super.key,
+  required final bool showAll,
+  required final ValueChanged<bool?> onToggleShowAll,
+  required final VoidCallback onRefresh,
+  required final ValueSetter<String> onFilterUpdated,
+  required final SuggestionsBuilder suggestionsBuilder,
+}) extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => ContentAppBar.defaultSize;
 

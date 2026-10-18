@@ -1,43 +1,31 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../localization/localization.dart';
 import 'controllers/action_controller.dart';
 import 'error_snack_bar.dart';
 
-class ActionDialog extends ConsumerWidget {
-  final ProviderListenable<ActionState> provider;
-  final ProviderListenable<ActionController> notifier;
-  final String hintTitle;
-  final String hint;
-  final String actionTitle;
-  final String action;
-  final String successMessage;
-  final String failureMessage;
-
-  const ActionDialog({
-    super.key,
-    required this.provider,
-    required this.notifier,
-    required this.hintTitle,
-    required this.hint,
-    required this.actionTitle,
-    required this.action,
-    required this.successMessage,
-    required this.failureMessage,
-  });
-
+class const ActionDialog({
+  super.key,
+  required final ProviderListenable<ActionState> provider,
+  required final ProviderListenable<ActionController> notifier,
+  required final String hintTitle,
+  required final String hint,
+  required final String actionTitle,
+  required final String action,
+  required final String successMessage,
+  required final String failureMessage,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(provider, (_, next) {
       switch (next) {
         case .success:
           Navigator.pop<bool>(context, true);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(successMessage)));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(successMessage)));
         case .failure:
           Navigator.pop<bool>(context, true);
           ScaffoldMessenger.of(context).showSnackBar(

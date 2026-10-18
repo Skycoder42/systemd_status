@@ -7,19 +7,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'process_runner.g.dart';
 
-class InvalidExitCode implements Exception {
-  final String binary;
-  final List<String> arguments;
-  final int expectedExitCode;
-  final int actualExitCode;
-
-  InvalidExitCode({
-    required this.binary,
-    required this.arguments,
-    required this.expectedExitCode,
-    required this.actualExitCode,
-  });
-
+class InvalidExitCode({
+  required final String binary,
+  required final List<String> arguments,
+  required final int expectedExitCode,
+  required final int actualExitCode,
+}) implements Exception {
   @override
   String toString() =>
       'Command "$binary ${arguments.join(' ')}" failed '
@@ -29,7 +22,7 @@ class InvalidExitCode implements Exception {
 @riverpod
 ProcessRunner processRunner(Ref ref) => ProcessRunner();
 
-class ProcessRunner {
+class ProcessRunner() {
   static const defaultProcessTimeout = Duration(minutes: 1);
 
   final _logger = Logger('ProcessRunner');

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../../app/router.dart';
@@ -7,11 +7,8 @@ import '../../../app/theme.dart';
 import '../../../models/state_group.dart';
 import 'state_icon.dart';
 
-class UnitCard extends StatelessWidget {
-  final UnitInfo unit;
-
-  const UnitCard({super.key, required this.unit});
-
+class const UnitCard({super.key, required final UnitInfo unit})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GestureDetector(
     onTap: () => LogsRoute(unit.name).go(context),

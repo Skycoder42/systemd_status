@@ -4,9 +4,7 @@ import '../../config/server_config.dart';
 import '../models/client_config.dart';
 
 @ApiEndpoint('/config')
-class ConfigEndpoint extends ShelfEndpoint {
-  ConfigEndpoint(super.request);
-
+class ConfigEndpoint(super.request) extends ShelfEndpoint {
   @Get('/')
   ClientConfig get() {
     final config = ref.read(serverConfigProvider);

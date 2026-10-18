@@ -25,11 +25,11 @@ extension FirebaseAuthX on Request {
 
 @freezed
 sealed class _AuthResult with _$AuthResult {
-  const factory _AuthResult.success(UserInfo userInfo) = _AuthSuccess;
-  const factory _AuthResult.failure(Response response) = _AuthFailure;
+  const factory success(UserInfo userInfo) = _AuthSuccess;
+  const factory failure(Response response) = _AuthFailure;
 }
 
-class _FirebaseAuthMiddleware {
+class _FirebaseAuthMiddleware() {
   static const _userInfoKey = 'FirebaseAuthMiddleware.userId';
   static final _authHeaderPattern = RegExp(r'^Bearer (.*)$');
 

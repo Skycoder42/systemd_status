@@ -6,14 +6,12 @@ import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry/sentry.dart';
 
-abstract interface class ErrorState {
+abstract interface class ErrorState() {
   Object get error;
   StackTrace get stackTrace;
 }
 
-final class ErrorObserver extends ProviderObserver {
-  const ErrorObserver();
-
+final class const ErrorObserver() extends ProviderObserver {
   @override
   void didAddProvider(ProviderObserverContext context, Object? value) {
     _maybeReportStateException(context, value);
@@ -77,9 +75,8 @@ final class ErrorObserver extends ProviderObserver {
     } else {
       final name =
           context.provider.name ?? context.provider.runtimeType.toString();
-      Logger(
-        'provider.$name',
-      ).severe('Provider ${context.provider} did fail', error, stackTrace);
+      Logger('provider.$name')
+          .severe('Provider ${context.provider} did fail', error, stackTrace);
     }
   }
 

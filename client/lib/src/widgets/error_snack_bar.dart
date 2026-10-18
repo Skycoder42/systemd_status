@@ -1,18 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../app/theme.dart';
 
-class ErrorSnackBar extends SnackBar {
-  ErrorSnackBar({
-    super.key,
-    required BuildContext context,
-    required Widget content,
-    super.duration,
-  }) : super(
-         backgroundColor: context.theme.colorScheme.error,
-         content: DefaultTextStyle(
-           style: TextStyle(color: context.theme.colorScheme.onError),
-           child: content,
-         ),
-       );
+// ignore: prefer_const_constructors_in_immutables false positive, initializer depends on context
+class ErrorSnackBar({
+  super.key,
+  required BuildContext context,
+  required Widget content,
+  super.duration,
+}) extends SnackBar {
+  this
+    : super(
+        backgroundColor: context.theme.colorScheme.error,
+        content: DefaultTextStyle(
+          style: TextStyle(color: context.theme.colorScheme.onError),
+          child: content,
+        ),
+      );
 }

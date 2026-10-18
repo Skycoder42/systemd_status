@@ -19,11 +19,9 @@ import 'middlewares/enforce_tls.dart';
 import 'middlewares/rate_limit.dart';
 import 'services/security_context_loader.dart';
 
-class Server {
+class Server(final Options options, final ServerConfig config) {
   static const _maxContentLength = 1 * 1024 * 1024; // 1 MB
 
-  final Options options;
-  final ServerConfig config;
   final _logger = Logger('Server');
 
   late final ProviderContainer _providerContainer;
@@ -33,7 +31,7 @@ class Server {
   late final HttpServer _server;
   var _isClosing = false;
 
-  Server(this.options, this.config) {
+  this {
     _setupHandler();
     _setupSignals();
   }

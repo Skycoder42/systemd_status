@@ -1,8 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-class EpochDateTimeConverter implements JsonConverter<DateTime, String> {
-  const EpochDateTimeConverter();
-
+class const EpochDateTimeConverter()
+    implements JsonConverter<DateTime, String> {
   @override
   DateTime fromJson(String json) =>
       DateTime.fromMicrosecondsSinceEpoch(int.parse(json, radix: 10));

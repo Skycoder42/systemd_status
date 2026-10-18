@@ -14,25 +14,21 @@ Options options(Ref ref) => throw StateError('Must be overridden');
 
 @immutable
 @CliOptions()
-class Options {
-  static const _configName = 'systemd-status-server.yaml';
-
+class const Options({
   @CliOption(
     abbr: 'H',
     valueHelp: 'address',
     defaultsTo: 'localhost',
     help: 'Specifies the host connect to.',
   )
-  final String host;
-
+  required final String host,
   @CliOption(
     abbr: 'p',
     valueHelp: 'port',
     defaultsTo: 8080,
     help: 'Specifies the port on the host to connect to.',
   )
-  final int port;
-
+  required final int port,
   @CliOption(
     abbr: 'c',
     valueHelp: 'path',
@@ -41,8 +37,7 @@ class Options {
         'with additional configuration options.',
     provideDefaultToOverride: true,
   )
-  final String config;
-
+  required final String config,
   @CliOption(
     convert: _logLevelFromString,
     abbr: 'L',
@@ -64,31 +59,20 @@ class Options {
         'Customize the logging level. '
         'Listed from most verbose (all) to least verbose (off).',
   )
-  final Level logLevel;
-
+  required final Level logLevel,
   @CliOption(name: 'debug-overwrite-systemctl', hide: true)
-  final String? debugOverwriteSystemctl;
-
+  final String? debugOverwriteSystemctl,
   @CliOption(name: 'debug-overwrite-journalctl', hide: true)
-  final String? debugOverwriteJournalctl;
-
+  final String? debugOverwriteJournalctl,
   @CliOption(
     abbr: 'h',
     negatable: false,
     defaultsTo: false,
     help: 'Prints usage information.',
   )
-  final bool help;
-
-  const Options({
-    required this.host,
-    required this.port,
-    required this.config,
-    required this.logLevel,
-    this.debugOverwriteSystemctl,
-    this.debugOverwriteJournalctl,
-    this.help = false,
-  });
+  final bool help = false,
+}) {
+  static const _configName = 'systemd-status-server.yaml';
 
   static ArgParser buildArgParser() => _$populateOptionsParser(
     ArgParser(

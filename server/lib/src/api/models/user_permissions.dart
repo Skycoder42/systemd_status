@@ -5,8 +5,8 @@ part 'user_permissions.g.dart';
 
 @freezed
 sealed class UserPermissions with _$UserPermissions {
-  const factory UserPermissions({required bool canReboot}) = _UserPermissions;
+  const factory({required bool canReboot}) = _UserPermissions;
 
-  factory UserPermissions.fromJson(Map<String, dynamic> json) =>
+  factory fromJson(Map<String, dynamic> json) =>
       _$UserPermissionsFromJson(json);
 }

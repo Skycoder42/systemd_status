@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../app/auth/account_manager_provider.dart';
 import '../../app/router.dart';
@@ -10,11 +10,8 @@ import '../../localization/localization.dart';
 import '../../widgets/async_action.dart';
 import '../../widgets/scrollable_expanded_box.dart';
 
-class LoginPage extends ConsumerStatefulWidget {
-  final String? redirectTo;
-
-  const LoginPage({super.key, this.redirectTo});
-
+class const LoginPage({super.key, final String? redirectTo})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
 
@@ -25,7 +22,7 @@ class LoginPage extends ConsumerStatefulWidget {
   }
 }
 
-class _LoginPageState extends ConsumerState<LoginPage> {
+class _LoginPageState() extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _submitKey = GlobalKey<AsyncActionState>();
   final _logger = Logger('LoginPage');

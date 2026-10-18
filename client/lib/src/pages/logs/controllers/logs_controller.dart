@@ -10,7 +10,7 @@ part 'logs_controller.g.dart';
 typedef LogsQuery = ({String unitName, LogPriority? logPriority});
 
 @riverpod
-class LogsController extends _$LogsController {
+class LogsController() extends _$LogsController {
   static const _pageSize = 100;
 
   final _logger = Logger('LogsController');

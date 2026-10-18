@@ -3,7 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-enum ActionState { hint, pending, success, failure }
+enum ActionState() {
+  hint,
+  pending,
+  success,
+  failure,
+}
 
 mixin ActionController on AnyNotifier<ActionState, ActionState> {
   @visibleForOverriding

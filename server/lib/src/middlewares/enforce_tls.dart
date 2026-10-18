@@ -6,12 +6,9 @@ const _kReleaseMode = bool.fromEnvironment('dart.vm.product');
 Middleware enforceTls({bool enabled = _kReleaseMode}) =>
     _EnforceTlsMiddleware(enabled).call;
 
-class _EnforceTlsMiddleware {
-  final bool enabled;
+// ignore: avoid_positional_boolean_parameters for single param
+class _EnforceTlsMiddleware(final bool enabled) {
   final _logger = Logger('EnforceTlsMiddleware');
-
-  // ignore: avoid_positional_boolean_parameters for single param
-  _EnforceTlsMiddleware(this.enabled);
 
   Handler call(Handler next) => (request) {
     if (!enabled) {

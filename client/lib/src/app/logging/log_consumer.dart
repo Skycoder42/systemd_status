@@ -7,7 +7,7 @@ import 'package:ansicolor/ansicolor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
-class LogConsumer implements StreamConsumer<LogRecord> {
+class LogConsumer() implements StreamConsumer<LogRecord> {
   @override
   Future<void> addStream(Stream<LogRecord> stream) => stream.forEach(_onRecord);
 

@@ -6,4 +6,4 @@ import 'endpoints/units_endpoint.dart';
 
 @ShelfApi(basePath: '/api', [ConfigEndpoint, UnitsEndpoint, SystemEndpoint])
 // ignore: unused_element for code generation
-abstract class _SystemdStatusApi {}
+abstract class _SystemdStatusApi();

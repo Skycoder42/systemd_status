@@ -12,12 +12,9 @@ Middleware rateLimit({
   DateTimeNow dateTimeNow = DateTime.now,
 }) => _RateLimitMiddleware(maxRequests, window, dateTimeNow).call;
 
-class _IpInfo {
-  DateTime windowEndTime;
+class _IpInfo(var DateTime windowEndTime, var Timer _cleanupTimer) {
   int requestCount;
-  Timer _cleanupTimer;
-
-  _IpInfo(this.windowEndTime, this._cleanupTimer) : requestCount = 0;
+  this : requestCount = 0;
 
   void resetWindow(_IpInfo info) {
     windowEndTime = info.windowEndTime;
@@ -27,15 +24,13 @@ class _IpInfo {
   }
 }
 
-class _RateLimitMiddleware {
-  final int _maxRequests;
-  final Duration _window;
-  final DateTimeNow _dateTimeNow;
-
+class _RateLimitMiddleware(
+  final int _maxRequests,
+  final Duration _window,
+  final DateTimeNow _dateTimeNow,
+) {
   final _cache = <String, _IpInfo>{};
   final _logger = Logger('RateLimitMiddleware');
-
-  _RateLimitMiddleware(this._maxRequests, this._window, this._dateTimeNow);
 
   Handler call(Handler next) => (request) {
     final blockTime = _checkRateLimit(request);

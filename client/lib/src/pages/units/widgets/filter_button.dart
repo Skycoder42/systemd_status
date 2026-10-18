@@ -1,21 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
-typedef SuggestionsBuilder =
-    FutureOr<Iterable<String>> Function(BuildContext context);
+typedef SuggestionsBuilder = FutureOr<Iterable<String>> Function(
+  BuildContext context,
+);
 
-class FilterButton extends StatefulWidget {
-  final ValueSetter<String> onFilterUpdated;
-  final SuggestionsBuilder suggestionsBuilder;
-
-  const FilterButton({
-    super.key,
-    required this.onFilterUpdated,
-    required this.suggestionsBuilder,
-  });
-
+class const FilterButton({
+  super.key,
+  required final ValueSetter<String> onFilterUpdated,
+  required final SuggestionsBuilder suggestionsBuilder,
+}) extends StatefulWidget {
   @override
   State<FilterButton> createState() => _FilterButtonState();
 
@@ -38,7 +34,7 @@ class FilterButton extends StatefulWidget {
   }
 }
 
-class _FilterButtonState extends State<FilterButton> {
+class _FilterButtonState() extends State<FilterButton> {
   late final SearchController _searchController;
 
   @override

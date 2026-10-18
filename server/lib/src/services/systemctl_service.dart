@@ -16,13 +16,11 @@ SystemctlService systemctlService(Ref ref) => SystemctlService(
   ref.watch(processRunnerProvider),
 );
 
-class SystemctlService {
-  final Options _options;
-  final ProcessRunner _processRunner;
-
+class SystemctlService(
+  final Options _options,
+  final ProcessRunner _processRunner,
+) {
   final _logger = Logger('SystemctlService');
-
-  SystemctlService(this._options, this._processRunner);
 
   Future<List<UnitInfo>> listUnits({bool all = false}) async {
     _logger.fine('calling listUnits');

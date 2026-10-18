@@ -11,11 +11,7 @@ part 'security_context_loader.g.dart';
 SecurityContextLoader securityContextLoader(Ref ref) =>
     SecurityContextLoader(ref.watch(serverConfigProvider.select((c) => c.tls)));
 
-class SecurityContextLoader {
-  final TlsConfig? _tlsConfig;
-
-  SecurityContextLoader(this._tlsConfig);
-
+class SecurityContextLoader(final TlsConfig? _tlsConfig) {
   Future<SecurityContext?> load() async {
     if (_tlsConfig == null) {
       return null;

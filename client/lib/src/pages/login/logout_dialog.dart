@@ -1,17 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../localization/localization.dart';
 import 'controllers/logout_controller.dart';
 
-class LogoutDialog extends ConsumerStatefulWidget {
-  const LogoutDialog({super.key});
-
+class const LogoutDialog({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<LogoutDialog> createState() => _LogoutDialogState();
 }
 
-class _LogoutDialogState extends ConsumerState<LogoutDialog> {
+class _LogoutDialogState() extends ConsumerState<LogoutDialog> {
   @override
   Widget build(BuildContext context) => AlertDialog(
     title: Text(context.strings.logout),

@@ -15,7 +15,7 @@ ServerConfig serverConfig(Ref ref) => throw StateError('Must be overridden');
 @freezed
 sealed class ServerConfig with _$ServerConfig {
   @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
-  const factory ServerConfig({
+  const factory({
     List<String>? allowedOrigins,
     List<String>? unitFilters,
     TlsConfig? tls,
@@ -24,13 +24,12 @@ sealed class ServerConfig with _$ServerConfig {
     String? sentryDsn,
   }) = _ServerConfig;
 
-  factory ServerConfig.fromJson(Map<String, dynamic> json) =>
-      _$ServerConfigFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$ServerConfigFromJson(json);
 
-  factory ServerConfig.fromYaml(Map<dynamic, dynamic>? yaml) =>
+  factory fromYaml(Map<dynamic, dynamic>? yaml) =>
       _$ServerConfigFromJson(yaml!);
 
-  factory ServerConfig.load(String path) {
+  factory load(String path) {
     final configFile = File(path);
     return checkedYamlDecode<ServerConfig>(
       configFile.readAsStringSync(),
@@ -43,46 +42,42 @@ sealed class ServerConfig with _$ServerConfig {
 @freezed
 sealed class TlsConfig with _$TlsConfig {
   @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
-  const factory TlsConfig({
+  const factory({
     @JsonKey(required: true) required String pfxPath,
     String? pfxPassphrase,
   }) = _TlsConfig;
 
-  factory TlsConfig.fromJson(Map<String, dynamic> json) =>
-      _$TlsConfigFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$TlsConfigFromJson(json);
 }
 
 @freezed
 sealed class AppConfig with _$AppConfig {
   @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
-  const factory AppConfig({String? appDir, String? sentryDsn}) = _AppConfig;
+  const factory({String? appDir, String? sentryDsn}) = _AppConfig;
 
-  factory AppConfig.fromJson(Map<String, dynamic> json) =>
-      _$AppConfigFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
 }
 
 @freezed
 sealed class FirebaseConfig with _$FirebaseConfig {
   @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
-  const factory FirebaseConfig({
+  const factory({
     @JsonKey(required: true) required String projectId,
     @JsonKey(required: true) required String apiKey,
     List<UserInfo>? users,
   }) = _FirebaseConfig;
 
-  factory FirebaseConfig.fromJson(Map<String, dynamic> json) =>
-      _$FirebaseConfigFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$FirebaseConfigFromJson(json);
 }
 
 @freezed
 sealed class UserInfo with _$UserInfo {
   @JsonSerializable(anyMap: true, checked: true, disallowUnrecognizedKeys: true)
-  const factory UserInfo({
+  const factory({
     @JsonKey(required: true) required String uid,
     List<String>? unitFilters,
     @Default(false) bool canReboot,
   }) = _UserInfo;
 
-  factory UserInfo.fromJson(Map<String, dynamic> json) =>
-      _$UserInfoFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$UserInfoFromJson(json);
 }

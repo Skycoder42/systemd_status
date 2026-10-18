@@ -9,11 +9,7 @@ part 'auth_interceptor.g.dart';
 @Riverpod(keepAlive: true)
 AuthInterceptor authInterceptor(Ref ref) => AuthInterceptor(ref);
 
-class AuthInterceptor extends Interceptor {
-  final Ref _ref;
-
-  const AuthInterceptor(this._ref);
-
+class const AuthInterceptor(final Ref _ref) extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final idToken = _loadIdToken();

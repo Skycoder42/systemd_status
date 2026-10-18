@@ -4,11 +4,7 @@ import 'package:shelf/shelf.dart';
 
 Middleware sentryDsn(String sentryDsn) => _SentryDsnMiddleware(sentryDsn).call;
 
-class _SentryDsnMiddleware {
-  final String _sentryDsn;
-
-  const _SentryDsnMiddleware(this._sentryDsn);
-
+class const _SentryDsnMiddleware(final String _sentryDsn) {
   Handler call(Handler next) => (request) async {
     final response = await next(request);
     if (response.statusCode != HttpStatus.ok) {

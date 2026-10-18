@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:systemd_status_server/api.dart';
 
 import '../../../extensions/flutter_x.dart';
@@ -8,11 +8,8 @@ import '../../../localization/localization.dart';
 import 'log_priority_extensions.dart';
 import 'timestamp_text.dart';
 
-class LogItem extends StatelessWidget {
-  final JournalEntry item;
-
-  const LogItem({super.key, required this.item});
-
+class const LogItem({super.key, required final JournalEntry item})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListTile(
     title: Text(item.message, style: item.priority.style),

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'error_snack_bar.dart';
 
@@ -9,22 +9,14 @@ typedef ActionBuilder = Widget Function(VoidCallback? onAction);
 
 typedef ErrorConverter = String? Function(Object error, StackTrace stackTrace);
 
-class AsyncAction extends StatefulWidget {
-  final ActionBuilder builder;
-  final bool enabled;
-  final AsyncCallback onAction;
-  final ErrorConverter onError;
-  final Duration? errorToastDuration;
-
-  const AsyncAction({
-    super.key,
-    this.enabled = true,
-    required this.onAction,
-    required this.onError,
-    required this.builder,
-    this.errorToastDuration,
-  });
-
+class const AsyncAction({
+  super.key,
+  final bool enabled = true,
+  required final AsyncCallback onAction,
+  required final ErrorConverter onError,
+  required final ActionBuilder builder,
+  final Duration? errorToastDuration,
+}) extends StatefulWidget {
   @override
   State<AsyncAction> createState() => AsyncActionState();
 
@@ -45,7 +37,7 @@ class AsyncAction extends StatefulWidget {
   }
 }
 
-class AsyncActionState extends State<AsyncAction> {
+class AsyncActionState() extends State<AsyncAction> {
   var _isRunning = false;
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
   _snackbarController;

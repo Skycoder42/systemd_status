@@ -7,9 +7,9 @@ part 'journal_entry.freezed.dart';
 part 'journal_entry.g.dart';
 
 @freezed
-sealed class JournalEntry with _$JournalEntry {
+sealed class const JournalEntry._() with _$JournalEntry {
   @EpochDateTimeConverter()
-  const factory JournalEntry({
+  const factory({
     @JsonKey(name: 'MESSAGE') required String message,
     @JsonKey(name: 'PRIORITY') required LogPriority priority,
     @JsonKey(name: '_BOOT_ID') required String bootId,
@@ -19,10 +19,7 @@ sealed class JournalEntry with _$JournalEntry {
     @JsonKey(name: '__CURSOR') required String cursor,
   }) = _JournalEntry;
 
-  factory JournalEntry.fromJson(Map<String, dynamic> json) =>
-      _$JournalEntryFromJson(json);
-
-  const JournalEntry._();
+  factory fromJson(Map<String, dynamic> json) => _$JournalEntryFromJson(json);
 
   DateTime get timeStamp => sourceRealtimeTimestamp ?? realtimeTimestamp;
 }

@@ -3,17 +3,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'active_state.freezed.dart';
 
 @Freezed(fromJson: false, toJson: false)
-sealed class ActiveState with _$ActiveState {
-  const factory ActiveState.active() = ActiveActiveState;
-  const factory ActiveState.reloading() = ReloadingActiveState;
-  const factory ActiveState.inactive() = InactiveActiveState;
-  const factory ActiveState.failed() = FailedActiveState;
-  const factory ActiveState.activating() = ActivatingActiveState;
-  const factory ActiveState.deactivating() = DeactivatingActiveState;
-  const factory ActiveState.maintenance() = MaintenanceActiveState;
-  const factory ActiveState.unknown(String raw) = UnknownActiveState;
+sealed class const ActiveState._() with _$ActiveState {
+  const factory active() = ActiveActiveState;
+  const factory reloading() = ReloadingActiveState;
+  const factory inactive() = InactiveActiveState;
+  const factory failed() = FailedActiveState;
+  const factory activating() = ActivatingActiveState;
+  const factory deactivating() = DeactivatingActiveState;
+  const factory maintenance() = MaintenanceActiveState;
+  const factory unknown(String raw) = UnknownActiveState;
 
-  factory ActiveState.fromJson(String json) => switch (json) {
+  factory fromJson(String json) => switch (json) {
     'active' => const ActiveState.active(),
     'reloading' => const ActiveState.reloading(),
     'inactive' => const ActiveState.inactive(),
@@ -23,8 +23,6 @@ sealed class ActiveState with _$ActiveState {
     'maintenance' => const ActiveState.maintenance(),
     _ => ActiveState.unknown(json),
   };
-
-  const ActiveState._();
 
   String get name => switch (this) {
     ActiveActiveState() => 'active',

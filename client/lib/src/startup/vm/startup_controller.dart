@@ -14,7 +14,7 @@ import 'http_client_adapter_factory.dart';
 import 'setup_app.dart';
 import 'setup_result.dart';
 
-final class StartupController extends StartupControllerBase {
+final class StartupController() extends StartupControllerBase {
   static const _serverUrlKey = 'serverUrl';
   static const _serverCertKey = 'serverCert';
   static const _clientConfigKey = 'clientConfig';

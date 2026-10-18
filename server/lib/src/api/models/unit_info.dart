@@ -8,7 +8,7 @@ part 'unit_info.g.dart';
 
 @freezed
 sealed class UnitInfo with _$UnitInfo {
-  const factory UnitInfo({
+  const factory({
     @JsonKey(name: 'unit') required String name,
     @JsonKey(name: 'load') required LoadState loadState,
     @JsonKey(name: 'active') required ActiveState activeState,
@@ -16,8 +16,7 @@ sealed class UnitInfo with _$UnitInfo {
     @JsonKey(includeIfNull: false) String? description,
   }) = _UnitInfo;
 
-  factory UnitInfo.fromJson(Map<String, dynamic> json) =>
-      _$UnitInfoFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$UnitInfoFromJson(json);
 
   static List<UnitInfo> fromJsonList(List<dynamic> json) =>
       json.cast<Map<String, dynamic>>().map(UnitInfo.fromJson).toList();

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:systemd_status_server/api.dart';
 
@@ -21,14 +21,12 @@ Future<List<UnitInfo>> units(Ref ref, bool showAll) async {
   return units;
 }
 
-class UnitsPage extends ConsumerStatefulWidget {
-  const UnitsPage({super.key});
-
+class const UnitsPage({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<UnitsPage> createState() => _UnitsPageState();
 }
 
-class _UnitsPageState extends ConsumerState<UnitsPage> {
+class _UnitsPageState() extends ConsumerState<UnitsPage> {
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   var _filter = '';
@@ -48,7 +46,7 @@ class _UnitsPageState extends ConsumerState<UnitsPage> {
     ),
     body: RefreshIndicator(
       key: _refreshIndicatorKey,
-      onRefresh: () async => ref.refresh(unitsProvider(_showAll).future),
+      onRefresh: () async => await ref.refresh(unitsProvider(_showAll).future),
       child: switch (ref.watch(unitsProvider(_showAll))) {
         AsyncData(value: final units) => GridView.extent(
           primary: true,

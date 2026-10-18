@@ -1,25 +1,18 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' hide SuggestionsBuilder;
+import 'package:material_ui/material_ui.dart' hide SuggestionsBuilder;
 
 import '../app/router.dart';
 import '../extensions/flutter_x.dart';
 import '../localization/localization.dart';
 
-class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
+class const ContentAppBar({
+  super.key,
+  required final String title,
+  final VoidCallback? onRefresh,
+  final List<Widget> actions = const [],
+  final List<Widget> menuItems = const [],
+}) extends StatelessWidget implements PreferredSizeWidget {
   static const defaultSize = Size.fromHeight(kToolbarHeight);
-
-  final String title;
-  final List<Widget> actions;
-  final List<Widget> menuItems;
-  final VoidCallback? onRefresh;
-
-  const ContentAppBar({
-    super.key,
-    required this.title,
-    this.onRefresh,
-    this.actions = const [],
-    this.menuItems = const [],
-  });
 
   @override
   Size get preferredSize => defaultSize;

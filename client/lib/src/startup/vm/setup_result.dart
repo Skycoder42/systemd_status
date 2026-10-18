@@ -6,8 +6,6 @@ part 'setup_result.freezed.dart';
 
 @freezed
 sealed class SetupResult with _$SetupResult {
-  const factory SetupResult({
-    required Uri serverUrl,
-    Uint8List? serverCertBytes,
-  }) = _SetupResult;
+  const factory({required Uri serverUrl, Uint8List? serverCertBytes}) =
+      _SetupResult;
 }

@@ -1,19 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../app/theme.dart';
 import '../../localization/localization.dart';
 import 'setup_page.dart';
 import 'setup_result.dart';
 
-class SetupApp extends ConsumerWidget {
-  final Completer<SetupResult> setupCompleter;
-
-  const SetupApp({super.key, required this.setupCompleter});
-
+class const SetupApp({
+  super.key,
+  required final Completer<SetupResult> setupCompleter,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => MaterialApp(
     // localization

@@ -8,7 +8,7 @@ import '../../providers/secure_storage_provider.dart';
 part 'account_manager_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class AccountManager extends _$AccountManager {
+class AccountManager() extends _$AccountManager {
   static const _refreshTokenKey = 'refreshToken';
 
   final _logger = Logger('AccountManager');

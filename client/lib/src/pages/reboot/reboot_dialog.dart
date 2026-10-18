@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../localization/localization.dart';
 import '../../widgets/action_dialog.dart';
 import 'controllers/reboot_controller.dart';
 
-class RebootDialog extends ConsumerWidget {
-  const RebootDialog({super.key});
-
+class const RebootDialog({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => ActionDialog(
     provider: rebootControllerProvider,

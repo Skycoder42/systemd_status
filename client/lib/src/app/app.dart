@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../localization/localization.dart';
 import 'router.dart';
 import 'theme.dart';
 
-class SystemdStatusApp extends ConsumerWidget {
-  const SystemdStatusApp({super.key});
-
+class const SystemdStatusApp({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => MaterialApp.router(
     routerConfig: ref.watch(routerProvider),
