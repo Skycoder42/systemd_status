@@ -1,0 +1,17 @@
+name: Automatic dependency updates
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 3 * * 5"
+
+jobs:
+  update:
+    name: Updates
+    uses: Skycoder42/dart_test_tools/.github/workflows/auto-update.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    with:
+      validationWorkflow: ci.yaml
