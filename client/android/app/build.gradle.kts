@@ -26,7 +26,7 @@ android {
 
     defaultConfig {
         applicationId = "de.skycoder42.systemdStatusClient"
-        minSdk = flutter.minSdkVersion
+        minSdk = 26 // required by sentry. "flutter.minSdkVersion" is currently 24. revert one flutter has caught up.
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
