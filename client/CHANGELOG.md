@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.6] - 2026-10-18
+### Fixed
+- Fixed missing android permission
+
 ## [0.4.5] - 2026-10-18
 ### Changed
 - Updated min sdk version to ^3.13.0
@@ -136,6 +140,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
+[0.4.6]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.4.5...v0.4.6
 [0.4.5]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.4.3...v0.4.5
 [0.4.3]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.4.2...v0.4.3
 [0.4.2]: https://github.com/Skycoder42/systemd_status/compare/client%2Fv0.4.1...v0.4.2
