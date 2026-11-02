@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../converters/epoch_date_time_converter.dart';
+import '../converters/journal_field_converter.dart';
 import 'log_priority.dart';
 
 part 'journal_entry.freezed.dart';
@@ -10,7 +11,7 @@ part 'journal_entry.g.dart';
 sealed class const JournalEntry._() with _$JournalEntry {
   @EpochDateTimeConverter()
   const factory({
-    @JsonKey(name: 'MESSAGE') required String message,
+    @JsonKey(name: 'MESSAGE') @JournalFieldConverter() required String message,
     @JsonKey(name: 'PRIORITY') required LogPriority priority,
     @JsonKey(name: '_BOOT_ID') required String bootId,
     @JsonKey(name: '_SOURCE_REALTIME_TIMESTAMP')
